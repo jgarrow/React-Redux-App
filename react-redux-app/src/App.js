@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { pokemonReducer as reducer } from "./reducers";
 
 import PokemonList from "./components/PokemonList";
+import GenButtons from "./components/GenButtons";
 
 const AppContainer = styled.div`
     text-align: center;
@@ -20,6 +21,7 @@ function App() {
         <Provider store={store}>
             <AppContainer>
                 <h1>Basic Pokedex</h1>
+                <GenButtons />
                 <PokemonList />
             </AppContainer>
         </Provider>

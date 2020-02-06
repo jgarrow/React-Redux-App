@@ -5,6 +5,16 @@ import {
 } from "../actions";
 
 const initialState = {
+    genApiUrls: {
+        gen1: "https://pokeapi.co/api/v2/pokemon",
+        gen2: "https://pokeapi.co/api/v2/pokemon/?offset=151&limit=20",
+        gen3: "https://pokeapi.co/api/v2/pokemon/?offset=251&limit=20",
+        gen4: "https://pokeapi.co/api/v2/pokemon/?offset=386&limit=20",
+        gen5: "https://pokeapi.co/api/v2/pokemon/?offset=494&limit=20",
+        gen6: "https://pokeapi.co/api/v2/pokemon/?offset=649&limit=20",
+        gen7: "https://pokeapi.co/api/v2/pokemon/?offset=721&limit=20",
+        gen8: null
+    },
     pokemon: [],
     next: null,
     previous: null,
