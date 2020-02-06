@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 
 import { getPokemon } from "../actions";
 
+import PokemonCard from "./PokemonCard";
+
 const PokemonList = props => {
     const handleGetPokemon = (e, apiUrl) => {
         e.preventDefault();
@@ -18,9 +20,11 @@ const PokemonList = props => {
         <div>
             {props.pokemon.length > 0 ? (
                 props.pokemon.map((mon, index) => (
-                    <div key={index}>
-                        <h2>{mon.name}</h2>
-                    </div>
+                    <PokemonCard
+                        key={index}
+                        pokemon={mon}
+                        pokemonUrl={mon.url}
+                    />
                 ))
             ) : (
                 <button
