@@ -6,6 +6,8 @@ import {
 
 const initialState = {
     pokemon: [],
+    next: null,
+    previous: null,
     error: "",
     isFetching: false
 };
@@ -15,20 +17,27 @@ export const pokemonReducer = (state = initialState, action) => {
         case API_CALL_FETCHING:
             return {
                 ...state,
-                isFetching: true
+                error: "",
+                isFetching: true,
+                next: null,
+                previous: null
             };
         case API_CALL_SUCCESS:
             return {
                 ...state,
-                pokemon: action.payload,
+                pokemon: action.payload.results,
                 error: "",
-                isFetching: false
+                isFetching: false,
+                next: action.payload.next,
+                previous: action.payload.previous
             };
         case API_CALL_FAILURE:
             return {
                 ...state,
                 error: action.payload,
-                isFetching: false
+                isFetching: false,
+                next: null,
+                previous: null
             };
         default:
             return state;
