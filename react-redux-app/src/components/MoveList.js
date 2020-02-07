@@ -1,16 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 import { Screen } from "./StyledComponents";
 
 const MoveContainer = styled.div`
     display: flex;
+    min-height: 158px;
 `;
 
 const MoveScreen = styled(Screen)`
     margin: 3px;
     padding: 10px 20px;
+    box-sizing: border-box;
     flex: 1;
+    width: 100%;
+    min-height: 135px;
+    max-height: 135px;
+    overflow: hidden;
+    position: relative;
+`;
+
+const Slides = styled.div`
+    width: 100%;
+    height: 100%;
+    min-height: 135px;
+    position: relative;
+    display: grid;
+    grid-template-rows: ${props => `repeat(${props.numOfSlides}, 100%)`};
+    transform: ${props => `translateY(${props.translateValue}%)`};
+    transition: transform 0.45s ease-out;
+`;
+
+const MoveInfoContainer = styled.div`
     display: flex;
     justify-content: space-between;
 `;
@@ -22,6 +44,10 @@ const MoveName = styled.div`
     margin-bottom: 3px;
     text-align: center;
     text-transform: capitalize;
+`;
+
+const MoveStat = styled.p`
+    margin: 0;
 `;
 
 const MoveType = styled.div`
@@ -60,29 +86,60 @@ const MoveArrow = styled.div`
     transform: rotate(60deg);
 `;
 
-const MoveList = () => {
+const MoveList = props => {
+    const [movePosition, setMovePosition] = useState(0);
+
+    const handleTransition = direction => {
+        let newPosition = movePosition;
+
+        if (direction === "up") {
+            newPosition += 100;
+        } else {
+            newPosition -= 100;
+        }
+
+        setMovePosition(newPosition);
+    };
+
     return (
         <MoveContainer>
             <MoveScreen>
-                <div>
-                    <MoveName></MoveName>
-                    <p>Accuracy</p>
-                    <p>Power</p>
-                    <p>PP</p>
-                </div>
+                {props.pokemon.moves && (
+                    <Slides
+                        translateValue={movePosition}
+                        numOfSlides={props.pokemon.moves.length}
+                    >
+                        {props.pokemon.moves.map(move => (
+                            <MoveInfoContainer>
+                                <div>
+                                    <MoveName>{move.move.name}</MoveName>
+                                    <MoveStat>Accuracy</MoveStat>
+                                    <MoveStat>Power</MoveStat>
+                                    <MoveStat>PP</MoveStat>
+                                </div>
 
-                <div>
-                    <MoveType>TYPE: </MoveType>
-                    <MoveLearn>Learn: Lvl</MoveLearn>
-                </div>
+                                <div>
+                                    <MoveType>TYPE: </MoveType>
+                                    <MoveLearn>Learn: Lvl</MoveLearn>
+                                </div>
+                            </MoveInfoContainer>
+                        ))}
+                    </Slides>
+                )}
             </MoveScreen>
 
             <MoveControls>
-                <MoveArrow></MoveArrow>
-                <MoveArrow></MoveArrow>
+                <MoveArrow onClick={() => handleTransition("up")}></MoveArrow>
+                <MoveArrow onClick={() => handleTransition("down")}></MoveArrow>
             </MoveControls>
         </MoveContainer>
     );
 };
 
-export default MoveList;
+const mapStateToProps = state => {
+    return {
+        pokemon: state.pokemon
+    };
+};
+
+export default connect(mapStateToProps, {})(MoveList);
