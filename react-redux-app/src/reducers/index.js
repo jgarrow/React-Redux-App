@@ -1,7 +1,10 @@
 import {
     API_CALL_FETCHING,
     API_CALL_SUCCESS,
-    API_CALL_FAILURE
+    API_CALL_FAILURE,
+    FETCHING_DEX_ENTRIES,
+    FETCHING_DEX_ENTRIES_SUCCESS,
+    FETCHING_DEX_ENTRIES_FAILURE
 } from "../actions";
 
 const initialState = {
@@ -15,7 +18,8 @@ const initialState = {
         gen7: "https://pokeapi.co/api/v2/pokemon/?offset=721&limit=20",
         gen8: null
     },
-    pokemon: [],
+    pokemon: {},
+    dexEntries: [],
     next: null,
     previous: null,
     error: "",
@@ -33,13 +37,15 @@ export const pokemonReducer = (state = initialState, action) => {
                 previous: null
             };
         case API_CALL_SUCCESS:
+            console.log("action.payload: ", action.payload);
+            console.log("sprite: ", action.payload.sprites["front_default"]);
             return {
                 ...state,
-                pokemon: action.payload.results,
+                pokemon: action.payload,
                 error: "",
-                isFetching: false,
-                next: action.payload.next,
-                previous: action.payload.previous
+                isFetching: false
+                // next: action.payload.next,
+                // previous: action.payload.previous
             };
         case API_CALL_FAILURE:
             return {
@@ -48,6 +54,19 @@ export const pokemonReducer = (state = initialState, action) => {
                 isFetching: false,
                 next: null,
                 previous: null
+            };
+        case FETCHING_DEX_ENTRIES_SUCCESS:
+            let entries = [...action.payload];
+            const englishEntries = entries.filter(
+                entry => entry.language.name === "en"
+            );
+
+            console.log("english entries: ", englishEntries);
+
+            return {
+                ...state,
+                error: "",
+                dexEntries: englishEntries
             };
         default:
             return state;

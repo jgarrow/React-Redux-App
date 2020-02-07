@@ -7,7 +7,7 @@ import { typeBg } from "../data/typeBackgrounds";
 const Card = styled.div`
     width: 200px;
     margin: 0.5rem 1rem;
-    background: lightblue;
+    background: #356abc;
     border-radius: 12px;
     box-sizing: border-box;
     padding: 0.5rem;

@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 import { Panel, Screen, SpriteControl } from "./StyledComponents";
+import { IoMdFemale } from "react-icons/io";
+import { FaUndo } from "react-icons/fa";
 
 const NameScreen = styled(Screen)`
     font-size: 28px;
@@ -14,6 +17,33 @@ const NameScreen = styled(Screen)`
 const DexNum = styled.span`
     float: right;
     text-transform: lowercase;
+`;
+
+const ImgWrapper = styled.div`
+    width: 359px;
+    height: 359px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Sprite = styled.img`
+    width: 100%;
+    display: flex;
+    image-rendering: pixelated;
+    border: inset #9aa28b 3px;
+    border-radius: 5px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    background: linear-gradient(
+        15deg,
+        #cad5b5 64%,
+        #dde2d4 70%,
+        #dde2d4 81%,
+        #fff 86%,
+        #dde2d4 89%,
+        #dde2d4 100%
+    );
 `;
 
 const SpriteControls = styled.div`
@@ -46,30 +76,77 @@ const ShinySpriteControl = styled(SpriteControl)`
 const DescriptionScreen = styled(Screen)`
     font-size: 18px;
     letter-spacing: 0;
+    width: 359px;
     min-height: 115px;
+    max-height: 130px;
     box-sizing: border-box;
     flex: 1;
+    display: flex;
+    overflow-x: scroll;
 `;
 
-const LeftPanel = () => {
+const Text = styled.div`
+    width: 90%;
+    margin: 0 5%;
+`;
+
+// do API call for props.pokemon.species.url, then res.data["flavor_text_entries"] to get the dex description entries array
+//  for each element (which are objects), if element.language.name === "en", get the element["flavor_text"] and element.version.name for which game it's from
+
+const LeftPanel = props => {
+    console.log("props.pokemon.sprites: ", props.pokemon.sprites);
+    // console.log(
+    //     "props.pokemon sprite: ",
+    //     props.pokemon.sprites["front_default"]
+    // );
+
     return (
         <Panel>
             <NameScreen>
-                <DexNum />
+                {props.pokemon !== {} && (
+                    <>
+                        {props.pokemon.name}
+                        <DexNum>no. {props.pokemon.order}</DexNum>
+                    </>
+                )}
             </NameScreen>
             <div>
-                <img />
+                <ImgWrapper>
+                    {props.pokemon.sprites && (
+                        <Sprite
+                            src={props.pokemon.sprites["front_default"]}
+                            alt={props.pokemon.name}
+                        />
+                    )}
+                </ImgWrapper>
                 <SpriteControls>
-                    <SpriteControl>Female</SpriteControl>
+                    <SpriteControl>
+                        <IoMdFemale />
+                    </SpriteControl>
                     <ShinySpriteControl>
                         <span>Shiny</span>
                     </ShinySpriteControl>
-                    <SpriteControl>Rotate</SpriteControl>
+                    <SpriteControl>
+                        <FaUndo />
+                    </SpriteControl>
                 </SpriteControls>
             </div>
-            <DescriptionScreen></DescriptionScreen>
+            <DescriptionScreen>
+                {props.dexEntries.map((entry, index) => (
+                    <Text key={index}>
+                        <p>{entry["flavor_text"]}</p>
+                    </Text>
+                ))}
+            </DescriptionScreen>
         </Panel>
     );
 };
 
-export default LeftPanel;
+const mapStateToProps = state => {
+    return {
+        pokemon: state.pokemon,
+        dexEntries: state.dexEntries
+    };
+};
+
+export default connect(mapStateToProps, {})(LeftPanel);

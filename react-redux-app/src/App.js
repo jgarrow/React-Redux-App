@@ -25,6 +25,11 @@ const AppContainer = styled.div`
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
+// click green "Submit" in RightPanel to trigger API call to fetch pokemon info based on the number in NumInput in RightPanel
+// set res.data.name to NameScreen in LeftPanel
+// set res.data.order to DexNum in LeftPanel
+// set
+
 function App() {
     return (
         <Provider store={store}>

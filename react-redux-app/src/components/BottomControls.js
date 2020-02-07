@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+
+import { getPokemon } from "../actions";
 
 const Controls = styled.div`
     display: flex;
@@ -65,17 +68,40 @@ const Submit = styled.div`
     cursor: pointer;
 `;
 
-const BottomControls = () => {
+const BottomControls = props => {
+    const [inputNum, setInputNum] = useState(1);
+
+    const handleChange = e => {
+        setInputNum(e.target.value);
+    };
+
+    const handleGetPokemon = num => {
+        props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${num}`);
+    };
+
     return (
         <Controls>
             <ControlsButton />
             <div>
-                <NumInput />
-                <Submit />
+                <label htmlFor="inputNum" />
+                <NumInput
+                    id="inputNum"
+                    type="number"
+                    placeholder="1"
+                    value={inputNum}
+                    onChange={handleChange}
+                />
+                <Submit onClick={() => handleGetPokemon(inputNum)} />
             </div>
             <ControlsButton />
         </Controls>
     );
 };
 
-export default BottomControls;
+const mapStateToProps = state => {
+    return {
+        pokemon: state.pokemon
+    };
+};
+
+export default connect(mapStateToProps, { getPokemon })(BottomControls);
