@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+
+import { getMoveInfo } from "../actions";
 
 import { Screen } from "./StyledComponents";
 
@@ -101,27 +103,65 @@ const MoveList = props => {
         setMovePosition(newPosition);
     };
 
+    useEffect(() => {
+        let tempArray = [];
+        if (props.pokemon.moves) {
+            tempArray = [...props.pokemon.moves];
+        }
+
+        console.log("tempArray: ", tempArray);
+
+        if (tempArray !== []) {
+            tempArray.forEach(move => {
+                console.log("move info url: ", move.move.url);
+                props.getMoveInfo(move.move.url);
+            });
+        }
+    }, [props.pokemon.moves]);
+
     return (
         <MoveContainer>
             <MoveScreen>
-                {props.pokemon.moves && (
+                {props.moves && (
                     <Slides
                         translateValue={movePosition}
-                        numOfSlides={props.pokemon.moves.length}
+                        numOfSlides={props.moves.length}
                     >
-                        {props.pokemon.moves.map(move => (
-                            <MoveInfoContainer>
-                                <div>
-                                    <MoveName>{move.move.name}</MoveName>
-                                    <MoveStat>Accuracy</MoveStat>
-                                    <MoveStat>Power</MoveStat>
-                                    <MoveStat>PP</MoveStat>
-                                </div>
+                        {props.moves.map((move, index) => (
+                            <MoveInfoContainer key={index}>
+                                {move.moveInfo && (
+                                    <>
+                                        <div>
+                                            <MoveName>
+                                                {move.moveInfo.name}
+                                            </MoveName>
+                                            <MoveStat>
+                                                Accuracy:{" "}
+                                                {move.moveInfo.accuracy}
+                                            </MoveStat>
+                                            <MoveStat>
+                                                Power: {move.moveInfo.power}
+                                            </MoveStat>
+                                            <MoveStat>
+                                                PP: {move.moveInfo.pp}
+                                            </MoveStat>
+                                        </div>
 
-                                <div>
-                                    <MoveType>TYPE: </MoveType>
-                                    <MoveLearn>Learn: Lvl</MoveLearn>
-                                </div>
+                                        <div>
+                                            <MoveType>
+                                                TYPE: {move.moveInfo.type.name}
+                                            </MoveType>
+                                            <MoveLearn>
+                                                Learn: Lvl{" "}
+                                                {
+                                                    move[
+                                                        "version_group_details"
+                                                    ][0]["level_learned_at"]
+                                                }
+                                            </MoveLearn>
+                                        </div>
+                                    </>
+                                )}
                             </MoveInfoContainer>
                         ))}
                     </Slides>
@@ -138,8 +178,9 @@ const MoveList = props => {
 
 const mapStateToProps = state => {
     return {
-        pokemon: state.pokemon
+        pokemon: state.pokemon,
+        moves: state.moves
     };
 };
 
-export default connect(mapStateToProps, {})(MoveList);
+export default connect(mapStateToProps, { getMoveInfo })(MoveList);

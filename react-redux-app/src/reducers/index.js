@@ -4,7 +4,10 @@ import {
     API_CALL_FAILURE,
     FETCHING_DEX_ENTRIES,
     FETCHING_DEX_ENTRIES_SUCCESS,
-    FETCHING_DEX_ENTRIES_FAILURE
+    FETCHING_DEX_ENTRIES_FAILURE,
+    FETCHING_MOVE_INFO,
+    FETCHING_MOVE_INFO_SUCCESS,
+    FETCHING_MOVE_INFO_FAILURE
 } from "../actions";
 
 const initialState = {
@@ -20,6 +23,7 @@ const initialState = {
     },
     pokemon: {},
     dexEntries: [],
+    moves: [],
     next: null,
     previous: null,
     error: "",
@@ -37,11 +41,12 @@ export const pokemonReducer = (state = initialState, action) => {
                 previous: null
             };
         case API_CALL_SUCCESS:
-            console.log("action.payload: ", action.payload);
-            console.log("sprite: ", action.payload.sprites["front_default"]);
+            // console.log("action.payload: ", action.payload);
+            // console.log("sprite: ", action.payload.sprites["front_default"]);
             return {
                 ...state,
                 pokemon: action.payload,
+                moves: action.payload.moves,
                 error: "",
                 isFetching: false
                 // next: action.payload.next,
@@ -66,7 +71,45 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: "",
-                dexEntries: englishEntries
+                dexEntries: englishEntries,
+                isFetching: false
+            };
+        case FETCHING_DEX_ENTRIES_FAILURE:
+            return {
+                ...state,
+                error: action.payload,
+                isFetching: false
+            };
+        case FETCHING_MOVE_INFO:
+            return {
+                ...state,
+                isFetching: true
+            };
+        case FETCHING_MOVE_INFO_SUCCESS:
+            let movesArray = [...state.moves];
+            console.log("movesArray: ", movesArray);
+            const moveIndex = movesArray.findIndex(
+                move => move.move.name === action.payload.name
+            );
+
+            console.log(
+                "movesArray[moveIndex] before change: ",
+                movesArray[moveIndex]
+            );
+            movesArray[moveIndex] = {
+                ...movesArray[moveIndex],
+                moveInfo: action.payload
+            };
+
+            console.log(
+                "movesArray[moveIndex] after change: ",
+                movesArray[moveIndex]
+            );
+
+            return {
+                ...state,
+                isFetching: false,
+                moves: movesArray
             };
         default:
             return state;

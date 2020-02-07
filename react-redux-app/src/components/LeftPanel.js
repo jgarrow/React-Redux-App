@@ -94,7 +94,7 @@ const Slides = styled.div`
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: ${props => `repeat(${props.numofSlides}, 100%)`};
+    sgrid-template-columns: ${props => `repeat(${props.numofSlides}, 100%)`};
     transform: ${props => `translateX(${props.translateValue}%)`};
     transition: transform 0.45s ease-out;
 `;
@@ -165,9 +165,11 @@ const LeftPanel = props => {
                     <SpriteControl>
                         <IoMdFemale />
                     </SpriteControl>
+
                     <ShinySpriteControl>
                         <span>Shiny</span>
                     </ShinySpriteControl>
+
                     <SpriteControl>
                         <FaUndo />
                     </SpriteControl>

@@ -6,6 +6,9 @@ export const API_CALL_FAILURE = "API_CALL_FAILURE";
 export const FETCHING_DEX_ENTRIES = "FETCHING_DEX_ENTRIES";
 export const FETCHING_DEX_ENTRIES_SUCCESS = "FETCHING_DEX_ENTRIES_SUCCESS";
 export const FETCHING_DEX_ENTRIES_FAILURE = "FETCHING_DEX_ENTRIES_FAILURE";
+export const FETCHING_MOVE_INFO = "FETCHING_MOVES";
+export const FETCHING_MOVE_INFO_SUCCESS = "FETCHING_MOVES_SUCCESS";
+export const FETCHING_MOVE_INFO_FAILURE = "FETCHING_MOVES_FAILURE";
 
 export const getPokemon = apiUrl => dispatch => {
     dispatch({ type: API_CALL_FETCHING });
@@ -15,13 +18,13 @@ export const getPokemon = apiUrl => dispatch => {
             console.log("res: ", res.data);
 
             dispatch({ type: API_CALL_SUCCESS, payload: res.data });
-            return res.data.species.url;
+            return res.data;
         })
         .then(res => {
-            console.log("res: ", res);
+            console.log("res before getting species: ", res);
 
             axios
-                .get(res)
+                .get(res.species.url)
                 .then(res => {
                     console.log(
                         "species res: ",
@@ -34,6 +37,10 @@ export const getPokemon = apiUrl => dispatch => {
                 })
                 .catch(err => {
                     console.log("species err: ", err);
+                    dispatch({
+                        type: FETCHING_DEX_ENTRIES_FAILURE,
+                        payload: err
+                    });
                 });
         })
         .catch(err => {
@@ -43,14 +50,29 @@ export const getPokemon = apiUrl => dispatch => {
         });
 };
 
-export const getDexEntries = apiUrl => dispatch => {
-    dispatch({ type: FETCHING_DEX_ENTRIES });
+// export const getDexEntries = apiUrl => dispatch => {
+//     dispatch({ type: FETCHING_DEX_ENTRIES });
+//     axios
+//         .get(apiUrl)
+//         .then(res => {
+//             console.log("res: ", res);
+//             dispatch({ type: FETCHING_DEX_ENTRIES_SUCCESS, payload: res.data. })
+//         })
+//         .catch(err => {
+//             console.log("err: ", err);
+//         });
+// };
+
+export const getMoveInfo = apiUrl => dispatch => {
+    dispatch({ type: FETCHING_MOVE_INFO });
     axios
         .get(apiUrl)
         .then(res => {
-            console.log("res: ", res);
+            console.log("moves res: ", res);
+            dispatch({ type: FETCHING_MOVE_INFO_SUCCESS, payload: res.data });
         })
         .catch(err => {
-            console.log("err: ", err);
+            console.log("error getting moves: ", err);
+            dispatch({ type: FETCHING_MOVE_INFO_FAILURE, payload: err });
         });
 };
