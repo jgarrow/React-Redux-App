@@ -48,8 +48,18 @@ const MoveName = styled.div`
     text-transform: capitalize;
 `;
 
+const MoveStatGrid = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 20px;
+`;
+
+const StatLabel = styled.p`
+    margin: 0;
+`;
+
 const MoveStat = styled.p`
     margin: 0;
+    justify-self: flex-end;
 `;
 
 const MoveType = styled.div`
@@ -133,16 +143,20 @@ const MoveList = props => {
                                             <MoveName>
                                                 {move.moveInfo.name}
                                             </MoveName>
-                                            <MoveStat>
-                                                Accuracy:{" "}
-                                                {move.moveInfo.accuracy}
-                                            </MoveStat>
-                                            <MoveStat>
-                                                Power: {move.moveInfo.power}
-                                            </MoveStat>
-                                            <MoveStat>
-                                                PP: {move.moveInfo.pp}
-                                            </MoveStat>
+                                            <MoveStatGrid>
+                                                <StatLabel>Accuracy</StatLabel>
+                                                <MoveStat>
+                                                    {move.moveInfo.accuracy}
+                                                </MoveStat>
+                                                <StatLabel>Power</StatLabel>
+                                                <MoveStat>
+                                                    {move.moveInfo.power}
+                                                </MoveStat>
+                                                <StatLabel>PP</StatLabel>
+                                                <MoveStat>
+                                                    {move.moveInfo.pp}
+                                                </MoveStat>
+                                            </MoveStatGrid>
                                         </div>
 
                                         <div>

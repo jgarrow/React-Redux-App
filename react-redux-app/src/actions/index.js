@@ -9,9 +9,9 @@ export const FETCHING_DEX_ENTRIES_FAILURE = "FETCHING_DEX_ENTRIES_FAILURE";
 export const FETCHING_MOVE_INFO = "FETCHING_MOVES";
 export const FETCHING_MOVE_INFO_SUCCESS = "FETCHING_MOVES_SUCCESS";
 export const FETCHING_MOVE_INFO_FAILURE = "FETCHING_MOVES_FAILURE";
-export const FETCHING_STAT_INFO = "FETCHING_STAT_INFO";
-export const FETCHING_STAT_INFO_SUCCESS = "FETCHING_STAT_INFO_SUCCESS";
-export const FETCHING_STAT_INFO_FAILURE = "FETCHING_STAT_INFO_FAILURE";
+// export const FETCHING_STAT_INFO = "FETCHING_STAT_INFO";
+// export const FETCHING_STAT_INFO_SUCCESS = "FETCHING_STAT_INFO_SUCCESS";
+// export const FETCHING_STAT_INFO_FAILURE = "FETCHING_STAT_INFO_FAILURE";
 
 export const getPokemon = apiUrl => dispatch => {
     dispatch({ type: API_CALL_FETCHING });
@@ -80,16 +80,16 @@ export const getMoveInfo = apiUrl => dispatch => {
         });
 };
 
-export const getStatInfo = apiUrl => dispatch => {
-    dispatch({ type: FETCHING_STAT_INFO });
-    axios
-        .get(apiUrl)
-        .then(res => {
-            console.log("stat info res: ".res);
-            dispatch({ type: FETCHING_STAT_INFO_SUCCESS, payload: res.data });
-        })
-        .catch(err => {
-            console.log("error getting stat info: ", err);
-            dispatch({ type: FETCHING_STAT_INFO_FAILURE, payload: err });
-        });
-};
+// export const getStatInfo = apiUrl => dispatch => {
+//     dispatch({ type: FETCHING_STAT_INFO });
+//     axios
+//         .get(apiUrl)
+//         .then(res => {
+//             console.log("stat info res: ".res);
+//             dispatch({ type: FETCHING_STAT_INFO_SUCCESS, payload: res.data });
+//         })
+//         .catch(err => {
+//             console.log("error getting stat info: ", err);
+//             dispatch({ type: FETCHING_STAT_INFO_FAILURE, payload: err });
+//         });
+// };

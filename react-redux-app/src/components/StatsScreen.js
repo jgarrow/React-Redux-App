@@ -11,6 +11,10 @@ const StatScreen = styled(Screen)`
     justify-content: center;
     margin: 5px;
     flex: 1;
+    min-height: 118px;
+    max-height: 118px;
+    display: grid;
+    grid-template-columns: 1fr 10px;
 `;
 
 const StatLabel = styled.p`
@@ -19,15 +23,16 @@ const StatLabel = styled.p`
     margin: 0;
 `;
 
-const StatNum = styled.p``;
+const StatNum = styled.p`
+    margin: 0;
+`;
 
 const StatsScreen = props => {
     const handleGetStat = name => {
-        let tempArray = [...props.stats];
         let stat = props.pokemon.stats.find(stat => stat.stat.name === name);
 
         stat = stat["base_stat"];
-        console.log(`${name} base state: `, stat);
+        // console.log(`${name} base state: `, stat);
 
         return stat;
     };

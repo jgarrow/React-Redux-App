@@ -144,29 +144,29 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: action.payload,
                 isFetching: false
             };
-        case FETCHING_STAT_INFO:
-            return {
-                ...state,
-                error: "",
-                isFetching: true
-            };
-        case FETCHING_STAT_INFO_SUCCESS:
-            let statsArray = [...state.stats];
-            const statIndex = statsArray.findIndex(
-                stat => stat.stat.name === action.payload
-            );
+        // case FETCHING_STAT_INFO:
+        //     return {
+        //         ...state,
+        //         error: "",
+        //         isFetching: true
+        //     };
+        // case FETCHING_STAT_INFO_SUCCESS:
+        //     let statsArray = [...state.stats];
+        //     const statIndex = statsArray.findIndex(
+        //         stat => stat.stat.name === action.payload
+        //     );
 
-            return {
-                ...state,
-                error: "",
-                isFetching: false
-            };
-        case FETCHING_STAT_INFO_FAILURE:
-            return {
-                ...state,
-                error: action.payload,
-                isFetching: false
-            };
+        //     return {
+        //         ...state,
+        //         error: "",
+        //         isFetching: false
+        //     };
+        // case FETCHING_STAT_INFO_FAILURE:
+        //     return {
+        //         ...state,
+        //         error: action.payload,
+        //         isFetching: false
+        //     };
         default:
             return state;
     }
