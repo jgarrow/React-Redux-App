@@ -89,6 +89,7 @@ const MoveArrow = styled.div`
 `;
 
 const MoveList = props => {
+    const { pokemon, getMoveInfo, moves } = props;
     const [movePosition, setMovePosition] = useState(0);
 
     const handleTransition = direction => {
@@ -105,19 +106,16 @@ const MoveList = props => {
 
     useEffect(() => {
         let tempArray = [];
-        if (props.pokemon.moves) {
-            tempArray = [...props.pokemon.moves];
+        if (pokemon.moves) {
+            tempArray = [...pokemon.moves];
         }
-
-        console.log("tempArray: ", tempArray);
 
         if (tempArray !== []) {
             tempArray.forEach(move => {
-                console.log("move info url: ", move.move.url);
-                props.getMoveInfo(move.move.url);
+                getMoveInfo(move.move.url);
             });
         }
-    }, [props.pokemon.moves]);
+    }, [pokemon.moves, getMoveInfo]);
 
     return (
         <MoveContainer>
@@ -125,9 +123,9 @@ const MoveList = props => {
                 {props.moves && (
                     <Slides
                         translateValue={movePosition}
-                        numOfSlides={props.moves.length}
+                        numOfSlides={moves.length}
                     >
-                        {props.moves.map((move, index) => (
+                        {moves.map((move, index) => (
                             <MoveInfoContainer key={index}>
                                 {move.moveInfo && (
                                     <>

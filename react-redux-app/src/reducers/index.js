@@ -7,7 +7,10 @@ import {
     FETCHING_DEX_ENTRIES_FAILURE,
     FETCHING_MOVE_INFO,
     FETCHING_MOVE_INFO_SUCCESS,
-    FETCHING_MOVE_INFO_FAILURE
+    FETCHING_MOVE_INFO_FAILURE,
+    FETCHING_STAT_INFO,
+    FETCHING_STAT_INFO_SUCCESS,
+    FETCHING_STAT_INFO_FAILURE
 } from "../actions";
 
 const initialState = {
@@ -24,8 +27,34 @@ const initialState = {
     pokemon: {},
     dexEntries: [],
     moves: [],
-    next: null,
-    previous: null,
+    stats: [
+        {
+            name: "speed",
+            stat: null
+        },
+        {
+            name: "special-defense",
+            stat: null
+        },
+        {
+            name: "special-attack",
+            stat: null
+        },
+        {
+            name: "defense",
+            stat: null
+        },
+        {
+            name: "attack",
+            stat: null
+        },
+        {
+            name: "hp",
+            stat: null
+        }
+    ],
+    // next: null,
+    // previous: null,
     error: "",
     isFetching: false
 };
@@ -36,9 +65,9 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: "",
-                isFetching: true,
-                next: null,
-                previous: null
+                isFetching: true
+                // next: null,
+                // previous: null
             };
         case API_CALL_SUCCESS:
             // console.log("action.payload: ", action.payload);
@@ -56,9 +85,15 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload,
-                isFetching: false,
-                next: null,
-                previous: null
+                isFetching: false
+                // next: null,
+                // previous: null
+            };
+        case FETCHING_DEX_ENTRIES:
+            return {
+                ...state,
+                isFetching: true,
+                error: ""
             };
         case FETCHING_DEX_ENTRIES_SUCCESS:
             let entries = [...action.payload];
@@ -66,7 +101,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 entry => entry.language.name === "en"
             );
 
-            console.log("english entries: ", englishEntries);
+            // console.log("english entries: ", englishEntries);
 
             return {
                 ...state,
@@ -83,33 +118,54 @@ export const pokemonReducer = (state = initialState, action) => {
         case FETCHING_MOVE_INFO:
             return {
                 ...state,
+                error: "",
                 isFetching: true
             };
         case FETCHING_MOVE_INFO_SUCCESS:
             let movesArray = [...state.moves];
-            console.log("movesArray: ", movesArray);
             const moveIndex = movesArray.findIndex(
                 move => move.move.name === action.payload.name
             );
 
-            console.log(
-                "movesArray[moveIndex] before change: ",
-                movesArray[moveIndex]
-            );
             movesArray[moveIndex] = {
                 ...movesArray[moveIndex],
                 moveInfo: action.payload
             };
 
-            console.log(
-                "movesArray[moveIndex] after change: ",
-                movesArray[moveIndex]
+            return {
+                ...state,
+                error: "",
+                isFetching: false,
+                moves: movesArray
+            };
+        case FETCHING_MOVE_INFO_FAILURE:
+            return {
+                ...state,
+                error: action.payload,
+                isFetching: false
+            };
+        case FETCHING_STAT_INFO:
+            return {
+                ...state,
+                error: "",
+                isFetching: true
+            };
+        case FETCHING_STAT_INFO_SUCCESS:
+            let statsArray = [...state.stats];
+            const statIndex = statsArray.findIndex(
+                stat => stat.stat.name === action.payload
             );
 
             return {
                 ...state,
-                isFetching: false,
-                moves: movesArray
+                error: "",
+                isFetching: false
+            };
+        case FETCHING_STAT_INFO_FAILURE:
+            return {
+                ...state,
+                error: action.payload,
+                isFetching: false
             };
         default:
             return state;
