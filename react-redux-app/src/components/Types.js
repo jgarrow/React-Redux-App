@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 const TypesContainer = styled.div`
     display: flex;
@@ -65,16 +66,24 @@ const Type = styled.div`
     background-blend-mode: hard-light;
 `;
 
-const Types = () => {
+const Types = props => {
     return (
         <TypesContainer>
-            <PanelHeader></PanelHeader>
+            <PanelHeader>Types</PanelHeader>
             <TypesWrapper>
-                <Type></Type>
-                <Type></Type>
+                {props.pokemon.types &&
+                    props.pokemon.types.map((type, index) => (
+                        <Type key={index}>{type.type.name}</Type>
+                    ))}
             </TypesWrapper>
         </TypesContainer>
     );
 };
 
-export default Types;
+const mapStateToProps = state => {
+    return {
+        pokemon: state.pokemon
+    };
+};
+
+export default connect(mapStateToProps, {})(Types);
