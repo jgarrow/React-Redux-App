@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
 import { Panel, Screen, SpriteControl } from "./StyledComponents";
-import { IoMdFemale } from "react-icons/io";
+import {
+    IoMdFemale,
+    IoIosArrowDropleftCircle,
+    IoIosArrowDroprightCircle
+} from "react-icons/io";
 import { FaUndo } from "react-icons/fa";
 
 const NameScreen = styled(Screen)`
@@ -76,18 +80,42 @@ const ShinySpriteControl = styled(SpriteControl)`
 const DescriptionScreen = styled(Screen)`
     font-size: 18px;
     letter-spacing: 0;
-    width: 359px;
+    width: 100%;
     min-height: 115px;
     max-height: 130px;
     box-sizing: border-box;
     flex: 1;
-    display: flex;
-    overflow-x: scroll;
+    position: relative;
+    overflow: hidden;
+`;
+
+const Slides = styled.div`
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: ${props => `repeat(${props.numofSlides}, 100%)`};
+    transform: ${props => `translateX(${props.translateValue}%)`};
+    transition: transform 0.45s ease-out;
 `;
 
 const Text = styled.div`
     width: 90%;
-    margin: 0 5%;
+    margin: 0 auto;
+    text-align: center;
+`;
+
+const Arrow = styled.div`
+    cursor: pointer;
+    height: 18px;
+    position: absolute;
+    top: calc(50% - 9px);
+    left: 5px;
+`;
+
+const RightArrow = styled(Arrow)`
+    left: unset;
+    right: 5px;
 `;
 
 // do API call for props.pokemon.species.url, then res.data["flavor_text_entries"] to get the dex description entries array
@@ -99,6 +127,20 @@ const LeftPanel = props => {
     //     "props.pokemon sprite: ",
     //     props.pokemon.sprites["front_default"]
     // );
+
+    const [dexEntryPosition, setDexEntryPosition] = useState(0);
+
+    const handleTransition = direction => {
+        let newPosition = dexEntryPosition;
+
+        if (direction === "left") {
+            newPosition += 100;
+        } else {
+            newPosition -= 100;
+        }
+
+        setDexEntryPosition(newPosition);
+    };
 
     return (
         <Panel>
@@ -132,11 +174,24 @@ const LeftPanel = props => {
                 </SpriteControls>
             </div>
             <DescriptionScreen>
-                {props.dexEntries.map((entry, index) => (
-                    <Text key={index}>
-                        <p>{entry["flavor_text"]}</p>
-                    </Text>
-                ))}
+                <Arrow onClick={() => handleTransition("left")}>
+                    <IoIosArrowDropleftCircle />
+                </Arrow>
+
+                <Slides
+                    translateValue={dexEntryPosition}
+                    numofSlides={props.dexEntries.length}
+                >
+                    {props.dexEntries.map((entry, index) => (
+                        <Text key={index}>
+                            <p>{entry["flavor_text"]}</p>
+                        </Text>
+                    ))}
+                </Slides>
+
+                <RightArrow onClick={() => handleTransition("right")}>
+                    <IoIosArrowDroprightCircle />
+                </RightArrow>
             </DescriptionScreen>
         </Panel>
     );
