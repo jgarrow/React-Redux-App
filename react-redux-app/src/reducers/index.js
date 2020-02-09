@@ -12,9 +12,6 @@ import {
     FETCHING_EVOLUTION_LINE_FAILURE,
     FETCHING_EVOL_SPRITE_SUCCESS,
     FETCHING_EVOL_SPRITE_FAILURE
-    // FETCHING_STAT_INFO,
-    // FETCHING_STAT_INFO_SUCCESS,
-    // FETCHING_STAT_INFO_FAILURE
 } from "../actions";
 
 const initialState = {
@@ -63,8 +60,6 @@ const initialState = {
         evol_II: [],
         evol_III: []
     },
-    // next: null,
-    // previous: null,
     error: "",
     isFetching: false
 };
@@ -75,29 +70,26 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: "",
-                isFetching: true
-                // next: null,
-                // previous: null
+                isFetching: true,
+                evolution_sprites: {
+                    evol_I: null,
+                    evol_II: [],
+                    evol_III: []
+                }
             };
         case API_CALL_SUCCESS:
-            // console.log("action.payload: ", action.payload);
-            // console.log("sprite: ", action.payload.sprites["front_default"]);
             return {
                 ...state,
                 pokemon: action.payload,
                 moves: action.payload.moves,
                 error: "",
                 isFetching: false
-                // next: action.payload.next,
-                // previous: action.payload.previous
             };
         case API_CALL_FAILURE:
             return {
                 ...state,
                 error: action.payload,
                 isFetching: false
-                // next: null,
-                // previous: null
             };
         case FETCHING_DEX_ENTRIES:
             return {
@@ -118,13 +110,13 @@ export const pokemonReducer = (state = initialState, action) => {
                 );
             });
 
-            console.log("english entries: ", englishEntries);
+            // console.log("english entries: ", englishEntries);
 
-            let entriesAreSame =
-                englishEntries[2]["flavor_text"].valueOf() ===
-                englishEntries[4]["flavor_text"].valueOf();
+            // let entriesAreSame =
+            //     englishEntries[2]["flavor_text"].valueOf() ===
+            //     englishEntries[4]["flavor_text"].valueOf();
 
-            console.log("entries 2 and 4 are same: ", entriesAreSame);
+            // console.log("entries 2 and 4 are same: ", entriesAreSame);
 
             const removedDuplicates = englishEntries.reduce((acc, current) => {
                 const x = acc.find(
@@ -137,7 +129,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 }
             }, []);
 
-            console.log("removedDuplicates array: ", removedDuplicates);
+            // console.log("removedDuplicates array: ", removedDuplicates);
 
             return {
                 ...state,
@@ -181,7 +173,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 isFetching: false
             };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
-            console.log("action.payload in fetching evo line:", action.payload);
+            // console.log("action.payload in fetching evo line:", action.payload);
             // action.payload = res.data.chain
             const evolineObj = { ...action.payload };
 
@@ -205,24 +197,10 @@ export const pokemonReducer = (state = initialState, action) => {
                 evolution_III: evol_III
             };
 
-            // let evolutions = action.payload["evolves_to"].map(element => {
-            //     let evol_II = element.species.name;
-            //     let evol_III = element["evolves_to"].map(mon => {
-            //         return mon.species.name;
-            //     });
-
-            //     return {
-            //         ...evolineArray,
-            //         evolI: evolution_I,
-            //         evolII: evol_II,
-            //         evolIII: evol_III // array of evol III names
-            //     };
-            // });
-
-            console.log("evolineObj: ", evolineObj);
+            // console.log("evolineObj: ", evolineObj);
 
             // evolutions is an array of objects
-            console.log("evolutions: ", evolutions);
+            // console.log("evolutions: ", evolutions);
 
             return {
                 ...state,
@@ -254,7 +232,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 ];
             }
 
-            console.log("evolutionSprites in reducer: ", evolutionSprites);
+            // console.log("evolutionSprites in reducer: ", evolutionSprites);
 
             return {
                 ...state,
@@ -268,29 +246,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: action.payload,
                 isFetching: false
             };
-        // case FETCHING_STAT_INFO:
-        //     return {
-        //         ...state,
-        //         error: "",
-        //         isFetching: true
-        //     };
-        // case FETCHING_STAT_INFO_SUCCESS:
-        //     let statsArray = [...state.stats];
-        //     const statIndex = statsArray.findIndex(
-        //         stat => stat.stat.name === action.payload
-        //     );
 
-        //     return {
-        //         ...state,
-        //         error: "",
-        //         isFetching: false
-        //     };
-        // case FETCHING_STAT_INFO_FAILURE:
-        //     return {
-        //         ...state,
-        //         error: action.payload,
-        //         isFetching: false
-        //     };
         default:
             return state;
     }

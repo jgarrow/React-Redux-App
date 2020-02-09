@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 
 import { PanelRow, Screen } from "./StyledComponents";
+import { Sprite } from "./LeftPanel";
 
 const EvolPanel = styled(PanelRow)`
     flex-wrap: wrap;
@@ -21,6 +22,7 @@ const EvolutionNum = styled.p`
     background: transparent;
     border: none;
     text-shadow: #e78181 -1px 1px;
+    margin: 0;
 `;
 
 const EvolutionName = styled(Screen)`
@@ -28,6 +30,12 @@ const EvolutionName = styled(Screen)`
     padding: 3px;
     margin-bottom: 3px;
     text-align: right;
+`;
+
+const SmallSprite = styled(Sprite)`
+    height: 120px;
+    width: 120px;
+    margin: 3px 0;
 `;
 
 const EvolutionPanel = props => {
@@ -46,7 +54,7 @@ const EvolutionPanel = props => {
                 </FlexCenter>
                 {props["evolution_line"] !== {} && (
                     <>
-                        <img
+                        <SmallSprite
                             src={props["evolution_sprites"]["evol_I"]}
                             alt={props["evolution_line"]["evolution_I"]}
                         />
@@ -64,7 +72,7 @@ const EvolutionPanel = props => {
                 </FlexCenter>
                 {props["evolution_line"]["evolution_II"] && (
                     <>
-                        <img
+                        <SmallSprite
                             src={props["evolution_sprites"]["evol_II"]}
                             alt={props["evolution_line"]["evolution_II"][0]}
                         />
@@ -82,7 +90,7 @@ const EvolutionPanel = props => {
                 </FlexCenter>
                 {props["evolution_line"]["evolution_III"] && (
                     <>
-                        <img
+                        <SmallSprite
                             src={props["evolution_sprites"]["evol_III"]}
                             alt={props["evolution_line"]["evolution_III"][0]}
                         />

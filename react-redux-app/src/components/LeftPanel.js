@@ -31,7 +31,7 @@ const ImgWrapper = styled.div`
     justify-content: center;
 `;
 
-const Sprite = styled.img`
+export const Sprite = styled.img`
     width: 100%;
     display: flex;
     image-rendering: pixelated;
