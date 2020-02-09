@@ -33,6 +33,11 @@ const EvolutionName = styled(Screen)`
 const EvolutionPanel = props => {
     console.log("evolution_line in evolution panel: ", props["evolution_line"]);
 
+    console.log(
+        "evolution_sprites in evolution panel: ",
+        props["evolution_sprites"]
+    );
+
     return (
         <EvolPanel>
             <div>
@@ -41,7 +46,10 @@ const EvolutionPanel = props => {
                 </FlexCenter>
                 {props["evolution_line"] !== {} && (
                     <>
-                        <img alt={props["evolution_line"]["evolution_I"]} />
+                        <img
+                            src={props["evolution_sprites"]["evol_I"]}
+                            alt={props["evolution_line"]["evolution_I"]}
+                        />
 
                         <EvolutionName>
                             {props["evolution_line"]["evolution_I"]}
@@ -56,7 +64,10 @@ const EvolutionPanel = props => {
                 </FlexCenter>
                 {props["evolution_line"]["evolution_II"] && (
                     <>
-                        <img alt={props["evolution_line"]["evolution_II"][0]} />
+                        <img
+                            src={props["evolution_sprites"]["evol_II"]}
+                            alt={props["evolution_line"]["evolution_II"][0]}
+                        />
 
                         <EvolutionName>
                             {props["evolution_line"]["evolution_II"][0]}
@@ -72,6 +83,7 @@ const EvolutionPanel = props => {
                 {props["evolution_line"]["evolution_III"] && (
                     <>
                         <img
+                            src={props["evolution_sprites"]["evol_III"]}
                             alt={props["evolution_line"]["evolution_III"][0]}
                         />
 
@@ -87,7 +99,8 @@ const EvolutionPanel = props => {
 
 const mapStateToProps = state => {
     return {
-        evolution_line: state["evolution_line"]
+        evolution_line: state["evolution_line"],
+        evolution_sprites: state["evolution_sprites"]
     };
 };
 

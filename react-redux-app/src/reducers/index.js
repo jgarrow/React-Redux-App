@@ -8,9 +8,10 @@ import {
     FETCHING_MOVE_INFO,
     FETCHING_MOVE_INFO_SUCCESS,
     FETCHING_MOVE_INFO_FAILURE,
-    FETCHING_EVOLUTION_LINE,
     FETCHING_EVOLUTION_LINE_SUCCESS,
-    FETCHING_EVOLUTION_LINE_FAILURE
+    FETCHING_EVOLUTION_LINE_FAILURE,
+    FETCHING_EVOL_SPRITE_SUCCESS,
+    FETCHING_EVOL_SPRITE_FAILURE
     // FETCHING_STAT_INFO,
     // FETCHING_STAT_INFO_SUCCESS,
     // FETCHING_STAT_INFO_FAILURE
@@ -57,6 +58,11 @@ const initialState = {
         }
     ],
     evolution_line: [],
+    evolution_sprites: {
+        evol_I: null,
+        evol_II: [],
+        evol_III: []
+    },
     // next: null,
     // previous: null,
     error: "",
@@ -230,7 +236,38 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: action.payload,
                 isFetching: false
             };
+        case FETCHING_EVOL_SPRITE_SUCCESS:
+            let payload_evolution = action.payload["evolution_tier"];
+            const evolutionSprites = { ...state["evolution_sprites"] };
 
+            if (payload_evolution === "evol_I") {
+                evolutionSprites["evol_I"] = action.payload.sprite;
+            } else if (payload_evolution === "evol_II") {
+                evolutionSprites["evol_II"] = [
+                    ...evolutionSprites["evol_II"],
+                    action.payload.sprite
+                ];
+            } else if (payload_evolution === "evol_III") {
+                evolutionSprites["evol_III"] = [
+                    ...evolutionSprites["evol_III"],
+                    action.payload.sprite
+                ];
+            }
+
+            console.log("evolutionSprites in reducer: ", evolutionSprites);
+
+            return {
+                ...state,
+                error: "",
+                isFetching: false,
+                evolution_sprites: evolutionSprites
+            };
+        case FETCHING_EVOL_SPRITE_FAILURE:
+            return {
+                ...state,
+                error: action.payload,
+                isFetching: false
+            };
         // case FETCHING_STAT_INFO:
         //     return {
         //         ...state,

@@ -14,6 +14,8 @@ export const FETCHING_EVOLUTION_LINE_SUCCESS =
     "FETCHING_EVOLUTION_LINE_SUCCESS";
 export const FETCHING_EVOLUTION_LINE_FAILURE =
     "FETCHING_EVOLUTION_LINE_FAILURE";
+export const FETCHING_EVOL_SPRITE_SUCCESS = "FETCHING_EVOL_SPRITE_SUCCESS";
+export const FETCHING_EVOL_SPRITE_FAILURE = "FETCHING_EVOL_SPRITE_FAILURE";
 // export const FETCHING_STAT_INFO = "FETCHING_STAT_INFO";
 // export const FETCHING_STAT_INFO_SUCCESS = "FETCHING_STAT_INFO_SUCCESS";
 // export const FETCHING_STAT_INFO_FAILURE = "FETCHING_STAT_INFO_FAILURE";
@@ -52,17 +54,181 @@ export const getPokemon = apiUrl => dispatch => {
                                 res.data.chain
                             );
 
+                            const evolineObj = { ...res.data.chain };
+
+                            const evol_I = evolineObj.species.name;
+
+                            // array of strings
+                            const evol_II = evolineObj["evolves_to"].map(
+                                mon => mon.species.name
+                            );
+
+                            // array of strings
+                            const evol_III = evolineObj["evolves_to"].map(
+                                mon =>
+                                    mon["evolves_to"]
+                                        .map(pokemon => pokemon.species.name)
+                                        .toString() // need to convert to string, otherwise all of the names will be in an array; don't want an array of arrays
+                            );
+
+                            const evolutions = {
+                                evolution_I: evol_I,
+                                evolution_II: evol_II,
+                                evolution_III: evol_III
+                            };
+
                             dispatch({
                                 type: FETCHING_EVOLUTION_LINE_SUCCESS,
                                 payload: res.data.chain // an array
                             });
-                            return res.data.chain["evolves_to"];
+
+                            return evolutions;
                         })
                         .then(res => {
                             console.log(
                                 "res after finishing evolution chain: ",
                                 res
                             );
+                            const baseApiUrl =
+                                "https://pokeapi.co/api/v2/pokemon/";
+
+                            let evol_II_urls = res["evolution_II"];
+                            evol_II_urls = evol_II_urls.map(
+                                mon => `${baseApiUrl}${mon}`
+                            );
+
+                            console.log("evol_II_urls array: ", evol_II_urls);
+
+                            let evol_III_urls = res["evolution_III"];
+                            evol_III_urls = evol_III_urls.map(
+                                mon => `${baseApiUrl}${mon}`
+                            );
+
+                            console.log("evol_III_urls array: ", evol_III_urls);
+
+                            const evol_I_url = `${baseApiUrl}${res["evolution_I"]}`;
+                            // const evol_II_url = `${baseApiUrl}${res["evolution_II"][0]}`;
+                            // const evol_III_url = `${baseApiUrl}${res["evolution_III"][0]}`;
+
+                            // console.log("evol_I_url: ", evol_I_url);
+                            // console.log("evol_II_url: ", evol_II_url);
+                            // console.log("evol_III_url: ", evol_III_url);
+
+                            const evolution_urls = {
+                                evol_I: evol_I_url,
+                                evol_II: evol_II_urls,
+                                evol_III: evol_III_urls
+                            };
+
+                            axios
+                                .get(evolution_urls["evol_I"])
+                                .then(res => {
+                                    console.log("evol_I res: ", res.data);
+                                    dispatch({
+                                        type: FETCHING_EVOL_SPRITE_SUCCESS,
+                                        payload: {
+                                            evolution_tier: "evol_I",
+                                            sprite:
+                                                res.data.sprites[
+                                                    "front_default"
+                                                ]
+                                        }
+                                    });
+                                })
+                                .catch(err => {
+                                    console.log(
+                                        "error getting evol_I sprite: ",
+                                        err
+                                    );
+                                    dispatch({
+                                        type: FETCHING_EVOL_SPRITE_FAILURE,
+                                        payload: err
+                                    });
+                                });
+
+                            evolution_urls["evol_II"].map(url => {
+                                axios
+                                    .get(url)
+                                    .then(res => {
+                                        console.log(
+                                            "evol_II url res: ",
+                                            res.data.sprites["front_default"]
+                                        );
+                                        dispatch({
+                                            type: FETCHING_EVOL_SPRITE_SUCCESS,
+                                            payload: {
+                                                evolution_tier: "evol_II",
+                                                sprite:
+                                                    res.data.sprites[
+                                                        "front_default"
+                                                    ]
+                                            }
+                                        });
+                                    })
+                                    .catch(err => {
+                                        console.log(
+                                            "error getting evolution II: ",
+                                            err
+                                        );
+                                        dispatch({
+                                            type: FETCHING_EVOL_SPRITE_FAILURE,
+                                            payload: err
+                                        });
+                                    });
+                            });
+
+                            evolution_urls["evol_III"].map(url => {
+                                axios
+                                    .get(url)
+                                    .then(res => {
+                                        console.log("evol_III res: ", res.data);
+                                        dispatch({
+                                            type: FETCHING_EVOL_SPRITE_SUCCESS,
+                                            payload: {
+                                                evolution_tier: "evol_III",
+                                                sprite:
+                                                    res.data.sprites[
+                                                        "front_default"
+                                                    ]
+                                            }
+                                        });
+                                    })
+                                    .catch(err => {
+                                        console.log(
+                                            "error getting evolution III: ",
+                                            err
+                                        );
+                                        dispatch({
+                                            type: FETCHING_EVOL_SPRITE_FAILURE,
+                                            payload: err
+                                        });
+                                    });
+                            });
+
+                            // evolution_urls.map(function(url) {
+                            //     axios
+                            //         .get(url)
+                            //         .then(res => {
+                            //             console.log("sprite url res: ", res);
+                            //             dispatch({
+                            //                 type: FETCHING_EVOL_SPRITE_SUCCESS,
+                            //                 payload:
+                            //                     res.data.sprites[
+                            //                         "front_default"
+                            //                     ]
+                            //             });
+                            //         })
+                            //         .catch(err => {
+                            //             console.log(
+                            //                 "error getting evolution info for sprite: ",
+                            //                 err
+                            //             );
+                            //             dispatch({
+                            //                 type: FETCHING_EVOL_SPRITE_FAILURE,
+                            //                 payload: err
+                            //             });
+                            //         });
+                            // });
                         })
                         .catch(err => {
                             console.log("error fetching evolution line: ", err);
