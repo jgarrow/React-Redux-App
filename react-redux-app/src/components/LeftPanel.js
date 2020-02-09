@@ -94,7 +94,7 @@ const Slides = styled.div`
     width: 100%;
     height: 100%;
     display: grid;
-    sgrid-template-columns: ${props => `repeat(${props.numofSlides}, 100%)`};
+    grid-template-columns: ${props => `repeat(${props.numofSlides}, 100%)`};
     transform: ${props => `translateX(${props.translateValue}%)`};
     transition: transform 0.45s ease-out;
 `;
@@ -122,7 +122,7 @@ const RightArrow = styled(Arrow)`
 //  for each element (which are objects), if element.language.name === "en", get the element["flavor_text"] and element.version.name for which game it's from
 
 const LeftPanel = props => {
-    console.log("props.pokemon.sprites: ", props.pokemon.sprites);
+    // console.log("props.pokemon.sprites: ", props.pokemon.sprites);
     // console.log(
     //     "props.pokemon sprite: ",
     //     props.pokemon.sprites["front_default"]

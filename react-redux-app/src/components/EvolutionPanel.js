@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 import { PanelRow, Screen } from "./StyledComponents";
 
@@ -29,34 +30,65 @@ const EvolutionName = styled(Screen)`
     text-align: right;
 `;
 
-const EvolutionPanel = () => {
+const EvolutionPanel = props => {
+    console.log("evolution_line in evolution panel: ", props["evolution_line"]);
+
     return (
         <EvolPanel>
             <div>
                 <FlexCenter>
                     <EvolutionNum>I</EvolutionNum>
                 </FlexCenter>
-                <img />
-                <EvolutionName></EvolutionName>
+                {props["evolution_line"] !== {} && (
+                    <>
+                        <img alt={props["evolution_line"]["evolution_I"]} />
+
+                        <EvolutionName>
+                            {props["evolution_line"]["evolution_I"]}
+                        </EvolutionName>
+                    </>
+                )}
             </div>
 
             <div>
                 <FlexCenter>
                     <EvolutionNum>II</EvolutionNum>
                 </FlexCenter>
-                <img />
-                <EvolutionName></EvolutionName>
+                {props["evolution_line"]["evolution_II"] && (
+                    <>
+                        <img alt={props["evolution_line"]["evolution_II"][0]} />
+
+                        <EvolutionName>
+                            {props["evolution_line"]["evolution_II"][0]}
+                        </EvolutionName>
+                    </>
+                )}
             </div>
 
             <div>
                 <FlexCenter>
                     <EvolutionNum>III</EvolutionNum>
                 </FlexCenter>
-                <img />
-                <EvolutionName></EvolutionName>
+                {props["evolution_line"]["evolution_III"] && (
+                    <>
+                        <img
+                            alt={props["evolution_line"]["evolution_III"][0]}
+                        />
+
+                        <EvolutionName>
+                            {props["evolution_line"]["evolution_III"][0]}
+                        </EvolutionName>
+                    </>
+                )}
             </div>
         </EvolPanel>
     );
 };
 
-export default EvolutionPanel;
+const mapStateToProps = state => {
+    return {
+        evolution_line: state["evolution_line"]
+    };
+};
+
+export default connect(mapStateToProps, {})(EvolutionPanel);

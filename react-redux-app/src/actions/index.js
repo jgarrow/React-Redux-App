@@ -9,6 +9,11 @@ export const FETCHING_DEX_ENTRIES_FAILURE = "FETCHING_DEX_ENTRIES_FAILURE";
 export const FETCHING_MOVE_INFO = "FETCHING_MOVES";
 export const FETCHING_MOVE_INFO_SUCCESS = "FETCHING_MOVES_SUCCESS";
 export const FETCHING_MOVE_INFO_FAILURE = "FETCHING_MOVES_FAILURE";
+export const FETCHING_EVOLUTION_LINE = "FETCHING_EVOLUTION_LINE";
+export const FETCHING_EVOLUTION_LINE_SUCCESS =
+    "FETCHING_EVOLUTION_LINE_SUCCESS";
+export const FETCHING_EVOLUTION_LINE_FAILURE =
+    "FETCHING_EVOLUTION_LINE_FAILURE";
 // export const FETCHING_STAT_INFO = "FETCHING_STAT_INFO";
 // export const FETCHING_STAT_INFO_SUCCESS = "FETCHING_STAT_INFO_SUCCESS";
 // export const FETCHING_STAT_INFO_FAILURE = "FETCHING_STAT_INFO_FAILURE";
@@ -37,6 +42,35 @@ export const getPokemon = apiUrl => dispatch => {
                         type: FETCHING_DEX_ENTRIES_SUCCESS,
                         payload: res.data["flavor_text_entries"]
                     });
+
+                    axios
+                        .get(res.data["evolution_chain"].url)
+                        .then(res => {
+                            // console.log("Evolution chain res: ", res);
+                            console.log(
+                                "Evolution chain res: ",
+                                res.data.chain
+                            );
+
+                            dispatch({
+                                type: FETCHING_EVOLUTION_LINE_SUCCESS,
+                                payload: res.data.chain // an array
+                            });
+                            return res.data.chain["evolves_to"];
+                        })
+                        .then(res => {
+                            console.log(
+                                "res after finishing evolution chain: ",
+                                res
+                            );
+                        })
+                        .catch(err => {
+                            console.log("error fetching evolution line: ", err);
+                            dispatch({
+                                type: FETCHING_EVOLUTION_LINE_FAILURE,
+                                payload: err
+                            });
+                        });
                 })
                 .catch(err => {
                     console.log("species err: ", err);
