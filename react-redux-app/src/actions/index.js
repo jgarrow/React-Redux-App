@@ -22,21 +22,13 @@ export const getPokemon = apiUrl => dispatch => {
     axios
         .get(apiUrl)
         .then(res => {
-            // console.log("res: ", res.data);
-
             dispatch({ type: API_CALL_SUCCESS, payload: res.data });
             return res.data;
         })
         .then(res => {
-            console.log("res before getting species: ", res);
-
             axios
                 .get(res.species.url)
                 .then(res => {
-                    // console.log(
-                    //     "species res: ",
-                    //     res.data["flavor_text_entries"]
-                    // );
                     dispatch({
                         type: FETCHING_DEX_ENTRIES_SUCCESS,
                         payload: res.data["flavor_text_entries"]
@@ -45,12 +37,6 @@ export const getPokemon = apiUrl => dispatch => {
                     axios
                         .get(res.data["evolution_chain"].url)
                         .then(res => {
-                            // console.log("Evolution chain res: ", res);
-                            // console.log(
-                            //     "Evolution chain res: ",
-                            //     res.data.chain
-                            // );
-
                             const evolineObj = { ...res.data.chain };
 
                             const evol_I = evolineObj.species.name;
@@ -82,10 +68,6 @@ export const getPokemon = apiUrl => dispatch => {
                             return evolutions;
                         })
                         .then(res => {
-                            // console.log(
-                            //     "res after finishing evolution chain: ",
-                            //     res
-                            // );
                             const baseApiUrl =
                                 "https://pokeapi.co/api/v2/pokemon/";
 
@@ -94,34 +76,15 @@ export const getPokemon = apiUrl => dispatch => {
                                 mon => `${baseApiUrl}${mon}`
                             );
 
-                            // console.log("evol_II_urls array: ", evol_II_urls);
-
                             let evol_III_urls = res["evolution_III"].toString();
-                            console.log("evol_III_urls array: ", evol_III_urls);
 
                             evol_III_urls = evol_III_urls.split(",");
-
-                            console.log(
-                                "evol_III_urls after split array: ",
-                                evol_III_urls
-                            );
 
                             evol_III_urls = evol_III_urls.map(
                                 mon => `${baseApiUrl}${mon}`
                             );
 
-                            console.log(
-                                "evol_III_urls now urls array: ",
-                                evol_III_urls
-                            );
-
                             const evol_I_url = `${baseApiUrl}${res["evolution_I"]}`;
-                            // const evol_II_url = `${baseApiUrl}${res["evolution_II"][0]}`;
-                            // const evol_III_url = `${baseApiUrl}${res["evolution_III"][0]}`;
-
-                            // console.log("evol_I_url: ", evol_I_url);
-                            // console.log("evol_II_url: ", evol_II_url);
-                            // console.log("evol_III_url: ", evol_III_url);
 
                             const evolution_urls = {
                                 evol_I: evol_I_url,
@@ -132,7 +95,6 @@ export const getPokemon = apiUrl => dispatch => {
                             axios
                                 .get(evolution_urls["evol_I"])
                                 .then(res => {
-                                    console.log("evol_I res: ", res.data);
                                     dispatch({
                                         type: FETCHING_EVOL_SPRITE_SUCCESS,
                                         payload: {
@@ -159,10 +121,6 @@ export const getPokemon = apiUrl => dispatch => {
                                 axios
                                     .get(url)
                                     .then(res => {
-                                        // console.log(
-                                        //     "evol_II url res: ",
-                                        //     res.data.sprites["front_default"]
-                                        // );
                                         dispatch({
                                             type: FETCHING_EVOL_SPRITE_SUCCESS,
                                             payload: {
@@ -190,7 +148,6 @@ export const getPokemon = apiUrl => dispatch => {
                                 axios
                                     .get(url)
                                     .then(res => {
-                                        // console.log("evol_III res: ", res.data);
                                         dispatch({
                                             type: FETCHING_EVOL_SPRITE_SUCCESS,
                                             payload: {
@@ -232,7 +189,6 @@ export const getPokemon = apiUrl => dispatch => {
         })
         .catch(err => {
             console.log("err with initial API call: ", err);
-            // console.log("err: apiUrl: ", apiUrl);
             dispatch({ type: API_CALL_FAILURE, payload: err });
         });
 };
@@ -242,7 +198,6 @@ export const getMoveInfo = apiUrl => dispatch => {
     axios
         .get(apiUrl)
         .then(res => {
-            // console.log("moves res: ", res);
             dispatch({ type: FETCHING_MOVE_INFO_SUCCESS, payload: res.data });
         })
         .catch(err => {

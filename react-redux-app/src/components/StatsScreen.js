@@ -30,9 +30,7 @@ const StatNum = styled.p`
 const StatsScreen = props => {
     const handleGetStat = name => {
         let stat = props.pokemon.stats.find(stat => stat.stat.name === name);
-
         stat = stat["base_stat"];
-        // console.log(`${name} base state: `, stat);
 
         return stat;
     };

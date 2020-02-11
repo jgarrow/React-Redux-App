@@ -208,8 +208,6 @@ export const pokemonReducer = (state = initialState, action) => {
                 evolution_III: evol_III
             };
 
-            console.log("evolutions tier III: ", evolutions["evolution_III"]);
-
             // if they're the same, evoIIArraysAreSame will be the length of the array - 1
             let evoIIArraysAreSame = false;
             if (prev_evo_line["evolution_II"]) {
@@ -218,9 +216,6 @@ export const pokemonReducer = (state = initialState, action) => {
                         prev_evo_line["evolution_II"][i] ===
                         evolutions["evolution_II"][i]
                     ) {
-                        console.log(
-                            `prev and evolutions are same at index ${i}`
-                        );
                         evoIIArraysAreSame = true;
                     }
                 }
@@ -276,13 +271,7 @@ export const pokemonReducer = (state = initialState, action) => {
             const evolutionSprites = { ...state["evolution_sprites"] };
             let updatedSprites = null;
 
-            // console.log(
-            //     "evolutionSprites in reducer before updating: ",
-            //     evolutionSprites
-            // );
-
             // need to reset evol_II and evol_III arrays when querying for a pokemon that has a different evolution_line
-
             if (payload_evolution === "evol_I") {
                 evolutionSprites["evol_I"] = action.payload.sprite;
             } else if (payload_evolution === "evol_II") {
@@ -312,11 +301,6 @@ export const pokemonReducer = (state = initialState, action) => {
                     ];
                 }
             }
-
-            // console.log(
-            //     "evolutionSprites in reducer after updating: ",
-            //     evolutionSprites
-            // );
 
             return {
                 ...state,

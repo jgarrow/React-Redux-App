@@ -122,12 +122,6 @@ const RightArrow = styled(Arrow)`
 //  for each element (which are objects), if element.language.name === "en", get the element["flavor_text"] and element.version.name for which game it's from
 
 const LeftPanel = props => {
-    // console.log("props.pokemon.sprites: ", props.pokemon.sprites);
-    // console.log(
-    //     "props.pokemon sprite: ",
-    //     props.pokemon.sprites["front_default"]
-    // );
-
     const [dexEntryPosition, setDexEntryPosition] = useState(0);
 
     const handleTransition = direction => {

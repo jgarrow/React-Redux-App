@@ -39,19 +39,6 @@ const SmallSprite = styled(Sprite)`
 `;
 
 const EvolutionPanel = props => {
-    // console.log("evolution_line in evolution panel: ", props["evolution_line"]);
-
-    // console.log(
-    //     "evolution_sprites in evolution panel: ",
-    //     props["evolution_sprites"]
-    // );
-
-    props["evolution_sprites"]["evol_II"] &&
-        console.log(
-            'props["evolution_sprites"]["evol_II"]: ',
-            props["evolution_sprites"]["evol_II"]
-        );
-
     return (
         <EvolPanel>
             <div>
