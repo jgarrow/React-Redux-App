@@ -46,6 +46,12 @@ const EvolutionPanel = props => {
     //     props["evolution_sprites"]
     // );
 
+    props["evolution_sprites"]["evol_II"] &&
+        console.log(
+            'props["evolution_sprites"]["evol_II"]: ',
+            props["evolution_sprites"]["evol_II"]
+        );
+
     return (
         <EvolPanel>
             <div>
@@ -73,7 +79,7 @@ const EvolutionPanel = props => {
                 {props["evolution_line"]["evolution_II"] && (
                     <>
                         <SmallSprite
-                            src={props["evolution_sprites"]["evol_II"]}
+                            src={props["evolution_sprites"]["evol_II"][0]}
                             alt={props["evolution_line"]["evolution_II"][0]}
                         />
 
@@ -91,7 +97,7 @@ const EvolutionPanel = props => {
                 {props["evolution_line"]["evolution_III"] && (
                     <>
                         <SmallSprite
-                            src={props["evolution_sprites"]["evol_III"]}
+                            src={props["evolution_sprites"]["evol_III"][0]}
                             alt={props["evolution_line"]["evolution_III"][0]}
                         />
 
@@ -112,17 +118,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, {}, null, {
-    areStatesEqual: (next, prev) => {
-        // console.log('prev["evolution_line"]: ', prev["evolution_line"]);
-        // console.log('next["evolution_line"]: ', next["evolution_line"]);
-
-        // console.log('prev["evolution_sprites"]: ', prev["evolution_sprites"]);
-        // console.log('next["evolution_sprites"]: ', next["evolution_sprites"]);
-
-        return (
-            prev["evolution_line"] === next["evolution_line"] &&
-            prev["evolution_sprites"] === next["evolution_sprites"]
-        );
-    }
-})(EvolutionPanel);
+export default connect(mapStateToProps, {})(EvolutionPanel);

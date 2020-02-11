@@ -54,7 +54,8 @@ const initialState = {
             stat: null
         }
     ],
-    evolution_line: [],
+    evolution_line: {},
+    previous_evolution_line: {},
     evolution_sprites: {
         evol_I: null,
         evol_II: [],
@@ -118,6 +119,8 @@ export const pokemonReducer = (state = initialState, action) => {
 
             // console.log("entries 2 and 4 are same: ", entriesAreSame);
 
+            // only removing some of the duplicates, but not all
+            // not sure why...I think it's something with some of the carriage returns?
             const removedDuplicates = englishEntries.reduce((acc, current) => {
                 const x = acc.find(
                     item => item["flavor_text"] === current["flavor_text"]
@@ -174,6 +177,13 @@ export const pokemonReducer = (state = initialState, action) => {
             };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
             // console.log("action.payload in fetching evo line:", action.payload);
+
+            let evoIISprites = [...state["evolution_sprites"]["evol_II"]];
+            // let evoIIISprites = [...state["evolution_sprites"]["evol_III"]];
+
+            // want to set the `previous_evolution_line` to what the current `evolution_line` is before it gets updated
+            const prev_evo_line = { ...state["evolution_line"] };
+
             // action.payload = res.data.chain
             const evolineObj = { ...action.payload };
 
@@ -197,6 +207,56 @@ export const pokemonReducer = (state = initialState, action) => {
                 evolution_III: evol_III
             };
 
+            // if they're the same, evoIIArraysAreSame will be the length of the array - 1
+            let evoIIArraysAreSame = false;
+            if (prev_evo_line["evolution_II"]) {
+                for (let i = 0; i < prev_evo_line["evolution_II"].length; i++) {
+                    console.log(
+                        `prevo evoII at index ${i}: `,
+                        prev_evo_line["evolution_II"][i]
+                    );
+                    console.log(
+                        `updated evoII at index ${i}: `,
+                        evolutions["evolution_II"][i]
+                    );
+
+                    if (
+                        prev_evo_line["evolution_II"][i] ===
+                        evolutions["evolution_II"][i]
+                    ) {
+                        console.log(
+                            `prev and evolutions are same at index ${i}`
+                        );
+                        evoIIArraysAreSame = true;
+                    }
+                }
+                console.log("evoIIArraysAreSame: ", evoIIArraysAreSame);
+
+                if (
+                    !evoIIArraysAreSame
+                    // prev_evo_line["evolution_II"].length - 1
+                ) {
+                    evoIISprites = [];
+                }
+            }
+
+            // if they're the same, evoIIArraysAreSame will be the length of the array - 1
+            // let evoIIIArraysAreSame = 0;
+            // for (let i = 0; i < prev_evo_line["evolution_III"].length; i++) {
+            //     if (
+            //         prev_evo_line["evolution_III"][i] !==
+            //         evolutions["evolution_III"][i]
+            //     ) {
+            //         evoIIArraysAreSame = evoIIArraysAreSame + 1;
+            //     }
+            // }
+
+            // if (
+            //     evoIIIArraysAreSame <
+            //     prev_evo_line["evolution_III"].length - 1
+            // ) {
+            //     evoIIISprites = [];
+            // }
             // console.log("evolineObj: ", evolineObj);
 
             // evolutions is an array of objects
@@ -205,6 +265,12 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 evolution_line: evolutions,
+                previous_evolution_line: prev_evo_line,
+                evolution_sprites: {
+                    ...state["evolution_sprites"],
+                    evol_II: evoIISprites
+                    // evol_III: evoIIISprites
+                },
                 error: "",
                 isFetching: false
             };
@@ -219,10 +285,12 @@ export const pokemonReducer = (state = initialState, action) => {
             const evolutionSprites = { ...state["evolution_sprites"] };
             let updatedSprites = null;
 
-            console.log(
-                "evolutionSprites in reducer before updating: ",
-                evolutionSprites
-            );
+            // console.log(
+            //     "evolutionSprites in reducer before updating: ",
+            //     evolutionSprites
+            // );
+
+            // need to reset evol_II and evol_III arrays when querying for a pokemon that has a different evolution_line
 
             if (payload_evolution === "evol_I") {
                 evolutionSprites["evol_I"] = action.payload.sprite;
@@ -254,10 +322,10 @@ export const pokemonReducer = (state = initialState, action) => {
                 }
             }
 
-            console.log(
-                "evolutionSprites in reducer after updating: ",
-                evolutionSprites
-            );
+            // console.log(
+            //     "evolutionSprites in reducer after updating: ",
+            //     evolutionSprites
+            // );
 
             return {
                 ...state,
