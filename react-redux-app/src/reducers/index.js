@@ -303,44 +303,66 @@ export const pokemonReducer = (state = initialState, action) => {
                 }
             }
 
-            console.log("evolutionSprites in reducer: ", evolutionSprites);
-
-            // need to make sure that the order of the evolution_line is the same as the evolution_sprites so that the names match the images
-            // can map of the sprites arrays, slice the last few characters to get the id number and then sort them by their id
-
-            let evoLine = { ...state["evolution_line"] };
-            let urlDexNumArray = evolutionSprites["evol_II"].map(
+            // logic to reorder the evolutionSprites for tier II so that they match the same order of the names for the sprites
+            let evoIIUrlDexNumArray = evolutionSprites["evol_II"].map(
                 (url, index) => {
+                    // get the last 7 characters (should be "###.png" or "/##.png")
                     let urlDexNum = url.slice(-7);
 
+                    // if the first char is "/", get rid of it
                     if (urlDexNum.charAt(0) === "/") {
                         urlDexNum = urlDexNum.slice(1);
                     }
 
+                    // get rid of the ".png" at the end and convert it to a num
                     urlDexNum = parseInt(urlDexNum.slice(0, 3));
-
-                    console.log("urlDexNum: ", urlDexNum);
 
                     return { dex: urlDexNum, imgSrc: url, currIndex: index };
                 }
             );
 
-            urlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
+            // sort the array by lowest to highest urlDexNum value at key "dex"
+            evoIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
 
-            urlDexNumArray.forEach((num, index) => {
+            // update the value of "currIndex" to be the newly sorted index
+            evoIIUrlDexNumArray.forEach((num, index) => {
                 num.currIndex = index;
             });
 
-            evolutionSprites["evol_II"] = urlDexNumArray.map(obj => obj.imgSrc);
-
-            console.log(
-                "urlDexNumArray after updating to new index: ",
-                urlDexNumArray
+            // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
+            evolutionSprites["evol_II"] = evoIIUrlDexNumArray.map(
+                obj => obj.imgSrc
             );
 
-            console.log(
-                'evolutionSprites["evol_II"]: ',
-                evolutionSprites["evol_II"]
+            // logic to reorder the evolutionSprites for tier III so that they match the same order of the names for the sprites
+            let evoIIIUrlDexNumArray = evolutionSprites["evol_III"].map(
+                (url, index) => {
+                    // get the last 7 characters (should be "###.png" or "/##.png")
+                    let urlDexNum = url.slice(-7);
+
+                    // if the first char is "/", get rid of it
+                    if (urlDexNum.charAt(0) === "/") {
+                        urlDexNum = urlDexNum.slice(1);
+                    }
+
+                    // get rid of the ".png" at the end and convert it to a num
+                    urlDexNum = parseInt(urlDexNum.slice(0, 3));
+
+                    return { dex: urlDexNum, imgSrc: url, currIndex: index };
+                }
+            );
+
+            // sort the array by lowest to highest urlDexNum value at key "dex"
+            evoIIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
+
+            // update the value of "currIndex" to be the newly sorted index
+            evoIIIUrlDexNumArray.forEach((num, index) => {
+                num.currIndex = index;
+            });
+
+            // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
+            evolutionSprites["evol_III"] = evoIIIUrlDexNumArray.map(
+                obj => obj.imgSrc
             );
 
             return {
