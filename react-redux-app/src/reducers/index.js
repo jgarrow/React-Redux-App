@@ -179,7 +179,7 @@ export const pokemonReducer = (state = initialState, action) => {
             // console.log("action.payload in fetching evo line:", action.payload);
 
             let evoIISprites = [...state["evolution_sprites"]["evol_II"]];
-            // let evoIIISprites = [...state["evolution_sprites"]["evol_III"]];
+            let evoIIISprites = [...state["evolution_sprites"]["evol_III"]];
 
             // want to set the `previous_evolution_line` to what the current `evolution_line` is before it gets updated
             const prev_evo_line = { ...state["evolution_line"] };
@@ -241,22 +241,28 @@ export const pokemonReducer = (state = initialState, action) => {
             }
 
             // if they're the same, evoIIArraysAreSame will be the length of the array - 1
-            // let evoIIIArraysAreSame = 0;
-            // for (let i = 0; i < prev_evo_line["evolution_III"].length; i++) {
-            //     if (
-            //         prev_evo_line["evolution_III"][i] !==
-            //         evolutions["evolution_III"][i]
-            //     ) {
-            //         evoIIArraysAreSame = evoIIArraysAreSame + 1;
-            //     }
-            // }
+            let evoIIIArraysAreSame = false;
+            if (prev_evo_line["evolution_III"]) {
+                for (
+                    let i = 0;
+                    i < prev_evo_line["evolution_III"].length;
+                    i++
+                ) {
+                    if (
+                        prev_evo_line["evolution_III"][i] ===
+                        evolutions["evolution_III"][i]
+                    ) {
+                        evoIIArraysAreSame = true;
+                    }
+                }
 
-            // if (
-            //     evoIIIArraysAreSame <
-            //     prev_evo_line["evolution_III"].length - 1
-            // ) {
-            //     evoIIISprites = [];
-            // }
+                if (
+                    !evoIIIArraysAreSame
+                    // prev_evo_line["evolution_III"].length - 1
+                ) {
+                    evoIIISprites = [];
+                }
+            }
             // console.log("evolineObj: ", evolineObj);
 
             // evolutions is an array of objects
@@ -268,8 +274,8 @@ export const pokemonReducer = (state = initialState, action) => {
                 previous_evolution_line: prev_evo_line,
                 evolution_sprites: {
                     ...state["evolution_sprites"],
-                    evol_II: evoIISprites
-                    // evol_III: evoIIISprites
+                    evol_II: evoIISprites,
+                    evol_III: evoIIISprites
                 },
                 error: "",
                 isFetching: false
