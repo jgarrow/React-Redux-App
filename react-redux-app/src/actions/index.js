@@ -96,12 +96,24 @@ export const getPokemon = apiUrl => dispatch => {
 
                             // console.log("evol_II_urls array: ", evol_II_urls);
 
-                            let evol_III_urls = res["evolution_III"];
+                            let evol_III_urls = res["evolution_III"].toString();
+                            console.log("evol_III_urls array: ", evol_III_urls);
+
+                            evol_III_urls = evol_III_urls.split(",");
+
+                            console.log(
+                                "evol_III_urls after split array: ",
+                                evol_III_urls
+                            );
+
                             evol_III_urls = evol_III_urls.map(
                                 mon => `${baseApiUrl}${mon}`
                             );
 
-                            // console.log("evol_III_urls array: ", evol_III_urls);
+                            console.log(
+                                "evol_III_urls now urls array: ",
+                                evol_III_urls
+                            );
 
                             const evol_I_url = `${baseApiUrl}${res["evolution_I"]}`;
                             // const evol_II_url = `${baseApiUrl}${res["evolution_II"][0]}`;

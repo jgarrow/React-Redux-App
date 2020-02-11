@@ -176,15 +176,13 @@ export const pokemonReducer = (state = initialState, action) => {
                 isFetching: false
             };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
-            // console.log("action.payload in fetching evo line:", action.payload);
-
             let evoIISprites = [...state["evolution_sprites"]["evol_II"]];
             let evoIIISprites = [...state["evolution_sprites"]["evol_III"]];
 
             // want to set the `previous_evolution_line` to what the current `evolution_line` is before it gets updated
             const prev_evo_line = { ...state["evolution_line"] };
 
-            // action.payload = res.data.chain
+            // structure of action.payload = res.data.chain
             const evolineObj = { ...action.payload };
 
             const evol_I = evolineObj.species.name;
@@ -195,11 +193,14 @@ export const pokemonReducer = (state = initialState, action) => {
             );
 
             // array of strings
-            const evol_III = evolineObj["evolves_to"].map(mon =>
-                mon["evolves_to"]
-                    .map(pokemon => pokemon.species.name)
-                    .toString()
-            );
+            let evol_III = evolineObj["evolves_to"]
+                .map(mon =>
+                    mon["evolves_to"]
+                        .map(pokemon => pokemon.species.name)
+                        .toString()
+                )
+                .toString();
+            evol_III = evol_III.split(",");
 
             const evolutions = {
                 evolution_I: evol_I,
@@ -207,19 +208,12 @@ export const pokemonReducer = (state = initialState, action) => {
                 evolution_III: evol_III
             };
 
+            console.log("evolutions tier III: ", evolutions["evolution_III"]);
+
             // if they're the same, evoIIArraysAreSame will be the length of the array - 1
             let evoIIArraysAreSame = false;
             if (prev_evo_line["evolution_II"]) {
                 for (let i = 0; i < prev_evo_line["evolution_II"].length; i++) {
-                    console.log(
-                        `prevo evoII at index ${i}: `,
-                        prev_evo_line["evolution_II"][i]
-                    );
-                    console.log(
-                        `updated evoII at index ${i}: `,
-                        evolutions["evolution_II"][i]
-                    );
-
                     if (
                         prev_evo_line["evolution_II"][i] ===
                         evolutions["evolution_II"][i]
@@ -230,12 +224,9 @@ export const pokemonReducer = (state = initialState, action) => {
                         evoIIArraysAreSame = true;
                     }
                 }
-                console.log("evoIIArraysAreSame: ", evoIIArraysAreSame);
 
-                if (
-                    !evoIIArraysAreSame
-                    // prev_evo_line["evolution_II"].length - 1
-                ) {
+                // reset the tier III evolution sprites in state to an empty array if the evolution line has changed
+                if (!evoIIArraysAreSame) {
                     evoIISprites = [];
                 }
             }
@@ -256,17 +247,11 @@ export const pokemonReducer = (state = initialState, action) => {
                     }
                 }
 
-                if (
-                    !evoIIIArraysAreSame
-                    // prev_evo_line["evolution_III"].length - 1
-                ) {
+                // reset the tier III evolution sprites in state to an empty array if the evolution line has changed
+                if (!evoIIIArraysAreSame) {
                     evoIIISprites = [];
                 }
             }
-            // console.log("evolineObj: ", evolineObj);
-
-            // evolutions is an array of objects
-            // console.log("evolutions: ", evolutions);
 
             return {
                 ...state,
