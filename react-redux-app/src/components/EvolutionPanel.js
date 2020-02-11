@@ -39,12 +39,12 @@ const SmallSprite = styled(Sprite)`
 `;
 
 const EvolutionPanel = props => {
-    console.log("evolution_line in evolution panel: ", props["evolution_line"]);
+    // console.log("evolution_line in evolution panel: ", props["evolution_line"]);
 
-    console.log(
-        "evolution_sprites in evolution panel: ",
-        props["evolution_sprites"]
-    );
+    // console.log(
+    //     "evolution_sprites in evolution panel: ",
+    //     props["evolution_sprites"]
+    // );
 
     return (
         <EvolPanel>
@@ -112,4 +112,17 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, {})(EvolutionPanel);
+export default connect(mapStateToProps, {}, null, {
+    areStatesEqual: (next, prev) => {
+        // console.log('prev["evolution_line"]: ', prev["evolution_line"]);
+        // console.log('next["evolution_line"]: ', next["evolution_line"]);
+
+        // console.log('prev["evolution_sprites"]: ', prev["evolution_sprites"]);
+        // console.log('next["evolution_sprites"]: ', next["evolution_sprites"]);
+
+        return (
+            prev["evolution_line"] === next["evolution_line"] &&
+            prev["evolution_sprites"] === next["evolution_sprites"]
+        );
+    }
+})(EvolutionPanel);

@@ -70,12 +70,12 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: "",
-                isFetching: true,
-                evolution_sprites: {
-                    evol_I: null,
-                    evol_II: [],
-                    evol_III: []
-                }
+                isFetching: true
+                // evolution_sprites: {
+                //     evol_I: null,
+                //     evol_II: [],
+                //     evol_III: []
+                // }
             };
         case API_CALL_SUCCESS:
             return {
@@ -217,22 +217,47 @@ export const pokemonReducer = (state = initialState, action) => {
         case FETCHING_EVOL_SPRITE_SUCCESS:
             let payload_evolution = action.payload["evolution_tier"];
             const evolutionSprites = { ...state["evolution_sprites"] };
+            let updatedSprites = null;
+
+            console.log(
+                "evolutionSprites in reducer before updating: ",
+                evolutionSprites
+            );
 
             if (payload_evolution === "evol_I") {
                 evolutionSprites["evol_I"] = action.payload.sprite;
             } else if (payload_evolution === "evol_II") {
-                evolutionSprites["evol_II"] = [
-                    ...evolutionSprites["evol_II"],
+                updatedSprites = [...state["evolution_sprites"]["evol_II"]];
+
+                // to prevent re "setting" state if the action.payload is the same as the current state
+                if (
+                    updatedSprites[updatedSprites.length - 1] !==
                     action.payload.sprite
-                ];
+                ) {
+                    evolutionSprites["evol_II"] = [
+                        ...evolutionSprites["evol_II"],
+                        action.payload.sprite
+                    ];
+                }
             } else if (payload_evolution === "evol_III") {
-                evolutionSprites["evol_III"] = [
-                    ...evolutionSprites["evol_III"],
+                updatedSprites = [...state["evolution_sprites"]["evol_III"]];
+
+                // to prevent re "setting" state if the action.payload is the same as the current state
+                if (
+                    updatedSprites[updatedSprites.length - 1] !==
                     action.payload.sprite
-                ];
+                ) {
+                    evolutionSprites["evol_III"] = [
+                        ...evolutionSprites["evol_III"],
+                        action.payload.sprite
+                    ];
+                }
             }
 
-            // console.log("evolutionSprites in reducer: ", evolutionSprites);
+            console.log(
+                "evolutionSprites in reducer after updating: ",
+                evolutionSprites
+            );
 
             return {
                 ...state,
