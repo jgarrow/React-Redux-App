@@ -54,9 +54,4 @@ export const PanelRow = styled.div`
     display: flex;
     border-bottom: groove #757575 3px;
     justify-content: space-evenly;
-
-    &:last-child {
-        border-top: groove #757575 3px;
-        border-bottom: none;
-    }
 `;

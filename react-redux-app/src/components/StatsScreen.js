@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Screen } from "./StyledComponents";
 
 const StatScreen = styled(Screen)`
+    box-sizing: border-box;
     width: 150px;
     display: flex;
     flex-flow: column nowrap;

@@ -27,6 +27,7 @@ const ImgWrapper = styled.div`
     width: 359px;
     height: 359px;
     display: flex;
+    margin: 10px 0;
     align-items: center;
     justify-content: center;
 `;
@@ -37,7 +38,6 @@ export const Sprite = styled.img`
     image-rendering: pixelated;
     border: inset #9aa28b 3px;
     border-radius: 5px;
-    margin: 10px 0;
     box-sizing: border-box;
     background: linear-gradient(
         15deg,
@@ -262,7 +262,8 @@ const LeftPanel = props => {
 const mapStateToProps = state => {
     return {
         pokemon: state.pokemon,
-        dexEntries: state.dexEntries
+        dexEntries: state.dexEntries,
+        isFetching: state.isFetching
     };
 };
 

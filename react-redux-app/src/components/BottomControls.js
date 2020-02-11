@@ -4,10 +4,14 @@ import { connect } from "react-redux";
 
 import { getPokemon } from "../actions";
 
-const Controls = styled.div`
+import { PanelRow } from "./StyledComponents";
+
+const Controls = styled(PanelRow)`
     display: flex;
     justify-content: space-around;
     padding: 15px;
+    border-top: groove #757575 3px;
+    border-bottom: none;
 `;
 
 const ControlsButton = styled.div`

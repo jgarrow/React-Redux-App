@@ -6,9 +6,10 @@ import { getMoveInfo } from "../actions";
 
 import { Screen } from "./StyledComponents";
 
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+
 const MoveContainer = styled.div`
     display: flex;
-    min-height: 158px;
 `;
 
 const MoveScreen = styled(Screen)`
@@ -17,8 +18,8 @@ const MoveScreen = styled(Screen)`
     box-sizing: border-box;
     flex: 1;
     width: 100%;
-    min-height: 135px;
-    max-height: 135px;
+    min-height: 103px;
+    max-height: 103px;
     overflow: hidden;
     position: relative;
 `;
@@ -26,7 +27,7 @@ const MoveScreen = styled(Screen)`
 const Slides = styled.div`
     width: 100%;
     height: 100%;
-    min-height: 135px;
+    min-height: 103px;
     position: relative;
     display: grid;
     grid-template-rows: ${props => `repeat(${props.numOfSlides}, 100%)`};
@@ -95,7 +96,6 @@ const MoveArrow = styled.div`
     align-items: center;
     text-shadow: #e78181 -1px 1px;
     cursor: pointer;
-    transform: rotate(60deg);
 `;
 
 const MoveList = props => {
@@ -181,8 +181,12 @@ const MoveList = props => {
             </MoveScreen>
 
             <MoveControls>
-                <MoveArrow onClick={() => handleTransition("up")}></MoveArrow>
-                <MoveArrow onClick={() => handleTransition("down")}></MoveArrow>
+                <MoveArrow onClick={() => handleTransition("up")}>
+                    <IoIosArrowUp />
+                </MoveArrow>
+                <MoveArrow onClick={() => handleTransition("down")}>
+                    <IoIosArrowDown />
+                </MoveArrow>
             </MoveControls>
         </MoveContainer>
     );
