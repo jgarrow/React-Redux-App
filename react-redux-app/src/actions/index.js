@@ -205,3 +205,15 @@ export const getMoveInfo = apiUrl => dispatch => {
             dispatch({ type: FETCHING_MOVE_INFO_FAILURE, payload: err });
         });
 };
+
+// export const getMainSprite = (name, isFemale, isBackwards, isShiny) => dispatch => {
+//     let
+
+//     axios
+//         .get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+//         .then(res => {
+//             console.log("getMainSprite res.data: ", res.data);
+//             dispatch({ type: FETCHING_MAIN_SPRITE_SUCCESS, payload:  })
+//         })
+
+// }

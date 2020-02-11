@@ -72,11 +72,6 @@ export const pokemonReducer = (state = initialState, action) => {
                 ...state,
                 error: "",
                 isFetching: true
-                // evolution_sprites: {
-                //     evol_I: null,
-                //     evol_II: [],
-                //     evol_III: []
-                // }
             };
         case API_CALL_SUCCESS:
             return {

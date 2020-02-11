@@ -36,9 +36,9 @@ const PokemonCard = props => {
     const [hasTwoTypes, setHasTwoTypes] = useState(false);
 
     let tempHasTwoTypes = false;
-    let monName = props.pokemon.name;
 
     useEffect(() => {
+        let monName = props.pokemon.name;
         axios
             .get(props.pokemonUrl)
             .then(res => {

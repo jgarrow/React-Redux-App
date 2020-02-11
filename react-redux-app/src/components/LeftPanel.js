@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -123,6 +123,16 @@ const RightArrow = styled(Arrow)`
 
 const LeftPanel = props => {
     const [dexEntryPosition, setDexEntryPosition] = useState(0);
+    const [isFemale, setIsFemale] = useState(false);
+    const [isShiny, setIsShiny] = useState(false);
+    const [isBackwards, setIsBackwards] = useState(false);
+    const [spriteSrc, setSpriteSrc] = useState("");
+
+    useEffect(() => {
+        if (props.pokemon.sprites) {
+            setSpriteSrc(props.pokemon.sprites["front_default"]);
+        }
+    }, [props.pokemon.sprites]);
 
     const handleTransition = direction => {
         let newPosition = dexEntryPosition;
@@ -134,6 +144,59 @@ const LeftPanel = props => {
         }
 
         setDexEntryPosition(newPosition);
+    };
+
+    const handleFemaleIconClick = e => {
+        console.log("in handleFemaleIconClick");
+        let newSpriteSrc = "";
+        setIsFemale(!isFemale);
+
+        console.log("isShiny: ", isShiny);
+        console.log("isBackwards: ", isBackwards);
+        console.log("isFemale: ", isFemale);
+
+        if (props.pokemon.sprites) {
+            if (!isFemale && !isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_female"];
+                console.log("normal female: ", newSpriteSrc);
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["front_default"];
+                }
+            } else if (!isFemale && !isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_female"];
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["back_default"];
+                }
+            } else if (!isFemale && isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_shiny_female"];
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["front_shiny"];
+                }
+            } else if (!isFemale && isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_shiny_female"];
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["back_shiny_default"];
+                }
+            } else if (isFemale && !isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_default"];
+            } else if (isFemale && !isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_default"];
+            } else if (isFemale && isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_shiny"];
+            } else if (isFemale && isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_shiny"];
+            }
+        }
+
+        setSpriteSrc(newSpriteSrc);
     };
 
     return (
@@ -149,15 +212,12 @@ const LeftPanel = props => {
             <div>
                 <ImgWrapper>
                     {props.pokemon.sprites && (
-                        <Sprite
-                            src={props.pokemon.sprites["front_default"]}
-                            alt={props.pokemon.name}
-                        />
+                        <Sprite src={spriteSrc} alt={props.pokemon.name} />
                     )}
                 </ImgWrapper>
                 <SpriteControls>
                     <SpriteControl>
-                        <IoMdFemale />
+                        <IoMdFemale onClick={handleFemaleIconClick} />
                     </SpriteControl>
 
                     <ShinySpriteControl>
