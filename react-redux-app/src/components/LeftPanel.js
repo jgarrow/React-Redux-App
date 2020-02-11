@@ -134,6 +134,53 @@ const LeftPanel = props => {
         }
     }, [props.pokemon.sprites]);
 
+    // for changing image sprite
+    useEffect(() => {
+        let newSpriteSrc = "";
+
+        if (props.pokemon.sprites) {
+            if (isFemale && !isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_female"];
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["front_default"];
+                }
+            } else if (isFemale && !isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_female"];
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["back_default"];
+                }
+            } else if (isFemale && isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_shiny_female"];
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["front_shiny"];
+                }
+            } else if (isFemale && isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_shiny_female"];
+
+                if (newSpriteSrc === null) {
+                    newSpriteSrc = newSpriteSrc =
+                        props.pokemon.sprites["back_shiny_default"];
+                }
+            } else if (!isFemale && !isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_default"];
+            } else if (!isFemale && !isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_default"];
+            } else if (!isFemale && isShiny && !isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["front_shiny"];
+            } else if (!isFemale && isShiny && isBackwards) {
+                newSpriteSrc = props.pokemon.sprites["back_shiny"];
+            }
+        }
+
+        setSpriteSrc(newSpriteSrc);
+    }, [isFemale, isShiny, isBackwards, props.pokemon.sprites]);
+
     const handleTransition = direction => {
         let newPosition = dexEntryPosition;
 
@@ -146,57 +193,16 @@ const LeftPanel = props => {
         setDexEntryPosition(newPosition);
     };
 
+    const handleShinyIconClick = e => {
+        setIsShiny(!isShiny);
+    };
+
+    const handleUndoIconClick = e => {
+        setIsBackwards(!isBackwards);
+    };
+
     const handleFemaleIconClick = e => {
-        console.log("in handleFemaleIconClick");
-        let newSpriteSrc = "";
         setIsFemale(!isFemale);
-
-        console.log("isShiny: ", isShiny);
-        console.log("isBackwards: ", isBackwards);
-        console.log("isFemale: ", isFemale);
-
-        if (props.pokemon.sprites) {
-            if (!isFemale && !isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_female"];
-                console.log("normal female: ", newSpriteSrc);
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["front_default"];
-                }
-            } else if (!isFemale && !isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_female"];
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["back_default"];
-                }
-            } else if (!isFemale && isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_shiny_female"];
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["front_shiny"];
-                }
-            } else if (!isFemale && isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_shiny_female"];
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["back_shiny_default"];
-                }
-            } else if (isFemale && !isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_default"];
-            } else if (isFemale && !isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_default"];
-            } else if (isFemale && isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_shiny"];
-            } else if (isFemale && isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_shiny"];
-            }
-        }
-
-        setSpriteSrc(newSpriteSrc);
     };
 
     return (
@@ -220,12 +226,12 @@ const LeftPanel = props => {
                         <IoMdFemale onClick={handleFemaleIconClick} />
                     </SpriteControl>
 
-                    <ShinySpriteControl>
+                    <ShinySpriteControl onClick={handleShinyIconClick}>
                         <span>Shiny</span>
                     </ShinySpriteControl>
 
                     <SpriteControl>
-                        <FaUndo />
+                        <FaUndo onClick={handleUndoIconClick} />
                     </SpriteControl>
                 </SpriteControls>
             </div>
