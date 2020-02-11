@@ -65,6 +65,10 @@ const initialState = {
     isFetching: false
 };
 
+// national pokedex found at pokemon-species endpoint
+// res.data["pokedex_numbers"] is an array of objects
+// if the object has a key pokedex.name === "national", then we want the key `entry_number` for the national dex number
+
 export const pokemonReducer = (state = initialState, action) => {
     switch (action.type) {
         case API_CALL_FETCHING:
@@ -243,6 +247,8 @@ export const pokemonReducer = (state = initialState, action) => {
                 }
             }
 
+            console.log("evolutions in reducer: ", evolutions);
+
             return {
                 ...state,
                 evolution_line: evolutions,
@@ -296,6 +302,46 @@ export const pokemonReducer = (state = initialState, action) => {
                     ];
                 }
             }
+
+            console.log("evolutionSprites in reducer: ", evolutionSprites);
+
+            // need to make sure that the order of the evolution_line is the same as the evolution_sprites so that the names match the images
+            // can map of the sprites arrays, slice the last few characters to get the id number and then sort them by their id
+
+            let evoLine = { ...state["evolution_line"] };
+            let urlDexNumArray = evolutionSprites["evol_II"].map(
+                (url, index) => {
+                    let urlDexNum = url.slice(-7);
+
+                    if (urlDexNum.charAt(0) === "/") {
+                        urlDexNum = urlDexNum.slice(1);
+                    }
+
+                    urlDexNum = parseInt(urlDexNum.slice(0, 3));
+
+                    console.log("urlDexNum: ", urlDexNum);
+
+                    return { dex: urlDexNum, imgSrc: url, currIndex: index };
+                }
+            );
+
+            urlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
+
+            urlDexNumArray.forEach((num, index) => {
+                num.currIndex = index;
+            });
+
+            evolutionSprites["evol_II"] = urlDexNumArray.map(obj => obj.imgSrc);
+
+            console.log(
+                "urlDexNumArray after updating to new index: ",
+                urlDexNumArray
+            );
+
+            console.log(
+                'evolutionSprites["evol_II"]: ',
+                evolutionSprites["evol_II"]
+            );
 
             return {
                 ...state,

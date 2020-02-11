@@ -60,6 +60,8 @@ export const getPokemon = apiUrl => dispatch => {
                                 evolution_III: evol_III
                             };
 
+                            console.log("evolutions in action: ", evolutions);
+
                             dispatch({
                                 type: FETCHING_EVOLUTION_LINE_SUCCESS,
                                 payload: res.data.chain // an array
@@ -205,15 +207,3 @@ export const getMoveInfo = apiUrl => dispatch => {
             dispatch({ type: FETCHING_MOVE_INFO_FAILURE, payload: err });
         });
 };
-
-// export const getMainSprite = (name, isFemale, isBackwards, isShiny) => dispatch => {
-//     let
-
-//     axios
-//         .get(`https://pokeapi.co/api/v2/pokemon/${name}`)
-//         .then(res => {
-//             console.log("getMainSprite res.data: ", res.data);
-//             dispatch({ type: FETCHING_MAIN_SPRITE_SUCCESS, payload:  })
-//         })
-
-// }
