@@ -26,19 +26,15 @@ const EvolutionNum = styled.p`
     margin: 0;
 `;
 
-const EvolutionName = styled(Screen)`
-    width: auto;
-    padding: 3px;
-    margin-bottom: 3px;
-    text-align: right;
-`;
-
 const SpriteScreen = styled.div`
     width: 100%;
+    min-width: 120px;
+    max-width: 120px;
     position: relative;
     overflow: hidden;
     min-height: 120px;
     max-height: 120px;
+    margin: 3px 0;
     border: inset #9aa28b 3px;
     border-radius: 5px;
     box-sizing: border-box;
@@ -90,6 +86,32 @@ const SmallSprite = styled.img`
     display: flex;
 `;
 
+const NameScreen = styled(Screen)`
+    padding: 3px;
+    box-sizing: border-box;
+    margin-bottom: 3px;
+    text-align: right;
+    height: 28px;
+    width: 120px;
+    overflow: hidden;
+`;
+
+const NameSlides = styled.div`
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 28px;
+    max-height: 28px;
+    display: grid;
+    grid-template-rows: ${props => `repeat(${props.numOfNames}, 100%)`};
+    transform: ${props => `translateY(${props.translateValue}%)`};
+    transition: transform 0.45s ease-out;
+`;
+
+const EvolutionName = styled.p`
+    margin: 0;
+`;
+
 const EvolutionPanel = props => {
     const [spriteIIEntryPosition, setSpriteIIEntryPosition] = useState(0);
 
@@ -121,18 +143,21 @@ const EvolutionPanel = props => {
                 <FlexCenter>
                     <EvolutionNum>I</EvolutionNum>
                 </FlexCenter>
-                {props["evolution_line"] !== {} && (
-                    <>
+                <SpriteScreen>
+                    {props["evolution_line"] !== {} && (
                         <SmallSprite
                             src={props["evolution_sprites"]["evol_I"]}
                             alt={props["evolution_line"]["evolution_I"]}
                         />
-
+                    )}
+                </SpriteScreen>
+                <NameScreen>
+                    {props["evolution_line"] !== {} && (
                         <EvolutionName>
                             {props["evolution_line"]["evolution_I"]}
                         </EvolutionName>
-                    </>
-                )}
+                    )}
+                </NameScreen>
             </div>
 
             <div>
@@ -168,12 +193,23 @@ const EvolutionPanel = props => {
                             <DownArrowIcon
                                 onClick={() => handleTransition("II", "down")}
                             />
-                            <EvolutionName>
-                                {props["evolution_line"]["evolution_II"][0]}
-                            </EvolutionName>
                         </>
                     )}
                 </SpriteScreen>
+                <NameScreen>
+                    {props["evolution_line"]["evolution_II"] &&
+                        props["evolution_line"]["evolution_II"].map(name => (
+                            <NameSlides
+                                numOfNames={
+                                    props["evolution_line"]["evolution_II"]
+                                        .length
+                                }
+                                translateValue={spriteIIEntryPosition}
+                            >
+                                <EvolutionName>{name}</EvolutionName>
+                            </NameSlides>
+                        ))}
+                </NameScreen>
             </div>
 
             <div>
