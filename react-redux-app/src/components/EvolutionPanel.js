@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -115,6 +115,21 @@ const EvolutionName = styled.p`
 const EvolutionPanel = props => {
     const [spriteIIEntryPosition, setSpriteIIEntryPosition] = useState(0);
     const [spriteIIIEntryPosition, setSpriteIIIEntryPosition] = useState(0);
+    const [evoIName, setEvoIName] = useState("");
+
+    // to capitalize first letter of tier I evolution's name
+    useEffect(() => {
+        let name = evoIName;
+        if (props["evolution_line"]["evolution_I"]) {
+            name = props["evolution_line"]["evolution_I"];
+        }
+
+        if (evoIName && evoIName !== "") {
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+        }
+
+        setEvoIName(name);
+    }, [props, evoIName]);
 
     const handleTransition = (evolTier, direction, numOfSlides) => {
         let newPosition = 0;
@@ -167,9 +182,7 @@ const EvolutionPanel = props => {
                 </SpriteScreen>
                 <NameScreen>
                     {props["evolution_line"] !== {} && (
-                        <EvolutionName>
-                            {props["evolution_line"]["evolution_I"]}
-                        </EvolutionName>
+                        <EvolutionName>{evoIName}</EvolutionName>
                     )}
                 </NameScreen>
             </div>
@@ -239,18 +252,24 @@ const EvolutionPanel = props => {
                 <NameScreen>
                     {props["evolution_line"]["evolution_II"] &&
                         props["evolution_line"]["evolution_II"].map(
-                            (name, index) => (
-                                <NameSlides
-                                    key={index}
-                                    numOfNames={
-                                        props["evolution_line"]["evolution_II"]
-                                            .length
-                                    }
-                                    translateValue={spriteIIEntryPosition}
-                                >
-                                    <EvolutionName>{name}</EvolutionName>
-                                </NameSlides>
-                            )
+                            (name, index) => {
+                                name =
+                                    name.charAt(0).toUpperCase() +
+                                    name.slice(1);
+                                return (
+                                    <NameSlides
+                                        key={index}
+                                        numOfNames={
+                                            props["evolution_line"][
+                                                "evolution_II"
+                                            ].length
+                                        }
+                                        translateValue={spriteIIEntryPosition}
+                                    >
+                                        <EvolutionName>{name}</EvolutionName>
+                                    </NameSlides>
+                                );
+                            }
                         )}
                 </NameScreen>
             </div>
@@ -323,18 +342,24 @@ const EvolutionPanel = props => {
                 <NameScreen>
                     {props["evolution_line"]["evolution_III"] &&
                         props["evolution_line"]["evolution_III"].map(
-                            (name, index) => (
-                                <NameSlides
-                                    key={index}
-                                    numOfNames={
-                                        props["evolution_line"]["evolution_III"]
-                                            .length
-                                    }
-                                    translateValue={spriteIIIEntryPosition}
-                                >
-                                    <EvolutionName>{name}</EvolutionName>
-                                </NameSlides>
-                            )
+                            (name, index) => {
+                                name =
+                                    name.charAt(0).toUpperCase() +
+                                    name.slice(1);
+                                return (
+                                    <NameSlides
+                                        key={index}
+                                        numOfNames={
+                                            props["evolution_line"][
+                                                "evolution_III"
+                                            ].length
+                                        }
+                                        translateValue={spriteIIIEntryPosition}
+                                    >
+                                        <EvolutionName>{name}</EvolutionName>
+                                    </NameSlides>
+                                );
+                            }
                         )}
                 </NameScreen>
             </div>
