@@ -116,35 +116,37 @@ const EvolutionPanel = props => {
     const [spriteIIEntryPosition, setSpriteIIEntryPosition] = useState(0);
     const [spriteIIIEntryPosition, setSpriteIIIEntryPosition] = useState(0);
 
-    const handleTransition = (evolTier, direction) => {
+    const handleTransition = (evolTier, direction, numOfSlides) => {
         let newPosition = 0;
         let entryPositionState = "";
 
-        console.log("in handleTransition");
-
         if (evolTier === "II") {
-            console.log("evolTier is II");
             newPosition = spriteIIEntryPosition;
             entryPositionState = evolTier;
         } else if (evolTier === "III") {
-            console.log("evolTier is III");
             newPosition = spriteIIIEntryPosition;
             entryPositionState = evolTier;
         }
 
         if (direction === "down") {
-            console.log("direction is down");
             newPosition -= 100;
+
+            // if you try to click "down" past the total num of images, loop back to the top
+            if (newPosition / -100 > numOfSlides) {
+                newPosition = 0;
+            }
         } else if (direction === "up") {
-            console.log("direction is up");
             newPosition += 100;
+
+            // if you try to click "up" past the first image, loop to the "bottom" of the images
+            if (newPosition > 0) {
+                newPosition = numOfSlides * -100;
+            }
         }
 
         if (entryPositionState === "II") {
-            console.log("setting tier II");
             setSpriteIIEntryPosition(newPosition);
         } else if (entryPositionState === "III") {
-            console.log("setting tier III");
             setSpriteIIIEntryPosition(newPosition);
         }
     };
@@ -180,11 +182,21 @@ const EvolutionPanel = props => {
                     {props["evolution_line"]["evolution_II"] && (
                         <>
                             {props["evolution_line"]["evolution_II"][0] !==
-                                "" && (
-                                <UpArrowIcon
-                                    onClick={() => handleTransition("II", "up")}
-                                />
-                            )}
+                                "" &&
+                                props["evolution_line"]["evolution_II"].length >
+                                    1 && (
+                                    <UpArrowIcon
+                                        onClick={() =>
+                                            handleTransition(
+                                                "II",
+                                                "up",
+                                                props["evolution_sprites"][
+                                                    "evol_II"
+                                                ].length - 1
+                                            )
+                                        }
+                                    />
+                                )}
                             <SpriteSlides
                                 translateValue={spriteIIEntryPosition}
                                 numOfSprites={
@@ -206,13 +218,21 @@ const EvolutionPanel = props => {
                                 )}
                             </SpriteSlides>
                             {props["evolution_line"]["evolution_II"][0] !==
-                                "" && (
-                                <DownArrowIcon
-                                    onClick={() =>
-                                        handleTransition("II", "down")
-                                    }
-                                />
-                            )}
+                                "" &&
+                                props["evolution_line"]["evolution_II"].length >
+                                    1 && (
+                                    <DownArrowIcon
+                                        onClick={() =>
+                                            handleTransition(
+                                                "II",
+                                                "down",
+                                                props["evolution_sprites"][
+                                                    "evol_II"
+                                                ].length - 1
+                                            )
+                                        }
+                                    />
+                                )}
                         </>
                     )}
                 </SpriteScreen>
@@ -243,13 +263,21 @@ const EvolutionPanel = props => {
                     {props["evolution_line"]["evolution_III"] && (
                         <>
                             {props["evolution_line"]["evolution_III"][0] !==
-                                "" && (
-                                <UpArrowIcon
-                                    onClick={() =>
-                                        handleTransition("III", "up")
-                                    }
-                                />
-                            )}
+                                "" &&
+                                props["evolution_line"]["evolution_III"]
+                                    .length > 1 && (
+                                    <UpArrowIcon
+                                        onClick={() =>
+                                            handleTransition(
+                                                "III",
+                                                "up",
+                                                props["evolution_sprites"][
+                                                    "evol_III"
+                                                ].length - 1
+                                            )
+                                        }
+                                    />
+                                )}
                             <SpriteSlides
                                 translateValue={spriteIIIEntryPosition}
                                 numOfSprites={
@@ -273,13 +301,21 @@ const EvolutionPanel = props => {
                             </SpriteSlides>
 
                             {props["evolution_line"]["evolution_III"][0] !==
-                                "" && (
-                                <DownArrowIcon
-                                    onClick={() =>
-                                        handleTransition("III", "down")
-                                    }
-                                />
-                            )}
+                                "" &&
+                                props["evolution_line"]["evolution_III"]
+                                    .length > 1 && (
+                                    <DownArrowIcon
+                                        onClick={() =>
+                                            handleTransition(
+                                                "III",
+                                                "down",
+                                                props["evolution_sprites"][
+                                                    "evol_III"
+                                                ].length - 1
+                                            )
+                                        }
+                                    />
+                                )}
                         </>
                     )}
                 </SpriteScreen>
