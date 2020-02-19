@@ -76,7 +76,35 @@ const BottomControls = props => {
     const [inputNum, setInputNum] = useState(1);
 
     const handleChange = e => {
-        setInputNum(e.target.value);
+        let newInput = e.target.value;
+
+        if (newInput > 806) {
+            newInput = 1;
+        } else if (newInput < 1) {
+            newInput = 806;
+        }
+
+        setInputNum(newInput);
+    };
+
+    const handleBlueButtonPress = direction => {
+        let changer = 0;
+        let newNum = 0;
+        if (direction === "up") {
+            changer = 1;
+        } else if (direction === "down") {
+            changer = -1;
+        }
+
+        if (inputNum + changer > 806) {
+            newNum = 0;
+        } else if (inputNum + changer < 1) {
+            newNum = 807;
+        } else {
+            newNum = inputNum;
+        }
+
+        setInputNum(newNum + changer);
     };
 
     const handleGetPokemon = num => {
@@ -85,7 +113,7 @@ const BottomControls = props => {
 
     return (
         <Controls>
-            <ControlsButton />
+            <ControlsButton onClick={() => handleBlueButtonPress("down")} />
             <div>
                 <label htmlFor="inputNum" />
                 <NumInput
@@ -97,7 +125,7 @@ const BottomControls = props => {
                 />
                 <Submit onClick={() => handleGetPokemon(inputNum)} />
             </div>
-            <ControlsButton />
+            <ControlsButton onClick={() => handleBlueButtonPress("up")} />
         </Controls>
     );
 };
