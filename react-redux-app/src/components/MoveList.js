@@ -125,6 +125,14 @@ const MoveList = props => {
                 getMoveInfo(move.move.url);
             });
         }
+
+        pokemon.moves &&
+            pokemon.moves.sort((a, b) =>
+                a["version_group_details"][0]["level_learned_at"] <
+                b["version_group_details"][0]["level_learned_at"]
+                    ? -1
+                    : 1
+            );
     }, [pokemon.moves, getMoveInfo]);
 
     return (
