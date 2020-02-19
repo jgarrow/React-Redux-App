@@ -101,14 +101,25 @@ const MoveArrow = styled.div`
 const MoveList = props => {
     const { pokemon, getMoveInfo, moves } = props;
     const [movePosition, setMovePosition] = useState(0);
+    const [entryPosition, setEntryPosition] = useState(0);
 
-    const handleTransition = direction => {
+    const handleTransition = (direction, numOfSlides) => {
         let newPosition = movePosition;
 
         if (direction === "up") {
             newPosition += 100;
-        } else {
+
+            // if you try to click "up" past the first image, loop to the "bottom" of the images
+            if (newPosition > 0) {
+                newPosition = numOfSlides * -100;
+            }
+        } else if (direction === "down") {
             newPosition -= 100;
+
+            // if you try to click "down" past the total num of images, loop back to the top
+            if (newPosition / -100 > numOfSlides) {
+                newPosition = 0;
+            }
         }
 
         setMovePosition(newPosition);
@@ -126,6 +137,7 @@ const MoveList = props => {
             });
         }
 
+        // sort moves by level from lowest to highest
         pokemon.moves &&
             pokemon.moves.sort((a, b) =>
                 a["version_group_details"][0]["level_learned_at"] <
@@ -189,10 +201,14 @@ const MoveList = props => {
             </MoveScreen>
 
             <MoveControls>
-                <MoveArrow onClick={() => handleTransition("up")}>
+                <MoveArrow
+                    onClick={() => handleTransition("up", moves.length - 1)}
+                >
                     <IoIosArrowUp />
                 </MoveArrow>
-                <MoveArrow onClick={() => handleTransition("down")}>
+                <MoveArrow
+                    onClick={() => handleTransition("down", moves.length - 1)}
+                >
                     <IoIosArrowDown />
                 </MoveArrow>
             </MoveControls>
