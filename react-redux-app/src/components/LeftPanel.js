@@ -181,13 +181,28 @@ const LeftPanel = props => {
         setSpriteSrc(newSpriteSrc);
     }, [isFemale, isShiny, isBackwards, props.pokemon.sprites]);
 
-    const handleTransition = direction => {
+    const handleTransition = (direction, numOfSlides) => {
         let newPosition = dexEntryPosition;
 
         if (direction === "left") {
             newPosition += 100;
+            console.log("newPosition: ", newPosition);
+
+            // if you try to click "left" past the total num of images, loop back to the end
+            if (newPosition > 0) {
+                newPosition = numOfSlides * -100;
+                console.log(
+                    "newPosition if clicked left too far: ",
+                    newPosition
+                );
+            }
         } else {
             newPosition -= 100;
+
+            // if you try to click "right" past the first image, loop to the beginning
+            if (newPosition / -100 > numOfSlides) {
+                newPosition = 0;
+            }
         }
 
         setDexEntryPosition(newPosition);
@@ -211,7 +226,7 @@ const LeftPanel = props => {
                 {props.pokemon !== {} && (
                     <>
                         {props.pokemon.name}
-                        <DexNum>no. {props.pokemon.order}</DexNum>
+                        <DexNum>no. {props.dexNum}</DexNum>
                     </>
                 )}
             </NameScreen>
@@ -236,7 +251,11 @@ const LeftPanel = props => {
                 </SpriteControls>
             </div>
             <DescriptionScreen>
-                <Arrow onClick={() => handleTransition("left")}>
+                <Arrow
+                    onClick={() =>
+                        handleTransition("left", props.dexEntries.length - 1)
+                    }
+                >
                     <IoIosArrowDropleftCircle />
                 </Arrow>
 
@@ -251,7 +270,11 @@ const LeftPanel = props => {
                     ))}
                 </Slides>
 
-                <RightArrow onClick={() => handleTransition("right")}>
+                <RightArrow
+                    onClick={() =>
+                        handleTransition("right", props.dexEntries.length - 1)
+                    }
+                >
                     <IoIosArrowDroprightCircle />
                 </RightArrow>
             </DescriptionScreen>
@@ -262,6 +285,7 @@ const LeftPanel = props => {
 const mapStateToProps = state => {
     return {
         pokemon: state.pokemon,
+        dexNum: state.dexNum,
         dexEntries: state.dexEntries,
         isFetching: state.isFetching
     };

@@ -26,6 +26,7 @@ const initialState = {
         gen8: null
     },
     pokemon: {},
+    dexNum: 0,
     dexEntries: [],
     moves: [],
     stats: [
@@ -98,7 +99,16 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: ""
             };
         case FETCHING_DEX_ENTRIES_SUCCESS:
-            let entries = [...action.payload];
+            // also set dexNum here
+            const dexNumArray = [...action.payload["pokedex_numbers"]];
+            let natDexNum = dexNumArray.find(
+                obj => obj.pokedex.name === "national"
+            );
+
+            natDexNum = natDexNum["entry_number"];
+            console.log("natDexNum: ", natDexNum);
+
+            let entries = [...action.payload["flavor_text_entries"]];
             let englishEntries = entries.filter(
                 entry => entry.language.name === "en"
             );
@@ -136,6 +146,7 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: "",
+                dexNum: natDexNum,
                 dexEntries: englishEntries,
                 isFetching: false
             };

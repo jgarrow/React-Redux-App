@@ -31,7 +31,7 @@ export const getPokemon = apiUrl => dispatch => {
                 .then(res => {
                     dispatch({
                         type: FETCHING_DEX_ENTRIES_SUCCESS,
-                        payload: res.data["flavor_text_entries"]
+                        payload: res.data
                     });
 
                     axios
