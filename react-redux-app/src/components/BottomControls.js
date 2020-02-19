@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { useGetPokemon } from "../hooks/useGetPokemon";
 
 import { getPokemon } from "../actions";
 
@@ -75,6 +76,15 @@ const Submit = styled.div`
 const BottomControls = props => {
     const [inputNum, setInputNum] = useState(1);
 
+    const {
+        getInputNum,
+        setInputNum: setNum,
+        decrementInputNum,
+        incrementInputNum,
+        getEndpoint
+        // retrievePokemon
+    } = useGetPokemon();
+
     const handleChange = e => {
         let newInput = e.target.value;
 
@@ -85,6 +95,7 @@ const BottomControls = props => {
         }
 
         setInputNum(newInput);
+        setNum(newInput);
     };
 
     const handleBlueButtonPress = direction => {
@@ -107,25 +118,43 @@ const BottomControls = props => {
         setInputNum(newNum + changer);
     };
 
-    const handleGetPokemon = num => {
-        props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${num}`);
+    const handleGetPokemon = () => {
+        // props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${num}`);
+        console.log(getEndpoint());
+        props.getPokemon(getEndpoint());
+    };
+
+    const handleEnterKeyGetPokemon = e => {
+        if (e.key === "Enter") {
+            props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${inputNum}`);
+        }
     };
 
     return (
         <Controls>
-            <ControlsButton onClick={() => handleBlueButtonPress("down")} />
+            <ControlsButton
+                // onClick={() => handleBlueButtonPress("down")}
+                onClick={() => decrementInputNum()}
+            />
             <div>
                 <label htmlFor="inputNum" />
                 <NumInput
                     id="inputNum"
                     type="number"
                     placeholder="1"
-                    value={inputNum}
+                    value={getInputNum()}
                     onChange={handleChange}
+                    onKeyPress={handleEnterKeyGetPokemon}
                 />
-                <Submit onClick={() => handleGetPokemon(inputNum)} />
+                <Submit
+                    onClick={() => handleGetPokemon()}
+                    // onClick={() => retrievePokemon(props.getPokemon)}
+                />
             </div>
-            <ControlsButton onClick={() => handleBlueButtonPress("up")} />
+            <ControlsButton
+                // onClick={() => handleBlueButtonPress("up")}
+                onClick={() => incrementInputNum()}
+            />
         </Controls>
     );
 };

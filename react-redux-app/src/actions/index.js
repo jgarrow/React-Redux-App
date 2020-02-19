@@ -18,6 +18,7 @@ export const FETCHING_EVOL_SPRITE_SUCCESS = "FETCHING_EVOL_SPRITE_SUCCESS";
 export const FETCHING_EVOL_SPRITE_FAILURE = "FETCHING_EVOL_SPRITE_FAILURE";
 
 export const getPokemon = apiUrl => dispatch => {
+    console.log("in getPokemon action");
     dispatch({ type: API_CALL_FETCHING });
     axios
         .get(apiUrl)
