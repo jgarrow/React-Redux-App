@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
+import { typeBackgrounds } from "../data/typeBackgrounds";
+
 const TypesContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -54,7 +56,18 @@ const Type = styled.div`
     letter-spacing: 2px;
     text-shadow: rgba(255, 255, 255, 0.3) -1px 1px;
     align-self: center;
-    background: linear-gradient(
+    background: ${props =>
+        typeBackgrounds[props.type.toLowerCase()]
+            ? `linear-gradient(
+                15deg,
+                rgba(128, 128, 128, 0.5) 64%,
+                rgba(138, 138, 138, 0.5) 70%,
+                rgba(230, 230, 230, 0.5) 81%,
+                rgba(255, 255, 255, 0.5) 86%,
+                rgba(220, 220, 220, 0.5) 89%,
+                rgba(230, 230, 230, 0.5) 100%
+            ) ${typeBackgrounds[props.type.toLowerCase()]}`
+            : `linear-gradient(
         15deg,
         rgba(128, 128, 128, 0.5) 64%,
         rgba(138, 138, 138, 0.5) 70%,
@@ -62,7 +75,7 @@ const Type = styled.div`
         rgba(255, 255, 255, 0.5) 86%,
         rgba(220, 220, 220, 0.5) 89%,
         rgba(230, 230, 230, 0.5) 100%
-    );
+    )`};
     background-blend-mode: hard-light;
 `;
 
@@ -73,7 +86,9 @@ const Types = props => {
             <TypesWrapper>
                 {props.pokemon.types &&
                     props.pokemon.types.map((type, index) => (
-                        <Type key={index}>{type.type.name}</Type>
+                        <Type key={index} type={type.type.name}>
+                            {type.type.name}
+                        </Type>
                     ))}
             </TypesWrapper>
         </TypesContainer>

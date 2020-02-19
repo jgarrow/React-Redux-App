@@ -18,3 +18,24 @@ export const typeBg = {
     steel: "#9EB7B8",
     fairy: "#FDB9E9"
 };
+
+export const typeBackgrounds = {
+    normal: "#bfbfbf",
+    fire: "#cf1414",
+    water: "#1689de",
+    electric: "#e6b700",
+    grass: "#47a047",
+    ice: "#98c3de",
+    fighting: "#d87c58",
+    poison: "#925192",
+    ground: "#dea761",
+    flying: "#999ade",
+    psychic: "#fa43b8",
+    bug: "#b1c967",
+    rock: "#897864",
+    ghost: "#c195dc",
+    dragon: "#89315d",
+    dark: "#282433",
+    steel: "#49769c",
+    fairy: "#dca0ce"
+};
