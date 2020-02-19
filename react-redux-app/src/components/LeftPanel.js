@@ -111,6 +111,7 @@ const Arrow = styled.div`
     position: absolute;
     top: calc(50% - 9px);
     left: 5px;
+    z-index: 5;
 `;
 
 const RightArrow = styled(Arrow)`
@@ -196,7 +197,7 @@ const LeftPanel = props => {
                     newPosition
                 );
             }
-        } else {
+        } else if (direction === "right") {
             newPosition -= 100;
 
             // if you try to click "right" past the first image, loop to the beginning

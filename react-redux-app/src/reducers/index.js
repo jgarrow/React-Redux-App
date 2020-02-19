@@ -120,7 +120,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 );
             });
 
-            // console.log("english entries: ", englishEntries);
+            console.log("english entries: ", englishEntries);
 
             // let entriesAreSame =
             //     englishEntries[2]["flavor_text"].valueOf() ===
