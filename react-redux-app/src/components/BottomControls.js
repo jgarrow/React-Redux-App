@@ -116,6 +116,7 @@ const BottomControls = props => {
         }
 
         setInputNum(newNum + changer);
+        setNum(newNum + changer);
     };
 
     const handleGetPokemon = () => {

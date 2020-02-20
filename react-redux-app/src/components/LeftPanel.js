@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { Panel, Screen, SpriteControl } from "./StyledComponents";
-import {
-    IoMdFemale,
-    IoIosArrowDropleftCircle,
-    IoIosArrowDroprightCircle
-} from "react-icons/io";
-import { FaUndo } from "react-icons/fa";
+import { Panel, Screen } from "./StyledComponents";
+import DexEntries from "./LeftPanel/DexEntries";
+import NameScreenText from "./LeftPanel/NameScreen";
+import MainSprite from "./LeftPanel/MainSprite";
 
 const NameScreen = styled(Screen)`
     font-size: 28px;
@@ -18,267 +16,85 @@ const NameScreen = styled(Screen)`
     box-sizing: border-box;
 `;
 
-const DexNum = styled.span`
-    float: right;
-    text-transform: lowercase;
-`;
-
-const ImgWrapper = styled.div`
-    width: 359px;
-    height: 359px;
-    display: flex;
-    margin: 10px 0;
-    align-items: center;
-    justify-content: center;
-`;
-
-export const Sprite = styled.img`
-    width: 100%;
-    display: flex;
-    image-rendering: pixelated;
-    border: inset #9aa28b 3px;
-    border-radius: 5px;
-    box-sizing: border-box;
-    background: linear-gradient(
-        15deg,
-        #cad5b5 64%,
-        #dde2d4 70%,
-        #dde2d4 81%,
-        #fff 86%,
-        #dde2d4 89%,
-        #dde2d4 100%
-    );
-`;
-
-const SpriteControls = styled.div`
-    display: flex;
-    justify-content: space-around;
-    font-family: "Staatliches", cursive;
-    margin-bottom: 10px;
-`;
-
-const ShinySpriteControl = styled(SpriteControl)`
-    transform: rotate(0);
-    background: linear-gradient(
-        14deg,
-        #bf8823 10%,
-        #ffee90 25%,
-        #e6a617 47%,
-        #ffee90 73%,
-        #fff6c8 74%,
-        #ffee90 80%
-    );
-    border-color: #cdb589;
-    width: 90px;
-    text-shadow: white -1px 1px;
-
-    & > * {
-        transform: rotate(0);
-    }
-`;
-
-const DescriptionScreen = styled(Screen)`
-    font-size: 18px;
-    letter-spacing: 0;
-    width: 100%;
-    min-height: 115px;
-    max-height: 130px;
-    box-sizing: border-box;
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-`;
-
-const Slides = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: ${props => `repeat(${props.numofSlides}, 100%)`};
-    transform: ${props => `translateX(${props.translateValue}%)`};
-    transition: transform 0.45s ease-out;
-`;
-
-const Text = styled.div`
-    width: 90%;
-    margin: 0 auto;
-    text-align: center;
-`;
-
-const Arrow = styled.div`
-    cursor: pointer;
-    height: 18px;
-    position: absolute;
-    top: calc(50% - 9px);
-    left: 5px;
-    z-index: 5;
-`;
-
-const RightArrow = styled(Arrow)`
-    left: unset;
-    right: 5px;
-`;
-
-// do API call for props.pokemon.species.url, then res.data["flavor_text_entries"] to get the dex description entries array
-//  for each element (which are objects), if element.language.name === "en", get the element["flavor_text"] and element.version.name for which game it's from
-
 const LeftPanel = props => {
-    const [dexEntryPosition, setDexEntryPosition] = useState(0);
-    const [isFemale, setIsFemale] = useState(false);
-    const [isShiny, setIsShiny] = useState(false);
-    const [isBackwards, setIsBackwards] = useState(false);
-    const [spriteSrc, setSpriteSrc] = useState("");
+    const [dexEntries, setDexEntries] = useState([]);
+    const [dexNum, setDexNum] = useState(null);
 
+    // get dexEntries and dexNum
     useEffect(() => {
-        if (props.pokemon.sprites) {
-            setSpriteSrc(props.pokemon.sprites["front_default"]);
+        let dexNumArray = [];
+        let natDexNum = null;
+        let entries = [];
+
+        if (props.pokemon !== {} && props.pokemon.species) {
+            axios
+                .get(props.pokemon.species.url)
+                .then(res => {
+                    console.log("leftPanel comp state species url res: ", res);
+
+                    // array of dex objects for different pokedexes
+                    dexNumArray = [...res.data["pokedex_numbers"]];
+
+                    // find the national dex object
+                    natDexNum = dexNumArray.find(
+                        obj => obj.pokedex.name === "national"
+                    );
+
+                    // get just the national dex number
+                    natDexNum = natDexNum["entry_number"];
+
+                    entries = [...res.data["flavor_text_entries"]];
+
+                    // only keep the english entries
+                    entries = entries.filter(
+                        entry => entry.language.name === "en"
+                    );
+
+                    // make all whitespace consistent by making them all spaces
+                    entries.forEach(entry => {
+                        entry["flavor_text"] = entry["flavor_text"].replace(
+                            /\s/gm,
+                            " "
+                        );
+                    });
+
+                    // find and get rid of duplicate entries
+                    entries = entries.reduce((acc, current) => {
+                        const x = acc.find(
+                            item =>
+                                item["flavor_text"] === current["flavor_text"]
+                        );
+                        if (!x) {
+                            return acc.concat([current]);
+                        } else {
+                            return acc;
+                        }
+                    }, []);
+
+                    setDexEntries(entries);
+                    setDexNum(natDexNum);
+                })
+                .catch(err => {
+                    console.log(
+                        "Error getting species url in LeftPanel: ",
+                        err
+                    );
+                });
         }
-    }, [props.pokemon.sprites]);
-
-    // for changing image sprite
-    useEffect(() => {
-        let newSpriteSrc = "";
-
-        if (props.pokemon.sprites) {
-            if (isFemale && !isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_female"];
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["front_default"];
-                }
-            } else if (isFemale && !isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_female"];
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["back_default"];
-                }
-            } else if (isFemale && isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_shiny_female"];
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["front_shiny"];
-                }
-            } else if (isFemale && isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_shiny_female"];
-
-                if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc =
-                        props.pokemon.sprites["back_shiny_default"];
-                }
-            } else if (!isFemale && !isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_default"];
-            } else if (!isFemale && !isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_default"];
-            } else if (!isFemale && isShiny && !isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["front_shiny"];
-            } else if (!isFemale && isShiny && isBackwards) {
-                newSpriteSrc = props.pokemon.sprites["back_shiny"];
-            }
-        }
-
-        setSpriteSrc(newSpriteSrc);
-    }, [isFemale, isShiny, isBackwards, props.pokemon.sprites]);
-
-    const handleTransition = (direction, numOfSlides) => {
-        let newPosition = dexEntryPosition;
-
-        if (direction === "left") {
-            newPosition += 100;
-            console.log("newPosition: ", newPosition);
-
-            // if you try to click "left" past the total num of images, loop back to the end
-            if (newPosition > 0) {
-                newPosition = numOfSlides * -100;
-                console.log(
-                    "newPosition if clicked left too far: ",
-                    newPosition
-                );
-            }
-        } else if (direction === "right") {
-            newPosition -= 100;
-
-            // if you try to click "right" past the first image, loop to the beginning
-            if (newPosition / -100 > numOfSlides) {
-                newPosition = 0;
-            }
-        }
-
-        setDexEntryPosition(newPosition);
-    };
-
-    const handleShinyIconClick = e => {
-        setIsShiny(!isShiny);
-    };
-
-    const handleUndoIconClick = e => {
-        setIsBackwards(!isBackwards);
-    };
-
-    const handleFemaleIconClick = e => {
-        setIsFemale(!isFemale);
-    };
+    }, [props.pokemon]);
 
     return (
         <Panel>
             <NameScreen>
                 {props.pokemon !== {} && (
-                    <>
-                        {props.pokemon.name}
-                        <DexNum>no. {props.dexNum}</DexNum>
-                    </>
+                    <NameScreenText name={props.pokemon.name} dexNum={dexNum} />
                 )}
             </NameScreen>
-            <div>
-                <ImgWrapper>
-                    {props.pokemon.sprites && (
-                        <Sprite src={spriteSrc} alt={props.pokemon.name} />
-                    )}
-                </ImgWrapper>
-                <SpriteControls>
-                    <SpriteControl>
-                        <IoMdFemale onClick={handleFemaleIconClick} />
-                    </SpriteControl>
-
-                    <ShinySpriteControl onClick={handleShinyIconClick}>
-                        <span>Shiny</span>
-                    </ShinySpriteControl>
-
-                    <SpriteControl>
-                        <FaUndo onClick={handleUndoIconClick} />
-                    </SpriteControl>
-                </SpriteControls>
-            </div>
-            <DescriptionScreen>
-                <Arrow
-                    onClick={() =>
-                        handleTransition("left", props.dexEntries.length - 1)
-                    }
-                >
-                    <IoIosArrowDropleftCircle />
-                </Arrow>
-
-                <Slides
-                    translateValue={dexEntryPosition}
-                    numofSlides={props.dexEntries.length}
-                >
-                    {props.dexEntries.map((entry, index) => (
-                        <Text key={index}>
-                            <p>{entry["flavor_text"]}</p>
-                        </Text>
-                    ))}
-                </Slides>
-
-                <RightArrow
-                    onClick={() =>
-                        handleTransition("right", props.dexEntries.length - 1)
-                    }
-                >
-                    <IoIosArrowDroprightCircle />
-                </RightArrow>
-            </DescriptionScreen>
+            <MainSprite
+                sprites={props.pokemon.sprites}
+                name={props.pokemon.name}
+            />
+            <DexEntries dexEntries={dexEntries} />
         </Panel>
     );
 };

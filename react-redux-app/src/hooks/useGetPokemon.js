@@ -25,7 +25,10 @@ export const useGetPokemon = () => {
         setInputNum(newInput);
     };
 
-    const getEndpoint = () => endpoint + inputNum;
+    const getEndpoint = () => {
+        console.log("inputNum in getEndpoint: ", inputNum);
+        return endpoint + inputNum;
+    };
 
     return {
         getInputNum,
