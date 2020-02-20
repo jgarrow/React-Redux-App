@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { useGetPokemon } from "../hooks/useGetPokemon";
+import { useGetPokemon } from "../../hooks/useGetPokemon";
 
-import { getPokemon } from "../actions";
+import { getPokemon } from "../../actions";
 
-import { PanelRow } from "./StyledComponents";
+import { PanelRow } from "../StyledComponents";
 
 const Controls = styled(PanelRow)`
     display: flex;

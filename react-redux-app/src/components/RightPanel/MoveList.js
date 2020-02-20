@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { getMoveInfo } from "../actions";
+import { getMoveInfo } from "../../actions";
 
-import { Screen } from "./StyledComponents";
-
+import { Screen } from "../StyledComponents";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 const MoveContainer = styled.div`
@@ -51,7 +50,7 @@ const MoveName = styled.div`
 
 const MoveStatGrid = styled.div`
     display: grid;
-    grid-template-columns: 1fr 20px;
+    grid-template-columns: 1fr 25px;
 `;
 
 const StatLabel = styled.p`
@@ -74,7 +73,7 @@ const MoveType = styled.div`
 
 const MoveLearn = styled.div`
     font-size: 20px;
-    float: right;
+
     margin-right: 3px;
 `;
 
@@ -98,10 +97,37 @@ const MoveArrow = styled.div`
     cursor: pointer;
 `;
 
+const MoveStats = ({ move }) => {
+    return (
+        <div>
+            <MoveName>{move.moveInfo.name}</MoveName>
+            <MoveStatGrid>
+                <StatLabel>Accuracy</StatLabel>
+                <MoveStat>{move.moveInfo.accuracy}</MoveStat>
+                <StatLabel>Power</StatLabel>
+                <MoveStat>{move.moveInfo.power}</MoveStat>
+                <StatLabel>PP</StatLabel>
+                <MoveStat>{move.moveInfo.pp}</MoveStat>
+            </MoveStatGrid>
+        </div>
+    );
+};
+
+const MoveData = ({ move }) => (
+    <div>
+        <MoveType>TYPE: {move.moveInfo.type.name}</MoveType>
+        <MoveLearn>
+            Learn:{" "}
+            {parseInt(move.learnMethod)
+                ? `Lvl ${move.learnMethod}`
+                : move.learnMethod}
+        </MoveLearn>
+    </div>
+);
+
 const MoveList = props => {
-    const { pokemon, getMoveInfo, moves } = props;
+    const { pokemon, moves, getMoveInfo } = props;
     const [movePosition, setMovePosition] = useState(0);
-    const [entryPosition, setEntryPosition] = useState(0);
 
     const handleTransition = (direction, numOfSlides) => {
         let newPosition = movePosition;
@@ -136,21 +162,12 @@ const MoveList = props => {
                 getMoveInfo(move.move.url);
             });
         }
-
-        // sort moves by level from lowest to highest
-        pokemon.moves &&
-            pokemon.moves.sort((a, b) =>
-                a["version_group_details"][0]["level_learned_at"] <
-                b["version_group_details"][0]["level_learned_at"]
-                    ? -1
-                    : 1
-            );
     }, [pokemon.moves, getMoveInfo]);
 
     return (
         <MoveContainer>
             <MoveScreen>
-                {props.moves && (
+                {moves && (
                     <Slides
                         translateValue={movePosition}
                         numOfSlides={moves.length}
@@ -159,39 +176,8 @@ const MoveList = props => {
                             <MoveInfoContainer key={index}>
                                 {move.moveInfo && (
                                     <>
-                                        <div>
-                                            <MoveName>
-                                                {move.moveInfo.name}
-                                            </MoveName>
-                                            <MoveStatGrid>
-                                                <StatLabel>Accuracy</StatLabel>
-                                                <MoveStat>
-                                                    {move.moveInfo.accuracy}
-                                                </MoveStat>
-                                                <StatLabel>Power</StatLabel>
-                                                <MoveStat>
-                                                    {move.moveInfo.power}
-                                                </MoveStat>
-                                                <StatLabel>PP</StatLabel>
-                                                <MoveStat>
-                                                    {move.moveInfo.pp}
-                                                </MoveStat>
-                                            </MoveStatGrid>
-                                        </div>
-
-                                        <div>
-                                            <MoveType>
-                                                TYPE: {move.moveInfo.type.name}
-                                            </MoveType>
-                                            <MoveLearn>
-                                                Learn: Lvl{" "}
-                                                {
-                                                    move[
-                                                        "version_group_details"
-                                                    ][0]["level_learned_at"]
-                                                }
-                                            </MoveLearn>
-                                        </div>
+                                        <MoveStats move={move} />
+                                        <MoveData move={move} />
                                     </>
                                 )}
                             </MoveInfoContainer>

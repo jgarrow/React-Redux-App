@@ -2,9 +2,6 @@ import {
     API_CALL_FETCHING,
     API_CALL_SUCCESS,
     API_CALL_FAILURE,
-    FETCHING_DEX_ENTRIES,
-    FETCHING_DEX_ENTRIES_SUCCESS,
-    FETCHING_DEX_ENTRIES_FAILURE,
     FETCHING_MOVE_INFO,
     FETCHING_MOVE_INFO_SUCCESS,
     FETCHING_MOVE_INFO_FAILURE,
@@ -26,8 +23,6 @@ const initialState = {
         gen8: null
     },
     pokemon: {},
-    dexNum: 0,
-    dexEntries: [],
     moves: [],
     stats: [
         {
@@ -66,10 +61,6 @@ const initialState = {
     isFetching: false
 };
 
-// national pokedex found at pokemon-species endpoint
-// res.data["pokedex_numbers"] is an array of objects
-// if the object has a key pokedex.name === "national", then we want the key `entry_number` for the national dex number
-
 export const pokemonReducer = (state = initialState, action) => {
     switch (action.type) {
         case API_CALL_FETCHING:
@@ -79,78 +70,62 @@ export const pokemonReducer = (state = initialState, action) => {
                 isFetching: true
             };
         case API_CALL_SUCCESS:
+            let movesArr = [...action.payload.moves];
+
+            //compare function for sorting array
+            function compareValues(key, order = "asc") {
+                return function innerSort(a, b) {
+                    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+                        return 0;
+                    }
+
+                    // if learned by level, value will be an int
+                    // want all of the moves learned by level first
+                    let varA = typeof a[key] === "string" ? 101 : a[key];
+                    let varB = typeof b[key] === "string" ? 101 : b[key];
+
+                    // if they're both strings (neither are learned by level), now we want to alphabetize them
+                    if (
+                        typeof a[key] === "string" &&
+                        typeof b[key] === "string"
+                    ) {
+                        varA = a[key].toUpperCase();
+                        varB = b[key].toUpperCase();
+                    }
+
+                    let comparison = 0;
+                    if (varA > varB) {
+                        comparison = 1;
+                    } else if (varA < varB) {
+                        comparison = -1;
+                    }
+                    return order === "desc" ? comparison * -1 : comparison;
+                };
+            }
+
+            // add "learnMethod" key for each move
+            movesArr.forEach(move => {
+                move.learnMethod =
+                    move["version_group_details"][0]["level_learned_at"] !== 0
+                        ? parseInt(
+                              move["version_group_details"][0][
+                                  "level_learned_at"
+                              ]
+                          )
+                        : move["version_group_details"][0]["move_learn_method"]
+                              .name;
+            });
+
+            movesArr.sort(compareValues("learnMethod"));
+
             return {
                 ...state,
                 pokemon: action.payload,
-                moves: action.payload.moves,
+                moves: movesArr,
                 error: "",
                 isFetching: false
             };
         case API_CALL_FAILURE:
-            return {
-                ...state,
-                error: action.payload,
-                isFetching: false
-            };
-        case FETCHING_DEX_ENTRIES:
-            return {
-                ...state,
-                isFetching: true,
-                error: ""
-            };
-        case FETCHING_DEX_ENTRIES_SUCCESS:
-            // also set dexNum here
-            const dexNumArray = [...action.payload["pokedex_numbers"]];
-            let natDexNum = dexNumArray.find(
-                obj => obj.pokedex.name === "national"
-            );
-
-            natDexNum = natDexNum["entry_number"];
-            console.log("natDexNum: ", natDexNum);
-
-            let entries = [...action.payload["flavor_text_entries"]];
-            let englishEntries = entries.filter(
-                entry => entry.language.name === "en"
-            );
-
-            englishEntries.forEach(entry => {
-                entry["flavor_text"] = entry["flavor_text"].replace(
-                    /\s/gm,
-                    " "
-                );
-            });
-
-            console.log("english entries: ", englishEntries);
-
-            // let entriesAreSame =
-            //     englishEntries[2]["flavor_text"].valueOf() ===
-            //     englishEntries[4]["flavor_text"].valueOf();
-
-            // console.log("entries 2 and 4 are same: ", entriesAreSame);
-
-            // only removing some of the duplicates, but not all
-            // not sure why...I think it's something with some of the carriage returns?
-            const removedDuplicates = englishEntries.reduce((acc, current) => {
-                const x = acc.find(
-                    item => item["flavor_text"] === current["flavor_text"]
-                );
-                if (!x) {
-                    return acc.concat([current]);
-                } else {
-                    return acc;
-                }
-            }, []);
-
-            // console.log("removedDuplicates array: ", removedDuplicates);
-
-            return {
-                ...state,
-                error: "",
-                dexNum: natDexNum,
-                dexEntries: englishEntries,
-                isFetching: false
-            };
-        case FETCHING_DEX_ENTRIES_FAILURE:
             return {
                 ...state,
                 error: action.payload,
@@ -164,6 +139,7 @@ export const pokemonReducer = (state = initialState, action) => {
             };
         case FETCHING_MOVE_INFO_SUCCESS:
             let movesArray = [...state.moves];
+
             const moveIndex = movesArray.findIndex(
                 move => move.move.name === action.payload.name
             );

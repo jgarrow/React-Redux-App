@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { typeBackgrounds } from "../data/typeBackgrounds";
+import { typeBackgrounds } from "../../data/typeBackgrounds";
 
 const TypesContainer = styled.div`
     display: flex;

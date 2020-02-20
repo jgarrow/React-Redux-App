@@ -12,9 +12,9 @@ import { getPokemon } from "./actions";
 // import PokemonList from "./components/PokemonList";
 // import GenButtons from "./components/GenButtons";
 
-import LeftPanel from "./components/LeftPanel";
+import LeftPanel from "./components/LeftPanel/LeftPanel";
 import Divider from "./components/Divider";
-import RightPanel from "./components/RightPanel";
+import RightPanel from "./components/RightPanel/RightPanel";
 
 const AppContainer = styled.div`
     background-color: #e61515;

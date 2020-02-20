@@ -3,10 +3,10 @@ import axios from "axios";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { Panel, Screen } from "./StyledComponents";
-import DexEntries from "./LeftPanel/DexEntries";
-import NameScreenText from "./LeftPanel/NameScreen";
-import MainSprite from "./LeftPanel/MainSprite";
+import { Panel, Screen } from "../StyledComponents";
+import DexEntries from "./DexEntries";
+import NameScreenText from "./NameScreen";
+import MainSprite from "./MainSprite";
 
 const NameScreen = styled(Screen)`
     font-size: 28px;
@@ -102,8 +102,6 @@ const LeftPanel = props => {
 const mapStateToProps = state => {
     return {
         pokemon: state.pokemon,
-        dexNum: state.dexNum,
-        dexEntries: state.dexEntries,
         isFetching: state.isFetching
     };
 };

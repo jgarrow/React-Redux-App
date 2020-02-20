@@ -30,10 +30,10 @@ export const getPokemon = apiUrl => dispatch => {
             axios
                 .get(res.species.url)
                 .then(res => {
-                    dispatch({
-                        type: FETCHING_DEX_ENTRIES_SUCCESS,
-                        payload: res.data
-                    });
+                    // dispatch({
+                    //     type: FETCHING_DEX_ENTRIES_SUCCESS,
+                    //     payload: res.data
+                    // });
 
                     axios
                         .get(res.data["evolution_chain"].url)

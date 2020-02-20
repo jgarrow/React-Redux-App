@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { PanelRow, Screen } from "./StyledComponents";
+import { PanelRow, Screen } from "../StyledComponents";
 
 import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io";
 

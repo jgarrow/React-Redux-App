@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { PanelRow } from "./StyledComponents";
+import { PanelRow } from "../StyledComponents";
 
 const BlueBtns = styled(PanelRow)`
     flex-wrap: wrap;

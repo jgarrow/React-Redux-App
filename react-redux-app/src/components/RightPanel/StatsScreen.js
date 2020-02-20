@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { Screen } from "./StyledComponents";
+import { Screen } from "../StyledComponents";
 
 const StatScreen = styled(Screen)`
     box-sizing: border-box;

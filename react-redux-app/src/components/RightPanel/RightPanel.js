@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Panel, PanelRow } from "./StyledComponents";
+import { Panel, PanelRow } from "../StyledComponents";
 import StatsScreen from "./StatsScreen";
 import Types from "./Types";
 import EvolutionPanel from "./EvolutionPanel";
