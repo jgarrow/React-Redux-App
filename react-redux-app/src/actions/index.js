@@ -60,7 +60,6 @@ export const getPokemon = apiUrl => dispatch => {
                             return evolutions;
                         })
                         .then(res => {
-                            console.log("res: ", res);
                             const baseApiUrl =
                                 "https://pokeapi.co/api/v2/pokemon/";
 
@@ -90,8 +89,6 @@ export const getPokemon = apiUrl => dispatch => {
                                 evol_II: evol_II_urls,
                                 evol_III: evol_III_urls
                             };
-
-                            console.log("evolution_urls: ", evolution_urls);
 
                             axios
                                 .get(evolution_urls["evol_I"])

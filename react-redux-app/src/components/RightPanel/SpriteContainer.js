@@ -50,7 +50,7 @@ const SpriteContainer = ({
 }) => {
     return (
         <>
-            {evolutionLine !== {} && evolTier && evolTier.length && (
+            {evolutionLine !== {} && evolTier && evolTier.length > 0 && (
                 <>
                     {evolTier[0] !== "" && evolSpriteTier.length > 1 && (
                         <UpArrowIcon

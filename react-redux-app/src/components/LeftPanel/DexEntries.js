@@ -79,7 +79,7 @@ const DexEntries = ({ dexEntries }) => {
 
     return (
         <DescriptionScreen>
-            {dexEntries.length && (
+            {dexEntries.length > 0 && (
                 <>
                     <Arrow
                         onClick={() =>
