@@ -87,6 +87,10 @@ const LeftPanel = props => {
         }
     }, [props.pokemon]);
 
+    useEffect(() => {
+        console.log("isFetching: ", props.isFetching);
+    }, [props.isFetching]);
+
     return (
         <Panel>
             <NameScreen>
@@ -97,6 +101,7 @@ const LeftPanel = props => {
             <MainSprite
                 sprites={props.pokemon.sprites}
                 name={props.pokemon.name}
+                isFetching={props.isFetching}
             />
             <DexEntries dexEntries={dexEntries} />
         </Panel>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
+import pokeball from "../../img/PokeballSVG.svg";
 import { IoMdFemale } from "react-icons/io";
 import { FaUndo } from "react-icons/fa";
 import { SpriteControl } from "../StyledComponents";
@@ -10,6 +11,7 @@ const ImgWrapper = styled.div`
     height: 359px;
     display: flex;
     margin: 10px 0;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     border: inset #9aa28b 3px;
@@ -30,6 +32,27 @@ export const Sprite = styled.img`
     width: 100%;
     display: flex;
     image-rendering: pixelated;
+`;
+
+const rotate = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+`;
+
+const LoadingImage = styled.img`
+    width: 200px;
+    height: 200px;
+    animation: ${props =>
+        props.isFetching
+            ? css`
+                  ${rotate} 2s infinite linear
+              `
+            : "none"};
 `;
 
 const SpriteControls = styled.div`
@@ -59,7 +82,7 @@ const ShinySpriteControl = styled(SpriteControl)`
     }
 `;
 
-const MainSprite = ({ sprites, name }) => {
+const MainSprite = ({ sprites, name, isFetching }) => {
     const [isFemale, setIsFemale] = useState(false);
     const [isShiny, setIsShiny] = useState(false);
     const [isBackwards, setIsBackwards] = useState(false);
@@ -130,8 +153,17 @@ const MainSprite = ({ sprites, name }) => {
     return (
         <div>
             <ImgWrapper>
-                {sprites && <Sprite src={spriteSrc} alt={name} />}
+                {sprites && !isFetching ? (
+                    <Sprite src={spriteSrc} alt={name} />
+                ) : (
+                    <LoadingImage
+                        src={pokeball}
+                        alt="Pokeball displays when loading or no image is available"
+                        isFetching={isFetching}
+                    />
+                )}
             </ImgWrapper>
+
             <SpriteControls>
                 <SpriteControl>
                     <IoMdFemale onClick={handleFemaleIconClick} />

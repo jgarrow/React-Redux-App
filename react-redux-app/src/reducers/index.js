@@ -96,8 +96,8 @@ export const pokemonReducer = (state = initialState, action) => {
                 ...state,
                 pokemon: action.payload,
                 moves: movesArr,
-                error: "",
-                isFetching: false
+                error: ""
+                // isFetching: false
             };
         case API_CALL_FAILURE:
             return {
@@ -126,7 +126,7 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: "",
-                isFetching: false,
+                // isFetching: false,
                 moves: movesArray
             };
         case FETCHING_MOVE_INFO_FAILURE:
@@ -219,8 +219,8 @@ export const pokemonReducer = (state = initialState, action) => {
                     evol_II: evoIISprites,
                     evol_III: evoIIISprites
                 },
-                error: "",
-                isFetching: false
+                error: ""
+                // isFetching: false
             };
         case FETCHING_EVOLUTION_LINE_FAILURE:
             return {
@@ -326,10 +326,16 @@ export const pokemonReducer = (state = initialState, action) => {
                 obj => obj.imgSrc
             );
 
+            let isLoading = true;
+
+            if (action.payload["evolution_tier"] === "evol_III") {
+                isLoading = false;
+            }
+
             return {
                 ...state,
                 error: "",
-                isFetching: false,
+                isFetching: isLoading,
                 evolution_sprites: evolutionSprites
             };
         case FETCHING_EVOL_SPRITE_FAILURE:
