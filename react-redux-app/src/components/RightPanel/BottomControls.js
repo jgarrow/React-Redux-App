@@ -82,7 +82,6 @@ const BottomControls = props => {
         decrementInputNum,
         incrementInputNum,
         getEndpoint
-        // retrievePokemon
     } = useGetPokemon();
 
     const handleChange = e => {
@@ -98,30 +97,7 @@ const BottomControls = props => {
         setNum(newInput);
     };
 
-    const handleBlueButtonPress = direction => {
-        let changer = 0;
-        let newNum = 0;
-        if (direction === "up") {
-            changer = 1;
-        } else if (direction === "down") {
-            changer = -1;
-        }
-
-        if (inputNum + changer > 806) {
-            newNum = 0;
-        } else if (inputNum + changer < 1) {
-            newNum = 807;
-        } else {
-            newNum = inputNum;
-        }
-
-        setInputNum(newNum + changer);
-        setNum(newNum + changer);
-    };
-
     const handleGetPokemon = () => {
-        // props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${num}`);
-        console.log(getEndpoint());
         props.getPokemon(getEndpoint());
     };
 
@@ -133,10 +109,7 @@ const BottomControls = props => {
 
     return (
         <Controls>
-            <ControlsButton
-                // onClick={() => handleBlueButtonPress("down")}
-                onClick={() => decrementInputNum()}
-            />
+            <ControlsButton onClick={() => decrementInputNum()} />
             <div>
                 <label htmlFor="inputNum" />
                 <NumInput
@@ -147,15 +120,9 @@ const BottomControls = props => {
                     onChange={handleChange}
                     onKeyPress={handleEnterKeyGetPokemon}
                 />
-                <Submit
-                    onClick={() => handleGetPokemon()}
-                    // onClick={() => retrievePokemon(props.getPokemon)}
-                />
+                <Submit onClick={() => handleGetPokemon()} />
             </div>
-            <ControlsButton
-                // onClick={() => handleBlueButtonPress("up")}
-                onClick={() => incrementInputNum()}
-            />
+            <ControlsButton onClick={() => incrementInputNum()} />
         </Controls>
     );
 };
