@@ -19,7 +19,7 @@ const NameScreenText = ({ name, dexNum }) => {
     return (
         <>
             <Name>{name}</Name>
-            <DexNum>no. {dexNum}</DexNum>
+            <DexNum>{dexNum ? `no. ${dexNum}` : ""}</DexNum>
         </>
     );
 };
