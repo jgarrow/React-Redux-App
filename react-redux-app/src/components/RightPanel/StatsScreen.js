@@ -65,8 +65,8 @@ const StatsScreen = props => {
 
 const mapStateToProps = state => {
     return {
-        pokemon: state.pokemon,
-        stats: state.stats
+        pokemon: state.pokemon
+        // stats: state.stats
     };
 };
 

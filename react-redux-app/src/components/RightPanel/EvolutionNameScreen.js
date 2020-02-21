@@ -18,7 +18,6 @@ const NameSlides = styled.div`
 `;
 
 const EvolutionNameScreen = ({ evolTier, entryPos }) => {
-    console.log("evolTier in evo name screen: ", evolTier);
     return (
         <>
             {evolTier &&

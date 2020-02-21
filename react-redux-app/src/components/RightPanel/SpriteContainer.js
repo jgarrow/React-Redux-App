@@ -1,31 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Screen } from "../StyledComponents";
 import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io";
-
-const SpriteScreen = styled.div`
-    width: 100%;
-    min-width: 120px;
-    max-width: 120px;
-    position: relative;
-    overflow: hidden;
-    min-height: 120px;
-    max-height: 120px;
-    margin: 3px 0;
-    border: inset #9aa28b 3px;
-    border-radius: 5px;
-    box-sizing: border-box;
-    background: linear-gradient(
-        15deg,
-        #cad5b5 64%,
-        #dde2d4 70%,
-        #dde2d4 81%,
-        #fff 86%,
-        #dde2d4 89%,
-        #dde2d4 100%
-    );
-`;
 
 const SmallSprite = styled.img`
     height: 120px;
@@ -72,13 +48,9 @@ const SpriteContainer = ({
     handleTransition,
     entryPos
 }) => {
-    console.log(`evolutionLine for ${evoNum}: `, evolutionLine);
-    console.log(`evolTier for ${evoNum}: `, evolTier);
-    console.log(`evolSpriteTier for ${evoNum}: `, evolSpriteTier);
     return (
         <>
-            {/* <SpriteScreen> */}
-            {evolutionLine !== {} && evolTier && evolTier.length ? (
+            {evolutionLine !== {} && evolTier && evolTier.length && (
                 <>
                     {evolTier[0] !== "" && evolSpriteTier.length > 1 && (
                         <UpArrowIcon
@@ -120,10 +92,7 @@ const SpriteContainer = ({
                         />
                     )}
                 </>
-            ) : (
-                <SmallSprite src={evolSpriteTier} alt={evolTier} />
             )}
-            {/* </SpriteScreen> */}
         </>
     );
 };

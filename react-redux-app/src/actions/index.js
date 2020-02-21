@@ -173,10 +173,6 @@ export const getPokemon = apiUrl => dispatch => {
                 })
                 .catch(err => {
                     console.log("species err: ", err);
-                    // dispatch({
-                    //     type: FETCHING_DEX_ENTRIES_FAILURE,
-                    //     payload: err
-                    // });
                 });
         })
         .catch(err => {

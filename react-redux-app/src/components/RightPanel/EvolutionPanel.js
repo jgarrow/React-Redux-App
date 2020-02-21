@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 
 import { PanelRow, Screen } from "../StyledComponents";
 import SpriteContainer from "./SpriteContainer";
-import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io";
 import EvolutionNameScreen from "./EvolutionNameScreen";
 
 const EvolPanel = styled(PanelRow)`
@@ -64,9 +63,6 @@ const EvolutionPanel = props => {
     const [spriteIIEntryPosition, setSpriteIIEntryPosition] = useState(0);
     const [spriteIIIEntryPosition, setSpriteIIIEntryPosition] = useState(0);
     const [evoIName, setEvoIName] = useState("");
-
-    // props["evolution_sprites"]["evol_I"] &&
-    // console.log("evolution_sprites: ", props["evolution_sprites"]);
 
     // to capitalize first letter of tier I evolution's name
     useEffect(() => {
@@ -139,94 +135,11 @@ const EvolutionPanel = props => {
                     {props["evolution_line"]["evolution_I"] && (
                         <EvolutionNameScreen
                             evolTier={[props["evolution_line"]["evolution_I"]]}
-                            // entryPos={spriteIIEntryPosition}
                         />
                     )}
                 </NameScreen>
-                {/* <NameScreen>
-                    {props["evolution_line"] !== {} && (
-                        <EvolutionName>{evoIName}</EvolutionName>
-                    )}
-                </NameScreen> */}
             </div>
-            {/*    <FlexCenter>
-                    <EvolutionNum>I</EvolutionNum>
-                </FlexCenter>
-                <SpriteScreen>
-                    {props["evolution_line"] !== {} && (
-                        <SmallSprite
-                            src={props["evolution_sprites"]["evol_I"]}
-                            alt={props["evolution_line"]["evolution_I"]}
-                        />
-                    )}
-                </SpriteScreen>
-                <NameScreen>
-                    {props["evolution_line"] !== {} && (
-                        <EvolutionName>{evoIName}</EvolutionName>
-                    )}
-                </NameScreen>*/}
 
-            {/* <FlexCenter>
-                    <EvolutionNum>II</EvolutionNum>
-                </FlexCenter>
-                <SpriteScreen>
-                    {props["evolution_line"]["evolution_II"] && (
-                        <>
-                            {props["evolution_line"]["evolution_II"][0] !==
-                                "" &&
-                                props["evolution_line"]["evolution_II"].length >
-                                    1 && (
-                                    <UpArrowIcon
-                                        onClick={() =>
-                                            handleTransition(
-                                                "II",
-                                                "up",
-                                                props["evolution_sprites"][
-                                                    "evol_II"
-                                                ].length - 1
-                                            )
-                                        }
-                                    />
-                                )}
-                            <SpriteSlides
-                                translateValue={spriteIIEntryPosition}
-                                numOfSprites={
-                                    props["evolution_sprites"]["evol_II"].length
-                                }
-                            >
-                                {props["evolution_sprites"]["evol_II"].map(
-                                    (sprite, index) => (
-                                        <SmallSprite
-                                            key={index}
-                                            src={sprite}
-                                            alt={
-                                                props["evolution_line"][
-                                                    "evolution_II"
-                                                ][index]
-                                            }
-                                        />
-                                    )
-                                )}
-                            </SpriteSlides>
-                            {props["evolution_line"]["evolution_II"][0] !==
-                                "" &&
-                                props["evolution_line"]["evolution_II"].length >
-                                    1 && (
-                                    <DownArrowIcon
-                                        onClick={() =>
-                                            handleTransition(
-                                                "II",
-                                                "down",
-                                                props["evolution_sprites"][
-                                                    "evol_II"
-                                                ].length - 1
-                                            )
-                                        }
-                                    />
-                                )}
-                        </>
-                    )}
-                </SpriteScreen> */}
             <div>
                 <FlexCenter>
                     <EvolutionNum>II</EvolutionNum>
@@ -254,94 +167,7 @@ const EvolutionPanel = props => {
                         entryPos={spriteIIEntryPosition}
                     />
                 </NameScreen>
-                {/* <NameScreen>
-                    {props["evolution_line"]["evolution_II"] &&
-                        props["evolution_line"]["evolution_II"].map(
-                            (name, index) => {
-                                name =
-                                    name.charAt(0).toUpperCase() +
-                                    name.slice(1);
-                                return (
-                                    <NameSlides
-                                        key={index}
-                                        numOfNames={
-                                            props["evolution_line"][
-                                                "evolution_II"
-                                            ].length
-                                        }
-                                        translateValue={spriteIIEntryPosition}
-                                    >
-                                        <EvolutionName>{name}</EvolutionName>
-                                    </NameSlides>
-                                );
-                            }
-                        )}
-                </NameScreen> */}
             </div>
-
-            {/* <FlexCenter>
-                    <EvolutionNum>III</EvolutionNum>
-                </FlexCenter>
-                <SpriteScreen>
-                    {props["evolution_line"]["evolution_III"] && (
-                        <>
-                            {props["evolution_line"]["evolution_III"][0] !==
-                                "" &&
-                                props["evolution_line"]["evolution_III"]
-                                    .length > 1 && (
-                                    <UpArrowIcon
-                                        onClick={() =>
-                                            handleTransition(
-                                                "III",
-                                                "up",
-                                                props["evolution_sprites"][
-                                                    "evol_III"
-                                                ].length - 1
-                                            )
-                                        }
-                                    />
-                                )}
-                            <SpriteSlides
-                                translateValue={spriteIIIEntryPosition}
-                                numOfSprites={
-                                    props["evolution_sprites"]["evol_III"]
-                                        .length
-                                }
-                            >
-                                {props["evolution_sprites"]["evol_III"].map(
-                                    (sprite, index) => (
-                                        <SmallSprite
-                                            key={index}
-                                            src={sprite}
-                                            alt={
-                                                props["evolution_line"][
-                                                    "evolution_III"
-                                                ][index]
-                                            }
-                                        />
-                                    )
-                                )}
-                            </SpriteSlides>
-
-                            {props["evolution_line"]["evolution_III"][0] !==
-                                "" &&
-                                props["evolution_line"]["evolution_III"]
-                                    .length > 1 && (
-                                    <DownArrowIcon
-                                        onClick={() =>
-                                            handleTransition(
-                                                "III",
-                                                "down",
-                                                props["evolution_sprites"][
-                                                    "evol_III"
-                                                ].length - 1
-                                            )
-                                        }
-                                    />
-                                )}
-                        </>
-                    )}
-                </SpriteScreen> */}
 
             <div>
                 <FlexCenter>
@@ -370,29 +196,6 @@ const EvolutionPanel = props => {
                         entryPos={spriteIIIEntryPosition}
                     />
                 </NameScreen>
-                {/* <NameScreen>
-                    {props["evolution_line"]["evolution_III"] &&
-                        props["evolution_line"]["evolution_III"].map(
-                            (name, index) => {
-                                name =
-                                    name.charAt(0).toUpperCase() +
-                                    name.slice(1);
-                                return (
-                                    <NameSlides
-                                        key={index}
-                                        numOfNames={
-                                            props["evolution_line"][
-                                                "evolution_III"
-                                            ].length
-                                        }
-                                        translateValue={spriteIIIEntryPosition}
-                                    >
-                                        <EvolutionName>{name}</EvolutionName>
-                                    </NameSlides>
-                                );
-                            }
-                        )}
-                </NameScreen> */}
             </div>
         </EvolPanel>
     );

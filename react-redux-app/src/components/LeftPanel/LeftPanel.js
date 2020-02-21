@@ -36,12 +36,16 @@ const LeftPanel = props => {
                     dexNumArray = [...res.data["pokedex_numbers"]];
 
                     // find the national dex object
-                    natDexNum = dexNumArray.find(
-                        obj => obj.pokedex.name === "national"
-                    );
+                    natDexNum = dexNumArray.length
+                        ? dexNumArray.find(
+                              obj => obj.pokedex.name === "national"
+                          )
+                        : "N/A";
 
                     // get just the national dex number
-                    natDexNum = natDexNum["entry_number"];
+                    if (natDexNum !== "N/A") {
+                        natDexNum = natDexNum["entry_number"];
+                    }
 
                     entries = [...res.data["flavor_text_entries"]];
 
