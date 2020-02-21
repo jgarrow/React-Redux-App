@@ -15,6 +15,8 @@ const AppContainer = styled.div`
     display: flex;
 `;
 
+// styling from Eric Varela -- https://codepen.io/siliconunicorn/pen/VqoxXP
+
 const App = () => {
     return (
         <AppContainer>
