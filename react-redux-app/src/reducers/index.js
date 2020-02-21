@@ -327,8 +327,11 @@ export const pokemonReducer = (state = initialState, action) => {
             );
 
             let isLoading = true;
-
-            if (action.payload["evolution_tier"] === "evol_III") {
+            if (
+                action.payload["evolution_tier"] === "evol_III" || // if we've gotten the last evolution
+                !(evolutionSprites["evol_II"].length > 0) || // if there is no second evolution
+                !(evolutionSprites["evol_III"].length > 0) // if there is no third evolution
+            ) {
                 isLoading = false;
             }
 

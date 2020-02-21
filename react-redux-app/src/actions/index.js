@@ -25,6 +25,7 @@ export const getPokemon = apiUrl => dispatch => {
         .then(res => {
             axios
                 .get(res.species.url)
+
                 .then(res => {
                     axios
                         .get(res.data["evolution_chain"].url)

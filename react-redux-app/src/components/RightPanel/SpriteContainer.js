@@ -69,7 +69,6 @@ const SpriteContainer = ({
                         numOfSprites={evolSpriteTier.length}
                     >
                         {evolSpriteTier.map((sprite, index) => {
-                            console.log("evolTier.index", evolTier[index]);
                             return (
                                 <SmallSprite
                                     key={index}

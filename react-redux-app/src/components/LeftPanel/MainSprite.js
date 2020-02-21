@@ -11,6 +11,8 @@ const ImgWrapper = styled.div`
     height: 359px;
     display: flex;
     margin: 10px 0;
+    position: relative;
+    z-index: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -47,12 +49,21 @@ const rotate = keyframes`
 const LoadingImage = styled.img`
     width: 200px;
     height: 200px;
+    position: relative;
+    z-index: 2;
     animation: ${props =>
         props.isFetching
             ? css`
                   ${rotate} 2s infinite linear
               `
             : "none"};
+`;
+
+const LoadingText = styled.p`
+    margin: 0;
+    position: absolute;
+    bottom: 45px;
+    z-index: 3;
 `;
 
 const SpriteControls = styled.div`
@@ -162,6 +173,7 @@ const MainSprite = ({ sprites, name, isFetching }) => {
                         isFetching={isFetching}
                     />
                 )}
+                {isFetching && <LoadingText>Loading...</LoadingText>}
             </ImgWrapper>
 
             <SpriteControls>
