@@ -60,6 +60,7 @@ export const getPokemon = apiUrl => dispatch => {
                             return evolutions;
                         })
                         .then(res => {
+                            console.log("res: ", res);
                             const baseApiUrl =
                                 "https://pokeapi.co/api/v2/pokemon/";
 
@@ -68,13 +69,19 @@ export const getPokemon = apiUrl => dispatch => {
                                 mon => `${baseApiUrl}${mon}`
                             );
 
-                            let evol_III_urls = res["evolution_III"].toString();
+                            let evol_III_urls = res["evolution_III"].length
+                                ? res["evolution_III"].toString()
+                                : [];
 
-                            evol_III_urls = evol_III_urls.split(",");
+                            evol_III_urls = evol_III_urls.length
+                                ? evol_III_urls.split(",")
+                                : [];
 
-                            evol_III_urls = evol_III_urls.map(
-                                mon => `${baseApiUrl}${mon}`
-                            );
+                            evol_III_urls = evol_III_urls.length
+                                ? evol_III_urls.map(
+                                      mon => `${baseApiUrl}${mon}`
+                                  )
+                                : [];
 
                             const evol_I_url = `${baseApiUrl}${res["evolution_I"]}`;
 
@@ -83,6 +90,8 @@ export const getPokemon = apiUrl => dispatch => {
                                 evol_II: evol_II_urls,
                                 evol_III: evol_III_urls
                             };
+
+                            console.log("evolution_urls: ", evolution_urls);
 
                             axios
                                 .get(evolution_urls["evol_I"])
@@ -136,32 +145,33 @@ export const getPokemon = apiUrl => dispatch => {
                                     });
                             });
 
-                            evolution_urls["evol_III"].forEach(url => {
-                                axios
-                                    .get(url)
-                                    .then(res => {
-                                        dispatch({
-                                            type: FETCHING_EVOL_SPRITE_SUCCESS,
-                                            payload: {
-                                                evolution_tier: "evol_III",
-                                                sprite:
-                                                    res.data.sprites[
-                                                        "front_default"
-                                                    ]
-                                            }
+                            evolution_urls["evol_III"].length &&
+                                evolution_urls["evol_III"].forEach(url => {
+                                    axios
+                                        .get(url)
+                                        .then(res => {
+                                            dispatch({
+                                                type: FETCHING_EVOL_SPRITE_SUCCESS,
+                                                payload: {
+                                                    evolution_tier: "evol_III",
+                                                    sprite:
+                                                        res.data.sprites[
+                                                            "front_default"
+                                                        ]
+                                                }
+                                            });
+                                        })
+                                        .catch(err => {
+                                            console.log(
+                                                "error getting evolution III: ",
+                                                err
+                                            );
+                                            dispatch({
+                                                type: FETCHING_EVOL_SPRITE_FAILURE,
+                                                payload: err
+                                            });
                                         });
-                                    })
-                                    .catch(err => {
-                                        console.log(
-                                            "error getting evolution III: ",
-                                            err
-                                        );
-                                        dispatch({
-                                            type: FETCHING_EVOL_SPRITE_FAILURE,
-                                            payload: err
-                                        });
-                                    });
-                            });
+                                });
                         })
                         .catch(err => {
                             console.log("error fetching evolution line: ", err);
