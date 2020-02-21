@@ -15,7 +15,7 @@ const StatScreen = styled(Screen)`
     min-height: 118px;
     max-height: 118px;
     display: grid;
-    grid-template-columns: 1fr 10px;
+    grid-template-columns: 1fr 20px;
 `;
 
 const StatLabel = styled.p`
@@ -26,6 +26,7 @@ const StatLabel = styled.p`
 
 const StatNum = styled.p`
     margin: 0;
+    justify-self: flex-end;
 `;
 
 const StatsScreen = props => {
