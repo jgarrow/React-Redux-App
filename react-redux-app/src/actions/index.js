@@ -3,9 +3,6 @@ import axios from "axios";
 export const API_CALL_FETCHING = "API_CALL_FETCHING";
 export const API_CALL_SUCCESS = "API_CALL_SUCCESS";
 export const API_CALL_FAILURE = "API_CALL_FAILURE";
-export const FETCHING_DEX_ENTRIES = "FETCHING_DEX_ENTRIES";
-export const FETCHING_DEX_ENTRIES_SUCCESS = "FETCHING_DEX_ENTRIES_SUCCESS";
-export const FETCHING_DEX_ENTRIES_FAILURE = "FETCHING_DEX_ENTRIES_FAILURE";
 export const FETCHING_MOVE_INFO = "FETCHING_MOVES";
 export const FETCHING_MOVE_INFO_SUCCESS = "FETCHING_MOVES_SUCCESS";
 export const FETCHING_MOVE_INFO_FAILURE = "FETCHING_MOVES_FAILURE";
@@ -18,7 +15,6 @@ export const FETCHING_EVOL_SPRITE_SUCCESS = "FETCHING_EVOL_SPRITE_SUCCESS";
 export const FETCHING_EVOL_SPRITE_FAILURE = "FETCHING_EVOL_SPRITE_FAILURE";
 
 export const getPokemon = apiUrl => dispatch => {
-    console.log("in getPokemon action");
     dispatch({ type: API_CALL_FETCHING });
     axios
         .get(apiUrl)
@@ -30,11 +26,6 @@ export const getPokemon = apiUrl => dispatch => {
             axios
                 .get(res.species.url)
                 .then(res => {
-                    // dispatch({
-                    //     type: FETCHING_DEX_ENTRIES_SUCCESS,
-                    //     payload: res.data
-                    // });
-
                     axios
                         .get(res.data["evolution_chain"].url)
                         .then(res => {
@@ -60,8 +51,6 @@ export const getPokemon = apiUrl => dispatch => {
                                 evolution_II: evol_II,
                                 evolution_III: evol_III
                             };
-
-                            console.log("evolutions in action: ", evolutions);
 
                             dispatch({
                                 type: FETCHING_EVOLUTION_LINE_SUCCESS,
@@ -120,7 +109,7 @@ export const getPokemon = apiUrl => dispatch => {
                                     });
                                 });
 
-                            evolution_urls["evol_II"].map(url => {
+                            evolution_urls["evol_II"].forEach(url => {
                                 axios
                                     .get(url)
                                     .then(res => {
@@ -147,7 +136,7 @@ export const getPokemon = apiUrl => dispatch => {
                                     });
                             });
 
-                            evolution_urls["evol_III"].map(url => {
+                            evolution_urls["evol_III"].forEach(url => {
                                 axios
                                     .get(url)
                                     .then(res => {
@@ -184,10 +173,10 @@ export const getPokemon = apiUrl => dispatch => {
                 })
                 .catch(err => {
                     console.log("species err: ", err);
-                    dispatch({
-                        type: FETCHING_DEX_ENTRIES_FAILURE,
-                        payload: err
-                    });
+                    // dispatch({
+                    //     type: FETCHING_DEX_ENTRIES_FAILURE,
+                    //     payload: err
+                    // });
                 });
         })
         .catch(err => {
@@ -196,6 +185,7 @@ export const getPokemon = apiUrl => dispatch => {
         });
 };
 
+// used in MoveList component in RightPanel
 export const getMoveInfo = apiUrl => dispatch => {
     dispatch({ type: FETCHING_MOVE_INFO });
     axios

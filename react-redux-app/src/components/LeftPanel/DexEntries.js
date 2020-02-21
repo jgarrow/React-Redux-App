@@ -75,7 +75,7 @@ const DexEntries = ({ dexEntries }) => {
         setDexEntryPosition(newPosition);
     };
 
-    console.log("dexEntries in DexEntries: ", dexEntries);
+    // console.log("dexEntries in DexEntries: ", dexEntries);
 
     return (
         <DescriptionScreen>

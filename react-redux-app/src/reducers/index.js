@@ -53,7 +53,7 @@ const initialState = {
     evolution_line: {},
     previous_evolution_line: {},
     evolution_sprites: {
-        evol_I: null,
+        evol_I: [],
         evol_II: [],
         evol_III: []
     },
@@ -234,7 +234,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 }
             }
 
-            console.log("evolutions in reducer: ", evolutions);
+            // console.log("evolutions in reducer: ", evolutions);
 
             return {
                 ...state,
@@ -259,9 +259,15 @@ export const pokemonReducer = (state = initialState, action) => {
             const evolutionSprites = { ...state["evolution_sprites"] };
             let updatedSprites = null;
 
+            console.log("In FETCHING_EVOL_SPRITE_SUCCESS");
+
             // need to reset evol_II and evol_III arrays when querying for a pokemon that has a different evolution_line
             if (payload_evolution === "evol_I") {
-                evolutionSprites["evol_I"] = action.payload.sprite;
+                console.log(
+                    "evol_I action.payload.sprite: ",
+                    action.payload.sprite
+                );
+                evolutionSprites["evol_I"] = [action.payload.sprite];
             } else if (payload_evolution === "evol_II") {
                 updatedSprites = [...state["evolution_sprites"]["evol_II"]];
 
