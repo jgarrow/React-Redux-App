@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { PanelRow } from "../StyledComponents";
+import { PanelRow, Screen } from "../StyledComponents";
 import SpriteContainer from "./SpriteContainer";
 import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io";
+import EvolutionNameScreen from "./EvolutionNameScreen";
 
 const EvolPanel = styled(PanelRow)`
     flex-wrap: wrap;
@@ -57,22 +58,6 @@ const NameScreen = styled(Screen)`
     height: 28px;
     width: 120px;
     overflow: hidden;
-`;
-
-const EvolutionName = styled.p`
-    margin: 0;
-`;
-
-const NameSlides = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 28px;
-    max-height: 28px;
-    display: grid;
-    grid-template-rows: ${props => `repeat(${props.numOfNames}, 100%)`};
-    transform: ${props => `translateY(${props.translateValue}%)`};
-    transition: transform 0.45s ease-out;
 `;
 
 const EvolutionPanel = props => {
@@ -150,6 +135,14 @@ const EvolutionPanel = props => {
                         />
                     )}
                 </SpriteScreen>
+                <NameScreen>
+                    {props["evolution_line"]["evolution_I"] && (
+                        <EvolutionNameScreen
+                            evolTier={[props["evolution_line"]["evolution_I"]]}
+                            // entryPos={spriteIIEntryPosition}
+                        />
+                    )}
+                </NameScreen>
                 {/* <NameScreen>
                     {props["evolution_line"] !== {} && (
                         <EvolutionName>{evoIName}</EvolutionName>
@@ -255,6 +248,12 @@ const EvolutionPanel = props => {
                             />
                         )}
                 </SpriteScreen>
+                <NameScreen>
+                    <EvolutionNameScreen
+                        evolTier={props["evolution_line"]["evolution_II"]}
+                        entryPos={spriteIIEntryPosition}
+                    />
+                </NameScreen>
                 {/* <NameScreen>
                     {props["evolution_line"]["evolution_II"] &&
                         props["evolution_line"]["evolution_II"].map(
@@ -365,6 +364,12 @@ const EvolutionPanel = props => {
                             />
                         )}
                 </SpriteScreen>
+                <NameScreen>
+                    <EvolutionNameScreen
+                        evolTier={props["evolution_line"]["evolution_III"]}
+                        entryPos={spriteIIIEntryPosition}
+                    />
+                </NameScreen>
                 {/* <NameScreen>
                     {props["evolution_line"]["evolution_III"] &&
                         props["evolution_line"]["evolution_III"].map(
