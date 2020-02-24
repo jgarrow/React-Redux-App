@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+
+import { getPokemon } from "./actions";
 
 import LeftPanel from "./components/LeftPanel/LeftPanel";
 import Divider from "./components/Divider";
@@ -17,7 +20,21 @@ const AppContainer = styled.div`
 
 // styling from Eric Varela -- https://codepen.io/siliconunicorn/pen/VqoxXP
 
-const App = () => {
+const App = props => {
+    const getRandomNum = () => {
+        const max = 807; // excluding 807
+        const randomNum = Math.floor(Math.random() * Math.floor(max));
+
+        console.log("randomNum: ", randomNum);
+
+        return randomNum;
+    };
+
+    useEffect(() => {
+        const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
+        props.getPokemon(baseUrl + getRandomNum());
+    }, []);
+
     return (
         <AppContainer>
             <LeftPanel />
@@ -27,4 +44,10 @@ const App = () => {
     );
 };
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        pokemon: state.pokemon
+    };
+};
+
+export default connect(mapStateToProps, { getPokemon })(App);
