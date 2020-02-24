@@ -115,7 +115,7 @@ const EvolutionPanel = props => {
         }
     };
 
-    console.log("evolution_sprites: ", props["evolution_sprites"]);
+    // console.log("evolution_sprites: ", props["evolution_sprites"]);
 
     return (
         <EvolPanel>

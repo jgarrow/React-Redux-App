@@ -63,10 +63,10 @@ const SpriteContainer = ({
     entryPos,
     isFetching
 }) => {
-    console.log(`evolSpriteTier for ${evoNum}: `, evolSpriteTier);
-    console.log("isFetching in SpriteContainer: ", isFetching);
-    console.log(`evolTier for ${evoNum}: `, evolTier);
-    console.log(`evolutionLine for ${evoNum}: `, evolutionLine);
+    // console.log(`evolSpriteTier for ${evoNum}: `, evolSpriteTier);
+    // console.log("isFetching in SpriteContainer: ", isFetching);
+    // console.log(`evolTier for ${evoNum}: `, evolTier);
+    // console.log(`evolutionLine for ${evoNum}: `, evolutionLine);
 
     return (
         <>

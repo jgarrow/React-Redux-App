@@ -1,5 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+
+import { useGetPokemon } from "../../hooks/useGetPokemon";
+
+import { getPokemon } from "../../actions";
 
 import { PanelRow } from "../StyledComponents";
 
@@ -12,6 +17,7 @@ const BlueButton = styled.div`
     height: 30px;
     flex: 1 1 16%;
     margin: 3px;
+    cursor: pointer;
     border: groove #6c96e6 3px;
     border-radius: 5px;
     background: linear-gradient(
@@ -25,23 +31,104 @@ const BlueButton = styled.div`
     );
     background-blend-mode: hard-light;
     background-color: #09a8ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active {
+        transition: border-width 0.1s ease-out;
+        border-width: 4px 3px 1px 3px;
+    }
 `;
 
-const BlueButtons = () => {
+const BlueButtons = props => {
+    const { setNewInput, getEndpoint } = useGetPokemon();
+
+    const getRandomNum = () => {
+        const max = 807; // excluding 807
+        const randomNum = Math.floor(Math.random() * Math.floor(max));
+
+        console.log("randomNum: ", randomNum);
+
+        return randomNum;
+    };
+
+    const handleGetPokemon = num => {
+        const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
+        console.log("num: ", num);
+        setNewInput(num);
+
+        props.getPokemon(baseUrl + num);
+    };
+
     return (
         <BlueBtns>
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(props.genApiUrls.gen1)}
+            >
+                Gen I
+            </BlueButton>
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(props.genApiUrls.gen2)}
+            >
+                Gen II
+            </BlueButton>
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(props.genApiUrls.gen3)}
+            >
+                Gen III
+            </BlueButton>
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(props.genApiUrls.gen4)}
+            >
+                Gen IV
+            </BlueButton>
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(props.genApiUrls.gen5)}
+            >
+                Gen V
+            </BlueButton>
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(props.genApiUrls.gen6)}
+            >
+                Gen VI
+            </BlueButton>
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(props.genApiUrls.gen7)}
+            >
+                Gen VII
+            </BlueButton>
             <BlueButton />
-            <BlueButton />
-            <BlueButton />
-            <BlueButton />
-            <BlueButton />
-            <BlueButton />
-            <BlueButton />
-            <BlueButton />
-            <BlueButton />
+            <BlueButton
+                role="button"
+                ariaPressed={false}
+                onClick={() => handleGetPokemon(getRandomNum())}
+            >
+                Random
+            </BlueButton>
             <BlueButton />
         </BlueBtns>
     );
 };
 
-export default BlueButtons;
+const mapStateToProps = state => {
+    return {
+        genApiUrls: state.genApiUrls
+    };
+};
+
+export default connect(mapStateToProps, { getPokemon })(BlueButtons);

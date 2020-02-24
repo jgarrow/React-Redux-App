@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const useGetPokemon = () => {
     const [inputNum, setInputNum] = useState(1);
 
+    // useEffect(() => {
+    //     const providedInput = newInput ? newInput : inputNum;
+    //     setInputNum(providedInput);
+    // }, [newInput]);
+
     const endpoint = `https://pokeapi.co/api/v2/pokemon/`;
 
     const getInputNum = () => inputNum;
+
+    const setNewInput = num => setInputNum(num);
+
     const decrementInputNum = () => {
         let newInput = inputNum - 1;
 
@@ -25,14 +33,16 @@ export const useGetPokemon = () => {
         setInputNum(newInput);
     };
 
-    const getEndpoint = () => {
+    const getEndpoint = inputNum => {
         console.log("inputNum in getEndpoint: ", inputNum);
+        // console.log("newInput in getEndpoint: ", newInput);
+        // setInputNum(newInput);
         return endpoint + inputNum;
     };
 
     return {
         getInputNum,
-        setInputNum,
+        setNewInput,
         decrementInputNum,
         incrementInputNum,
         getEndpoint
