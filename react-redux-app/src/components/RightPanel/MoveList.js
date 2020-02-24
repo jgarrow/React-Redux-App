@@ -167,7 +167,7 @@ const MoveList = props => {
     return (
         <MoveContainer>
             <MoveScreen>
-                {moves && (
+                {!props.isFetching && moves && (
                     <Slides
                         translateValue={movePosition}
                         numOfSlides={moves.length}
@@ -205,7 +205,8 @@ const MoveList = props => {
 const mapStateToProps = state => {
     return {
         pokemon: state.pokemon,
-        moves: state.moves
+        moves: state.moves,
+        isFetching: state.isFetching
     };
 };
 

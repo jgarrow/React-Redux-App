@@ -38,8 +38,18 @@ const initialState = {
 export const pokemonReducer = (state = initialState, action) => {
     switch (action.type) {
         case API_CALL_FETCHING:
+            // reset state when new api call is made
             return {
                 ...state,
+                pokemon: {},
+                moves: [],
+                evolution_line: {},
+                previous_evolution_line: {},
+                evolution_sprites: {
+                    evol_I: [],
+                    evol_II: [],
+                    evol_III: []
+                },
                 error: "",
                 isFetching: true
             };

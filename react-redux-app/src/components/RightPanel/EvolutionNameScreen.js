@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 const EvolutionName = styled.p`
     margin: 0;
@@ -17,10 +18,11 @@ const NameSlides = styled.div`
     transition: transform 0.45s ease-out;
 `;
 
-const EvolutionNameScreen = ({ evolTier, entryPos }) => {
+const EvolutionNameScreen = ({ evolTier, entryPos, isFetching }) => {
     return (
         <>
-            {evolTier &&
+            {!isFetching &&
+                evolTier &&
                 evolTier.map((name, index) => {
                     name = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -38,4 +40,10 @@ const EvolutionNameScreen = ({ evolTier, entryPos }) => {
     );
 };
 
-export default EvolutionNameScreen;
+const mapStateToProps = state => {
+    return {
+        isFetching: state.isFetching
+    };
+};
+
+export default connect(mapStateToProps, {})(EvolutionNameScreen);

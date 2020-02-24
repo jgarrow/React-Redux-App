@@ -39,7 +39,7 @@ const StatsScreen = props => {
 
     return (
         <StatScreen>
-            {props.pokemon.stats && (
+            {props.pokemon.stats && !props.isFetching && (
                 <>
                     <StatLabel>Speed</StatLabel>
                     <StatNum>{handleGetStat("speed")}</StatNum>
@@ -66,7 +66,8 @@ const StatsScreen = props => {
 
 const mapStateToProps = state => {
     return {
-        pokemon: state.pokemon
+        pokemon: state.pokemon,
+        isFetching: state.isFetching
         // stats: state.stats
     };
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import pokeball from "../../img/PokeballSVG.svg";
 import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io";
 
 const SmallSprite = styled.img`
@@ -40,55 +41,87 @@ const SpriteSlides = styled.div`
     transition: transform 0.45s ease-out;
 `;
 
+const AltImgContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const AltImage = styled.img`
+    width: 80px;
+    height: 80px;
+`;
+
 const SpriteContainer = ({
     evoNum,
     evolutionLine,
     evolTier,
     evolSpriteTier,
     handleTransition,
-    entryPos
+    entryPos,
+    isFetching
 }) => {
+    console.log(`evolSpriteTier for ${evoNum}: `, evolSpriteTier);
+    console.log("isFetching in SpriteContainer: ", isFetching);
+    console.log(`evolTier for ${evoNum}: `, evolTier);
+    console.log(`evolutionLine for ${evoNum}: `, evolutionLine);
+
     return (
         <>
-            {evolutionLine !== {} && evolTier && evolTier.length > 0 && (
+            {!isFetching && (
                 <>
-                    {evolTier[0] !== "" && evolSpriteTier.length > 1 && (
-                        <UpArrowIcon
-                            onClick={() =>
-                                handleTransition(
-                                    evoNum,
-                                    "up",
-                                    evolSpriteTier.length - 1
-                                )
-                            }
-                        />
-                    )}
+                    {evolSpriteTier && evolSpriteTier.length > 0 ? (
+                        <>
+                            {evolTier[0] !== "" &&
+                                evolSpriteTier.length > 1 && (
+                                    <UpArrowIcon
+                                        onClick={() =>
+                                            handleTransition(
+                                                evoNum,
+                                                "up",
+                                                evolSpriteTier.length - 1
+                                            )
+                                        }
+                                    />
+                                )}
 
-                    <SpriteSlides
-                        translateValue={entryPos}
-                        numOfSprites={evolSpriteTier.length}
-                    >
-                        {evolSpriteTier.map((sprite, index) => {
-                            return (
-                                <SmallSprite
-                                    key={index}
-                                    src={sprite}
-                                    alt={evolTier[index]}
-                                />
-                            );
-                        })}
-                    </SpriteSlides>
+                            <SpriteSlides
+                                translateValue={entryPos}
+                                numOfSprites={evolSpriteTier.length}
+                            >
+                                {evolSpriteTier.map((sprite, index) => {
+                                    return (
+                                        <SmallSprite
+                                            key={index}
+                                            src={sprite}
+                                            alt={evolTier[index]}
+                                        />
+                                    );
+                                })}
+                            </SpriteSlides>
 
-                    {evolTier[0] !== "" && evolSpriteTier.length > 1 && (
-                        <DownArrowIcon
-                            onClick={() =>
-                                handleTransition(
-                                    evoNum,
-                                    "down",
-                                    evolSpriteTier.length - 1
-                                )
-                            }
-                        />
+                            {evolTier[0] !== "" &&
+                                evolSpriteTier.length > 1 && (
+                                    <DownArrowIcon
+                                        onClick={() =>
+                                            handleTransition(
+                                                evoNum,
+                                                "down",
+                                                evolSpriteTier.length - 1
+                                            )
+                                        }
+                                    />
+                                )}
+                        </>
+                    ) : (
+                        <AltImgContainer>
+                            <AltImage
+                                src={pokeball}
+                                alt="Pokeball displays when no image is available or the displayed pokemon doesn't evolve"
+                            />
+                        </AltImgContainer>
                     )}
                 </>
             )}

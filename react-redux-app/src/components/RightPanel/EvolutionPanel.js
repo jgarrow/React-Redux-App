@@ -47,6 +47,8 @@ const SpriteScreen = styled.div`
         #dde2d4 89%,
         #dde2d4 100%
     );
+    display: flex;
+    align-items: center;
 `;
 
 const NameScreen = styled(Screen)`
@@ -113,6 +115,8 @@ const EvolutionPanel = props => {
         }
     };
 
+    console.log("evolution_sprites: ", props["evolution_sprites"]);
+
     return (
         <EvolPanel>
             <div>
@@ -128,6 +132,7 @@ const EvolutionPanel = props => {
                             evolSpriteTier={
                                 props["evolution_sprites"]["evol_I"]
                             }
+                            isFetching={props.isFetching}
                         />
                     )}
                 </SpriteScreen>
@@ -158,6 +163,7 @@ const EvolutionPanel = props => {
                                 }
                                 handleTransition={handleTransition}
                                 entryPos={spriteIIEntryPosition}
+                                isFetching={props.isFetching}
                             />
                         )}
                 </SpriteScreen>
@@ -187,6 +193,7 @@ const EvolutionPanel = props => {
                                 }
                                 handleTransition={handleTransition}
                                 entryPos={spriteIIIEntryPosition}
+                                isFetching={props.isFetching}
                             />
                         )}
                 </SpriteScreen>
@@ -204,7 +211,8 @@ const EvolutionPanel = props => {
 const mapStateToProps = state => {
     return {
         evolution_line: state["evolution_line"],
-        evolution_sprites: state["evolution_sprites"]
+        evolution_sprites: state["evolution_sprites"],
+        isFetching: state.isFetching
     };
 };
 

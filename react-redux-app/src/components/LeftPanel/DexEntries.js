@@ -49,7 +49,7 @@ const RightArrow = styled(Arrow)`
     right: 5px;
 `;
 
-const DexEntries = ({ dexEntries }) => {
+const DexEntries = ({ dexEntries, isFetching }) => {
     const [dexEntryPosition, setDexEntryPosition] = useState(0);
 
     // for slides transitioning for dex entries
@@ -79,7 +79,7 @@ const DexEntries = ({ dexEntries }) => {
 
     return (
         <DescriptionScreen>
-            {dexEntries.length > 0 && (
+            {dexEntries.length > 0 && !isFetching && (
                 <>
                     <Arrow
                         onClick={() =>

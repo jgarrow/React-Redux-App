@@ -84,7 +84,8 @@ const Types = props => {
         <TypesContainer>
             <PanelHeader>Types</PanelHeader>
             <TypesWrapper>
-                {props.pokemon.types &&
+                {!props.isFetching &&
+                    props.pokemon.types &&
                     props.pokemon.types.map((type, index) => (
                         <Type key={index} type={type.type.name}>
                             {type.type.name}
@@ -97,7 +98,8 @@ const Types = props => {
 
 const mapStateToProps = state => {
     return {
-        pokemon: state.pokemon
+        pokemon: state.pokemon,
+        isFetching: state.isFetching
     };
 };
 

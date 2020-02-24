@@ -94,7 +94,7 @@ const LeftPanel = props => {
     return (
         <Panel>
             <NameScreen>
-                {props.pokemon !== {} && (
+                {props.pokemon !== {} && !props.isFetching && (
                     <NameScreenText name={props.pokemon.name} dexNum={dexNum} />
                 )}
             </NameScreen>
@@ -103,7 +103,7 @@ const LeftPanel = props => {
                 name={props.pokemon.name}
                 isFetching={props.isFetching}
             />
-            <DexEntries dexEntries={dexEntries} />
+            <DexEntries dexEntries={dexEntries} isFetching={props.isFetching} />
         </Panel>
     );
 };
