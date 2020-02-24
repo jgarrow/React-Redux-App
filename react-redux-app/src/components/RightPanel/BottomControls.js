@@ -78,7 +78,7 @@ const BottomControls = props => {
 
     const {
         getInputNum,
-        setInputNum: setNum,
+        setNewInput: setNum,
         decrementInputNum,
         incrementInputNum,
         getEndpoint
