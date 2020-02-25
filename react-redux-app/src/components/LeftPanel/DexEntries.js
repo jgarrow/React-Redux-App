@@ -22,7 +22,7 @@ const DescriptionScreen = styled(Screen)`
 const Slides = styled.div`
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 115px;
     display: grid;
     grid-template-columns: ${props => `repeat(${props.numOfSlides}, 100%)`};
     transform: ${props => `translateX(${props.translateValue}%)`};
@@ -31,8 +31,16 @@ const Slides = styled.div`
 
 const Text = styled.div`
     width: 90%;
+    height: 115px;
     margin: 0 auto;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        margin: 0;
+    }
 `;
 
 const Arrow = styled.div`
