@@ -83,8 +83,6 @@ const DexEntries = ({ dexEntries, isFetching }) => {
         setDexEntryPosition(newPosition);
     };
 
-    // console.log("dexEntries in DexEntries: ", dexEntries);
-
     return (
         <DescriptionScreen>
             {dexEntries.length > 0 && !isFetching && (

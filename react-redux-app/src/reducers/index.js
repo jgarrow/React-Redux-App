@@ -346,6 +346,9 @@ export const pokemonReducer = (state = initialState, action) => {
                 !(evolutionSprites["evol_II"].length > 0) || // if there is no second evolution
                 !(evolutionSprites["evol_III"].length > 0) // if there is no third evolution
             ) {
+                console.log(
+                    "in last evolution OR there's no 2nd evo OR there's no 3rd evo"
+                );
                 isLoading = false;
             }
 

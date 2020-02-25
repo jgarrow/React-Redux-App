@@ -30,9 +30,14 @@ export const getPokemon = apiUrl => dispatch => {
                 .get(res.species.url)
 
                 .then(res => {
+                    console.log("res from res.species.url: ", res.data);
                     axios
                         .get(res.data["evolution_chain"].url)
                         .then(res => {
+                            console.log(
+                                `res from res.data["evolution_chain"].url: `,
+                                res.data
+                            );
                             const evolineObj = { ...res.data.chain };
 
                             const evol_I = evolineObj.species.name;
@@ -56,21 +61,43 @@ export const getPokemon = apiUrl => dispatch => {
                                 evolution_III: evol_III
                             };
 
+                            const evoIUrl = evolineObj.species.url;
+                            const evoIIUrls = evolineObj["evolves_to"].map(
+                                mon => {
+                                    const url = mon.species.url;
+                                    return url.replace("-species", "");
+                                }
+                            );
+
+                            const evoIIIUrls = evolineObj["evolves_to"].map(
+                                mon =>
+                                    mon["evolves_to"].map(pokemon => {
+                                        let monUrl = pokemon.species.url;
+                                        return monUrl.replace("-species", "");
+                                    })
+                            );
+
+                            const evolution_urls = {
+                                evolution_I: evoIUrl.replace("-species", ""),
+                                evolution_II: evoIIUrls,
+                                evolution_III: evoIIIUrls
+                            };
+
                             dispatch({
                                 type: FETCHING_EVOLUTION_LINE_SUCCESS,
                                 payload: res.data.chain // an array
                             });
 
-                            return evolutions;
+                            return evolution_urls;
                         })
                         .then(res => {
                             const baseApiUrl =
                                 "https://pokeapi.co/api/v2/pokemon/";
 
                             let evol_II_urls = res["evolution_II"];
-                            evol_II_urls = evol_II_urls.map(
-                                mon => `${baseApiUrl}${mon}`
-                            );
+                            // evol_II_urls = evol_II_urls.map(
+                            //     mon => `${baseApiUrl}${mon}`
+                            // );
 
                             let evol_III_urls = res["evolution_III"].length
                                 ? res["evolution_III"].toString()
@@ -80,19 +107,22 @@ export const getPokemon = apiUrl => dispatch => {
                                 ? evol_III_urls.split(",")
                                 : [];
 
-                            evol_III_urls = evol_III_urls.length
-                                ? evol_III_urls.map(
-                                      mon => `${baseApiUrl}${mon}`
-                                  )
-                                : [];
+                            // evol_III_urls = evol_III_urls.length
+                            //     ? evol_III_urls.map(
+                            //           mon => `${baseApiUrl}${mon}`
+                            //       )
+                            //     : [];
 
-                            const evol_I_url = `${baseApiUrl}${res["evolution_I"]}`;
+                            // const evol_I_url = `${baseApiUrl}${res["evolution_I"]}`;
+                            const evol_I_url = res["evolution_I"];
 
                             const evolution_urls = {
                                 evol_I: evol_I_url,
                                 evol_II: evol_II_urls,
                                 evol_III: evol_III_urls
                             };
+
+                            console.log("evolution_urls: ", evolution_urls);
 
                             axios
                                 .get(evolution_urls["evol_I"])

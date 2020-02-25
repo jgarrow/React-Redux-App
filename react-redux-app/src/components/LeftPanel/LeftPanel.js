@@ -88,8 +88,8 @@ const LeftPanel = props => {
     }, [props.pokemon]);
 
     useEffect(() => {
-        console.log("isFetching: ", props.isFetching);
-        console.log("pokemon: ", props.pokemon);
+        console.log("LeftPanel: isFetching: ", props.isFetching);
+        // console.log("pokemon: ", props.pokemon);
     }, [props.isFetching]);
 
     return (
