@@ -42,6 +42,7 @@ const initialState = {
 export const pokemonReducer = (state = initialState, action) => {
     switch (action.type) {
         case API_CALL_FETCHING:
+            console.log("API_CALL_FETCHING");
             // reset state when new api call is made
             return {
                 ...state,
@@ -58,6 +59,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 isFetching: true
             };
         case API_CALL_SUCCESS:
+            console.log("API_CALL_SUCCESS");
             let movesArr = [...action.payload.moves];
 
             //compare function for sorting array
@@ -122,8 +124,8 @@ export const pokemonReducer = (state = initialState, action) => {
         case FETCHING_MOVE_INFO:
             return {
                 ...state,
-                error: "",
-                isFetching: true
+                error: ""
+                // isFetching: true
             };
         case FETCHING_MOVE_INFO_SUCCESS:
             let movesArray = [...state.moves];
@@ -146,8 +148,8 @@ export const pokemonReducer = (state = initialState, action) => {
         case FETCHING_MOVE_INFO_FAILURE:
             return {
                 ...state,
-                error: action.payload,
-                isFetching: false
+                error: action.payload
+                // isFetching: false
             };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
             let evoIISprites = [...state["evolution_sprites"]["evol_II"]];
@@ -224,145 +226,213 @@ export const pokemonReducer = (state = initialState, action) => {
 
             // console.log("evolutions in reducer: ", evolutions);
 
+            const spriteBase =
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
+            const regExp = /[a-zA-Z]*\/?/g;
+
+            let evoIUrl = evolineObj.species.url.slice(-5);
+
+            if (evoIUrl[evoIUrl.length - 1] === "/") {
+                evoIUrl = evoIUrl.slice(0, -1);
+            }
+
+            const evoImatch = evoIUrl.match(regExp);
+            const indexToRemove = evoImatch[0].length;
+
+            evoIUrl = evoIUrl.slice(indexToRemove > 1 ? indexToRemove - 1 : 0);
+
+            evoIUrl = spriteBase + evoIUrl + ".png";
+
+            let evoIIUrls = evolineObj["evolves_to"].map(mon => {
+                let url = mon.species.url.slice(-5);
+                // url.replace(regExp, "");
+
+                if (url[url.length - 1] === "/") {
+                    // url[url.length - 1].replace("/", "");
+                    url = url.slice(0, -1);
+                }
+
+                const evoIImatch = url.match(regExp);
+                const amntToRemove = evoIImatch[0].length;
+
+                url = url.slice(amntToRemove > 1 ? amntToRemove - 1 : 0);
+                url = spriteBase + url + ".png";
+
+                return url;
+            });
+
+            let evoIIIUrls = evolineObj["evolves_to"].map(mon =>
+                mon["evolves_to"].map(pokemon => {
+                    let url = pokemon.species.url.slice(-5);
+                    // url.replace(regExp, "");
+
+                    if (url[url.length - 1] === "/") {
+                        // url[url.length - 1].replace("/", "");
+                        url = url.slice(0, -1);
+                    }
+
+                    const evoIIImatch = url.match(regExp);
+                    const remove = evoIIImatch[0].length;
+
+                    url = url.slice(remove > 1 ? remove - 1 : 0);
+                    url = spriteBase + url + ".png";
+
+                    return url;
+                })
+            );
+
+            evoIIIUrls = evoIIIUrls.flat();
+
+            const evolution_urls = {
+                evolution_I: evoIUrl,
+                evolution_II: evoIIUrls,
+                evolution_III: evoIIIUrls
+            };
+
+            console.log("evolineObj: ", evolineObj);
+            console.log("evolution_urls: ", evolution_urls);
+
             return {
                 ...state,
                 evolution_line: evolutions,
                 previous_evolution_line: prev_evo_line,
-                evolution_sprites: {
-                    ...state["evolution_sprites"],
-                    evol_II: evoIISprites,
-                    evol_III: evoIIISprites
-                },
+                evolution_sprites: evolution_urls,
+                // {
+                //     ...state["evolution_sprites"],
+                //     evol_I: evoIUrl,
+                //     evol_II: evoIISprites,
+                //     evol_III: evoIIISprites
+                // },
                 error: ""
                 // isFetching: false
             };
         case FETCHING_EVOLUTION_LINE_FAILURE:
             return {
                 ...state,
-                error: action.payload,
-                isFetching: false
+                error: action.payload
+                // isFetching: false
             };
         case FETCHING_EVOL_SPRITE_SUCCESS:
-            let payload_evolution = action.payload["evolution_tier"];
-            const evolutionSprites = { ...state["evolution_sprites"] };
-            let updatedSprites = null;
+            // let payload_evolution = action.payload["evolution_tier"];
+            // const evolutionSprites = { ...state["evolution_sprites"] };
+            // let updatedSprites = null;
 
-            // need to reset evol_II and evol_III arrays when querying for a pokemon that has a different evolution_line
-            if (payload_evolution === "evol_I") {
-                evolutionSprites["evol_I"] = [action.payload.sprite];
-            } else if (payload_evolution === "evol_II") {
-                updatedSprites = [...state["evolution_sprites"]["evol_II"]];
+            // // need to reset evol_II and evol_III arrays when querying for a pokemon that has a different evolution_line
+            // if (payload_evolution === "evol_I") {
+            //     evolutionSprites["evol_I"] = [action.payload.sprite];
+            // } else if (payload_evolution === "evol_II") {
+            //     updatedSprites = [...state["evolution_sprites"]["evol_II"]];
 
-                // to prevent re "setting" state if the action.payload is the same as the current state
-                if (
-                    updatedSprites[updatedSprites.length - 1] !==
-                    action.payload.sprite
-                ) {
-                    evolutionSprites["evol_II"] = [
-                        ...evolutionSprites["evol_II"],
-                        action.payload.sprite
-                    ];
-                }
-            } else if (payload_evolution === "evol_III") {
-                updatedSprites = [...state["evolution_sprites"]["evol_III"]];
+            //     // to prevent re "setting" state if the action.payload is the same as the current state
+            //     if (
+            //         updatedSprites[updatedSprites.length - 1] !==
+            //         action.payload.sprite
+            //     ) {
+            //         evolutionSprites["evol_II"] = [
+            //             ...evolutionSprites["evol_II"],
+            //             action.payload.sprite
+            //         ];
+            //     }
+            // } else if (payload_evolution === "evol_III") {
+            //     updatedSprites = [...state["evolution_sprites"]["evol_III"]];
 
-                // to prevent re "setting" state if the action.payload is the same as the current state
-                if (
-                    updatedSprites[updatedSprites.length - 1] !==
-                    action.payload.sprite
-                ) {
-                    evolutionSprites["evol_III"] = [
-                        ...evolutionSprites["evol_III"],
-                        action.payload.sprite
-                    ];
-                }
-            }
+            //     // to prevent re "setting" state if the action.payload is the same as the current state
+            //     if (
+            //         updatedSprites[updatedSprites.length - 1] !==
+            //         action.payload.sprite
+            //     ) {
+            //         evolutionSprites["evol_III"] = [
+            //             ...evolutionSprites["evol_III"],
+            //             action.payload.sprite
+            //         ];
+            //     }
+            // }
 
-            // logic to reorder the evolutionSprites for tier II so that they match the same order of the names for the sprites
-            let evoIIUrlDexNumArray = evolutionSprites["evol_II"].map(
-                (url, index) => {
-                    // get the last 7 characters (should be "###.png" or "/##.png")
-                    let urlDexNum = url.slice(-7);
+            // // logic to reorder the evolutionSprites for tier II so that they match the same order of the names for the sprites
+            // let evoIIUrlDexNumArray = evolutionSprites["evol_II"].map(
+            //     (url, index) => {
+            //         // get the last 7 characters (should be "###.png" or "/##.png")
+            //         let urlDexNum = url.slice(-7);
 
-                    // if the first char is "/", get rid of it
-                    if (urlDexNum.charAt(0) === "/") {
-                        urlDexNum = urlDexNum.slice(1);
-                    }
+            //         // if the first char is "/", get rid of it
+            //         if (urlDexNum.charAt(0) === "/") {
+            //             urlDexNum = urlDexNum.slice(1);
+            //         }
 
-                    // get rid of the ".png" at the end and convert it to a num
-                    urlDexNum = parseInt(urlDexNum.slice(0, 3));
+            //         // get rid of the ".png" at the end and convert it to a num
+            //         urlDexNum = parseInt(urlDexNum.slice(0, 3));
 
-                    return { dex: urlDexNum, imgSrc: url, currIndex: index };
-                }
-            );
+            //         return { dex: urlDexNum, imgSrc: url, currIndex: index };
+            //     }
+            // );
 
-            // sort the array by lowest to highest urlDexNum value at key "dex"
-            evoIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
+            // // sort the array by lowest to highest urlDexNum value at key "dex"
+            // evoIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
 
-            // update the value of "currIndex" to be the newly sorted index
-            evoIIUrlDexNumArray.forEach((num, index) => {
-                num.currIndex = index;
-            });
+            // // update the value of "currIndex" to be the newly sorted index
+            // evoIIUrlDexNumArray.forEach((num, index) => {
+            //     num.currIndex = index;
+            // });
 
-            // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
-            evolutionSprites["evol_II"] = evoIIUrlDexNumArray.map(
-                obj => obj.imgSrc
-            );
+            // // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
+            // evolutionSprites["evol_II"] = evoIIUrlDexNumArray.map(
+            //     obj => obj.imgSrc
+            // );
 
-            // logic to reorder the evolutionSprites for tier III so that they match the same order of the names for the sprites
-            let evoIIIUrlDexNumArray = evolutionSprites["evol_III"].map(
-                (url, index) => {
-                    // get the last 7 characters (should be "###.png" or "/##.png")
-                    let urlDexNum = url.slice(-7);
+            // // logic to reorder the evolutionSprites for tier III so that they match the same order of the names for the sprites
+            // let evoIIIUrlDexNumArray = evolutionSprites["evol_III"].map(
+            //     (url, index) => {
+            //         // get the last 7 characters (should be "###.png" or "/##.png")
+            //         let urlDexNum = url.slice(-7);
 
-                    // if the first char is "/", get rid of it
-                    if (urlDexNum.charAt(0) === "/") {
-                        urlDexNum = urlDexNum.slice(1);
-                    }
+            //         // if the first char is "/", get rid of it
+            //         if (urlDexNum.charAt(0) === "/") {
+            //             urlDexNum = urlDexNum.slice(1);
+            //         }
 
-                    // get rid of the ".png" at the end and convert it to a num
-                    urlDexNum = parseInt(urlDexNum.slice(0, 3));
+            //         // get rid of the ".png" at the end and convert it to a num
+            //         urlDexNum = parseInt(urlDexNum.slice(0, 3));
 
-                    return { dex: urlDexNum, imgSrc: url, currIndex: index };
-                }
-            );
+            //         return { dex: urlDexNum, imgSrc: url, currIndex: index };
+            //     }
+            // );
 
-            // sort the array by lowest to highest urlDexNum value at key "dex"
-            evoIIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
+            // // sort the array by lowest to highest urlDexNum value at key "dex"
+            // evoIIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
 
-            // update the value of "currIndex" to be the newly sorted index
-            evoIIIUrlDexNumArray.forEach((num, index) => {
-                num.currIndex = index;
-            });
+            // // update the value of "currIndex" to be the newly sorted index
+            // evoIIIUrlDexNumArray.forEach((num, index) => {
+            //     num.currIndex = index;
+            // });
 
-            // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
-            evolutionSprites["evol_III"] = evoIIIUrlDexNumArray.map(
-                obj => obj.imgSrc
-            );
+            // // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
+            // evolutionSprites["evol_III"] = evoIIIUrlDexNumArray.map(
+            //     obj => obj.imgSrc
+            // );
 
-            let isLoading = true;
-            if (
-                action.payload["evolution_tier"] === "evol_III" || // if we've gotten the last evolution
-                !(evolutionSprites["evol_II"].length > 0) || // if there is no second evolution
-                !(evolutionSprites["evol_III"].length > 0) // if there is no third evolution
-            ) {
-                console.log(
-                    "in last evolution OR there's no 2nd evo OR there's no 3rd evo"
-                );
-                isLoading = false;
-            }
+            // let isLoading = true;
+            // if (
+            //     action.payload["evolution_tier"] === "evol_III" || // if we've gotten the last evolution
+            //     !(evolutionSprites["evol_II"].length > 0) || // if there is no second evolution
+            //     !(evolutionSprites["evol_III"].length > 0) // if there is no third evolution
+            // ) {
+            //     // console.log(
+            //     //     "in last evolution OR there's no 2nd evo OR there's no 3rd evo"
+            //     // );
+            //     isLoading = false;
+            // }
 
             return {
                 ...state,
-                error: "",
-                isFetching: isLoading,
-                evolution_sprites: evolutionSprites
+                error: ""
+                // isFetching: isLoading,
+                // evolution_sprites: evolutionSprites
             };
         case FETCHING_EVOL_SPRITE_FAILURE:
             return {
                 ...state,
-                error: action.payload,
-                isFetching: false
+                error: action.payload
+                // isFetching: false
             };
         case INCREMENT_INPUT:
             let newInput = state.inputNum + 1;

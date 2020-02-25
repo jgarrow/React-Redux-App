@@ -30,7 +30,7 @@ const LeftPanel = props => {
             axios
                 .get(props.pokemon.species.url)
                 .then(res => {
-                    console.log("leftPanel comp state species url res: ", res);
+                    // console.log("leftPanel comp state species url res: ", res);
 
                     // array of dex objects for different pokedexes
                     dexNumArray = [...res.data["pokedex_numbers"]];
@@ -87,10 +87,10 @@ const LeftPanel = props => {
         }
     }, [props.pokemon]);
 
-    useEffect(() => {
-        console.log("LeftPanel: isFetching: ", props.isFetching);
-        // console.log("pokemon: ", props.pokemon);
-    }, [props.isFetching]);
+    // useEffect(() => {
+    //     console.log("LeftPanel: isFetching: ", props.isFetching);
+    //     console.log("pokemon: ", props.pokemon);
+    // }, [props.isFetching]);
 
     return (
         <Panel>
