@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { getPokemon } from "./actions";
+import { getPokemon, updateInputNum } from "./actions";
 
 import LeftPanel from "./components/LeftPanel/LeftPanel";
 import Divider from "./components/Divider";
@@ -32,7 +32,9 @@ const App = props => {
 
     useEffect(() => {
         const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
-        props.getPokemon(baseUrl + getRandomNum());
+        const randomNum = getRandomNum();
+        props.updateInputNum("new input", randomNum);
+        props.getPokemon(baseUrl + randomNum);
     }, []);
 
     return (
@@ -46,8 +48,9 @@ const App = props => {
 
 const mapStateToProps = state => {
     return {
-        pokemon: state.pokemon
+        pokemon: state.pokemon,
+        inputNum: state.inputNum
     };
 };
 
-export default connect(mapStateToProps, { getPokemon })(App);
+export default connect(mapStateToProps, { getPokemon, updateInputNum })(App);

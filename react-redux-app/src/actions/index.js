@@ -13,6 +13,9 @@ export const FETCHING_EVOLUTION_LINE_FAILURE =
     "FETCHING_EVOLUTION_LINE_FAILURE";
 export const FETCHING_EVOL_SPRITE_SUCCESS = "FETCHING_EVOL_SPRITE_SUCCESS";
 export const FETCHING_EVOL_SPRITE_FAILURE = "FETCHING_EVOL_SPRITE_FAILURE";
+export const INCREMENT_INPUT = "INCREMENT_INPUT";
+export const DECREMENT_INPUT = "DECREMENT_INPUT";
+export const PROVIDED_NEW_INPUT = "PROVIDED_NEW_INPUT";
 
 export const getPokemon = apiUrl => dispatch => {
     dispatch({ type: API_CALL_FETCHING });
@@ -201,4 +204,14 @@ export const getMoveInfo = apiUrl => dispatch => {
             console.log("error getting moves: ", err);
             dispatch({ type: FETCHING_MOVE_INFO_FAILURE, payload: err });
         });
+};
+
+export const updateInputNum = (updateType, newInput) => dispatch => {
+    if (updateType === "increment") {
+        dispatch({ type: INCREMENT_INPUT });
+    } else if (updateType === "decrement") {
+        dispatch({ type: DECREMENT_INPUT });
+    } else if (updateType === "new input") {
+        dispatch({ type: PROVIDED_NEW_INPUT, payload: newInput });
+    }
 };

@@ -2,9 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { useGetPokemon } from "../../hooks/useGetPokemon";
-
-import { getPokemon } from "../../actions";
+import { getPokemon, updateInputNum } from "../../actions";
 
 import { PanelRow } from "../StyledComponents";
 
@@ -42,22 +40,18 @@ const BlueButton = styled.div`
 `;
 
 const BlueButtons = props => {
-    const { setNewInput, getEndpoint } = useGetPokemon();
-
     const getRandomNum = () => {
         const max = 807; // excluding 807
         const randomNum = Math.floor(Math.random() * Math.floor(max));
 
-        console.log("randomNum: ", randomNum);
-
+        props.updateInputNum("new input", randomNum);
         return randomNum;
     };
 
     const handleGetPokemon = num => {
         const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
-        console.log("num: ", num);
-        setNewInput(num);
 
+        props.updateInputNum("new input", num);
         props.getPokemon(baseUrl + num);
     };
 
@@ -127,8 +121,11 @@ const BlueButtons = props => {
 
 const mapStateToProps = state => {
     return {
-        genApiUrls: state.genApiUrls
+        genApiUrls: state.genApiUrls,
+        inputNum: state.inputNum
     };
 };
 
-export default connect(mapStateToProps, { getPokemon })(BlueButtons);
+export default connect(mapStateToProps, { getPokemon, updateInputNum })(
+    BlueButtons
+);

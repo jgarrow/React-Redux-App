@@ -8,7 +8,10 @@ import {
     FETCHING_EVOLUTION_LINE_SUCCESS,
     FETCHING_EVOLUTION_LINE_FAILURE,
     FETCHING_EVOL_SPRITE_SUCCESS,
-    FETCHING_EVOL_SPRITE_FAILURE
+    FETCHING_EVOL_SPRITE_FAILURE,
+    INCREMENT_INPUT,
+    DECREMENT_INPUT,
+    PROVIDED_NEW_INPUT
 } from "../actions";
 
 const initialState = {
@@ -31,6 +34,7 @@ const initialState = {
         evol_II: [],
         evol_III: []
     },
+    inputNum: 1,
     error: "",
     isFetching: false
 };
@@ -64,7 +68,7 @@ export const pokemonReducer = (state = initialState, action) => {
                     }
 
                     // if learned by level, value will be an int
-                    // want all of the moves learned by level first
+                    // want all of the moves learned by level first (highest level = 100)
                     let varA = typeof a[key] === "string" ? 101 : a[key];
                     let varB = typeof b[key] === "string" ? 101 : b[key];
 
@@ -357,7 +361,33 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: action.payload,
                 isFetching: false
             };
+        case INCREMENT_INPUT:
+            let newInput = state.inputNum + 1;
 
+            if (newInput > 806) {
+                newInput = 1;
+            }
+
+            return {
+                ...state,
+                inputNum: newInput
+            };
+        case DECREMENT_INPUT:
+            let updatedInput = state.inputNum - 1;
+
+            if (updatedInput < 1) {
+                updatedInput = 806;
+            }
+
+            return {
+                ...state,
+                inputNum: updatedInput
+            };
+        case PROVIDED_NEW_INPUT:
+            return {
+                ...state,
+                inputNum: action.payload
+            };
         default:
             return state;
     }

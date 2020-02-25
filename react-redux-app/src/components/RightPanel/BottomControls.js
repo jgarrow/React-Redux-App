@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { useGetPokemon } from "../../hooks/useGetPokemon";
 
-import { getPokemon } from "../../actions";
+import { getPokemon, updateInputNum } from "../../actions";
 
 import { PanelRow } from "../StyledComponents";
 
@@ -76,14 +75,6 @@ const Submit = styled.div`
 const BottomControls = props => {
     const [inputNum, setInputNum] = useState(1);
 
-    const {
-        getInputNum,
-        setNewInput: setNum,
-        decrementInputNum,
-        incrementInputNum,
-        getEndpoint
-    } = useGetPokemon();
-
     const handleChange = e => {
         let newInput = e.target.value;
 
@@ -94,11 +85,10 @@ const BottomControls = props => {
         }
 
         setInputNum(newInput);
-        setNum(newInput);
     };
 
     const handleGetPokemon = () => {
-        props.getPokemon(getEndpoint());
+        props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${inputNum}`);
     };
 
     const handleEnterKeyGetPokemon = e => {
@@ -107,30 +97,37 @@ const BottomControls = props => {
         }
     };
 
+    useEffect(() => {
+        setInputNum(props.inputNum);
+    }, [props.inputNum]);
+
     return (
         <Controls>
-            <ControlsButton onClick={() => decrementInputNum()} />
+            <ControlsButton onClick={() => props.updateInputNum("decrement")} />
             <div>
                 <label htmlFor="inputNum" />
                 <NumInput
                     id="inputNum"
                     type="number"
                     placeholder="1"
-                    value={getInputNum()}
+                    value={inputNum}
                     onChange={handleChange}
                     onKeyPress={handleEnterKeyGetPokemon}
                 />
                 <Submit onClick={() => handleGetPokemon()} />
             </div>
-            <ControlsButton onClick={() => incrementInputNum()} />
+            <ControlsButton onClick={() => props.updateInputNum("increment")} />
         </Controls>
     );
 };
 
 const mapStateToProps = state => {
     return {
-        pokemon: state.pokemon
+        pokemon: state.pokemon,
+        inputNum: state.inputNum
     };
 };
 
-export default connect(mapStateToProps, { getPokemon })(BottomControls);
+export default connect(mapStateToProps, { getPokemon, updateInputNum })(
+    BottomControls
+);
