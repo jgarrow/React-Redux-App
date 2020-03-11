@@ -6,6 +6,7 @@ export const API_CALL_FAILURE = "API_CALL_FAILURE";
 export const FETCHING_MOVE_INFO = "FETCHING_MOVES";
 export const FETCHING_MOVE_INFO_SUCCESS = "FETCHING_MOVES_SUCCESS";
 export const FETCHING_MOVE_INFO_FAILURE = "FETCHING_MOVES_FAILURE";
+export const FETCHING_DEX_INFO = "FETCHING_DEX_INFO";
 export const FETCHING_EVOLUTION_LINE = "FETCHING_EVOLUTION_LINE";
 export const FETCHING_EVOLUTION_LINE_SUCCESS =
     "FETCHING_EVOLUTION_LINE_SUCCESS";
@@ -33,6 +34,59 @@ export const getPokemon = apiUrl => dispatch => {
                 .then(res => {
                     console.log("second API call");
                     // console.log("res from res.species.url: ", res.data);
+
+                    let dexNumArray = [];
+                    let natDexNum = null;
+                    let entries = [];
+
+                    // array of dex objects for different pokedexes
+                    dexNumArray = [...res.data["pokedex_numbers"]];
+
+                    // find the national dex object
+                    natDexNum = dexNumArray.length
+                        ? dexNumArray.find(
+                              obj => obj.pokedex.name === "national"
+                          )
+                        : "N/A";
+
+                    // get just the national dex number
+                    if (natDexNum !== "N/A") {
+                        natDexNum = natDexNum["entry_number"];
+                    }
+
+                    entries = [...res.data["flavor_text_entries"]];
+
+                    // only keep the english entries
+                    entries = entries.filter(
+                        entry => entry.language.name === "en"
+                    );
+
+                    // make all whitespace consistent by making them all spaces
+                    entries.forEach(entry => {
+                        entry["flavor_text"] = entry["flavor_text"].replace(
+                            /\s/gm,
+                            " "
+                        );
+                    });
+
+                    // find and get rid of duplicate entries
+                    entries = entries.reduce((acc, current) => {
+                        const x = acc.find(
+                            item =>
+                                item["flavor_text"] === current["flavor_text"]
+                        );
+                        if (!x) {
+                            return acc.concat([current]);
+                        } else {
+                            return acc;
+                        }
+                    }, []);
+
+                    dispatch({
+                        type: FETCHING_DEX_INFO,
+                        payload: { dexEntries: entries, dexNum: natDexNum }
+                    });
+
                     axios
                         .get(res.data["evolution_chain"].url)
                         .then(res => {

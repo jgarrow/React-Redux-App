@@ -5,6 +5,7 @@ import {
     FETCHING_MOVE_INFO,
     FETCHING_MOVE_INFO_SUCCESS,
     FETCHING_MOVE_INFO_FAILURE,
+    FETCHING_DEX_INFO,
     FETCHING_EVOLUTION_LINE_SUCCESS,
     FETCHING_EVOLUTION_LINE_FAILURE,
     FETCHING_EVOL_SPRITE_SUCCESS,
@@ -34,6 +35,8 @@ const initialState = {
         evol_II: [],
         evol_III: []
     },
+    dexEntries: [],
+    dexNum: 0,
     inputNum: 1,
     error: "",
     isFetching: false
@@ -151,6 +154,13 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: action.payload
                 // isFetching: false
             };
+        case FETCHING_DEX_INFO:
+            return {
+                ...state,
+                dexEntries: action.payload.dexEntries,
+                dexNum: action.payload.dexNum,
+                error: ""
+            };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
             let evoIISprites = [...state["evolution_sprites"]["evol_II"]];
             let evoIIISprites = [...state["evolution_sprites"]["evol_III"]];
@@ -232,6 +242,7 @@ export const pokemonReducer = (state = initialState, action) => {
 
             let evoIUrl = evolineObj.species.url.slice(-5);
 
+            // get rid of the trailing "/"
             if (evoIUrl[evoIUrl.length - 1] === "/") {
                 evoIUrl = evoIUrl.slice(0, -1);
             }
@@ -239,23 +250,25 @@ export const pokemonReducer = (state = initialState, action) => {
             const evoImatch = evoIUrl.match(regExp);
             const indexToRemove = evoImatch[0].length;
 
+            // get rid of everything before "/#"
             evoIUrl = evoIUrl.slice(indexToRemove > 1 ? indexToRemove - 1 : 0);
 
             evoIUrl = spriteBase + evoIUrl + ".png";
 
             let evoIIUrls = evolineObj["evolves_to"].map(mon => {
                 let url = mon.species.url.slice(-5);
-                // url.replace(regExp, "");
 
+                // get rid of the trailing "/"
                 if (url[url.length - 1] === "/") {
-                    // url[url.length - 1].replace("/", "");
                     url = url.slice(0, -1);
                 }
 
                 const evoIImatch = url.match(regExp);
                 const amntToRemove = evoIImatch[0].length;
 
+                // get rid of everything before "/#"
                 url = url.slice(amntToRemove > 1 ? amntToRemove - 1 : 0);
+
                 url = spriteBase + url + ".png";
 
                 return url;
@@ -264,23 +277,25 @@ export const pokemonReducer = (state = initialState, action) => {
             let evoIIIUrls = evolineObj["evolves_to"].map(mon =>
                 mon["evolves_to"].map(pokemon => {
                     let url = pokemon.species.url.slice(-5);
-                    // url.replace(regExp, "");
 
+                    // get rid of the trailing "/"
                     if (url[url.length - 1] === "/") {
-                        // url[url.length - 1].replace("/", "");
                         url = url.slice(0, -1);
                     }
 
                     const evoIIImatch = url.match(regExp);
                     const remove = evoIIImatch[0].length;
 
+                    // get rid of everything before "/#"
                     url = url.slice(remove > 1 ? remove - 1 : 0);
+
                     url = spriteBase + url + ".png";
 
                     return url;
                 })
             );
 
+            // evo III is an array of arrays, so we need to "flatten" it to be an array of strings
             evoIIIUrls = evoIIIUrls.flat();
 
             const evolution_urls = {
