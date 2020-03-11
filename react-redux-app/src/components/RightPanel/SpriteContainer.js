@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 import pokeball from "../../img/PokeballSVG.svg";
 import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io";
@@ -61,12 +62,22 @@ const SpriteContainer = ({
     evolSpriteTier,
     handleTransition,
     entryPos,
+    // ...props
     isFetching
 }) => {
+    const [isLoading, setIsLoading] = useState(isFetching);
+
     // console.log(`evolSpriteTier for ${evoNum}: `, evolSpriteTier);
     // console.log("isFetching in SpriteContainer: ", isFetching);
     // console.log(`evolTier for ${evoNum}: `, evolTier);
     // console.log(`evolutionLine for ${evoNum}: `, evolutionLine);
+
+    useEffect(() => {
+        console.log("isFetching in SpriteContainer: ", isFetching);
+        setIsLoading(isFetching);
+    }, [isFetching]);
+
+    console.log("evolSpriteTier: ", evolSpriteTier);
 
     return (
         <>
@@ -129,4 +140,10 @@ const SpriteContainer = ({
     );
 };
 
-export default SpriteContainer;
+const mapStateToProps = state => {
+    return {
+        isFetching: state.isFetching
+    };
+};
+
+export default connect(mapStateToProps, {})(SpriteContainer);

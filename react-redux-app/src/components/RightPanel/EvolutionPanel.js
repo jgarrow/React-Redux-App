@@ -124,17 +124,17 @@ const EvolutionPanel = props => {
                     <EvolutionNum>I</EvolutionNum>
                 </FlexCenter>
                 <SpriteScreen>
-                    {props["evolution_sprites"]["evol_I"] && (
-                        <SpriteContainer
-                            evoNum="I"
-                            evolutionLine={props["evolution_line"]}
-                            evolTier={[props["evolution_line"]["evolution_I"]]}
-                            evolSpriteTier={
-                                props["evolution_sprites"]["evol_I"]
-                            }
-                            isFetching={props.isFetching}
-                        />
-                    )}
+                    {/* {props["evolution_sprites"]["evol_I"] && ( */}
+                    <SpriteContainer
+                        evoNum="I"
+                        evolutionLine={props["evolution_line"]}
+                        evolTier={[props["evolution_line"]["evolution_I"]]}
+                        evolSpriteTier={[
+                            props["evolution_sprites"]["evolution_I"]
+                        ]}
+                        isFetching={props.isFetching}
+                    />
+                    {/* )} */}
                 </SpriteScreen>
                 <NameScreen>
                     {props["evolution_line"]["evolution_I"] && (
@@ -150,22 +150,20 @@ const EvolutionPanel = props => {
                     <EvolutionNum>II</EvolutionNum>
                 </FlexCenter>
                 <SpriteScreen>
-                    {props["evolution_sprites"]["evol_II"] &&
-                        props["evolution_sprites"]["evol_II"] !== [] && (
-                            <SpriteContainer
-                                evoNum="II"
-                                evolutionLine={props["evolution_line"]}
-                                evolTier={
-                                    props["evolution_line"]["evolution_II"]
-                                }
-                                evolSpriteTier={
-                                    props["evolution_sprites"]["evol_II"]
-                                }
-                                handleTransition={handleTransition}
-                                entryPos={spriteIIEntryPosition}
-                                isFetching={props.isFetching}
-                            />
-                        )}
+                    {/* {props["evolution_sprites"]["evol_II"] &&
+                        props["evolution_sprites"]["evol_II"] !== [] && ( */}
+                    <SpriteContainer
+                        evoNum="II"
+                        evolutionLine={props["evolution_line"]}
+                        evolTier={props["evolution_line"]["evolution_II"]}
+                        evolSpriteTier={
+                            props["evolution_sprites"]["evolution_II"]
+                        }
+                        handleTransition={handleTransition}
+                        entryPos={spriteIIEntryPosition}
+                        // isFetching={props.isFetching}
+                    />
+                    {/* // )} */}
                 </SpriteScreen>
                 <NameScreen>
                     <EvolutionNameScreen
@@ -180,22 +178,20 @@ const EvolutionPanel = props => {
                     <EvolutionNum>III</EvolutionNum>
                 </FlexCenter>
                 <SpriteScreen>
-                    {props["evolution_sprites"]["evol_III"] &&
-                        props["evolution_sprites"]["evol_III"] !== [] && (
-                            <SpriteContainer
-                                evoNum="III"
-                                evolutionLine={props["evolution_line"]}
-                                evolTier={
-                                    props["evolution_line"]["evolution_III"]
-                                }
-                                evolSpriteTier={
-                                    props["evolution_sprites"]["evol_III"]
-                                }
-                                handleTransition={handleTransition}
-                                entryPos={spriteIIIEntryPosition}
-                                isFetching={props.isFetching}
-                            />
-                        )}
+                    {/* {props["evolution_sprites"]["evol_III"] &&
+                        props["evolution_sprites"]["evol_III"] !== [] && ( */}
+                    <SpriteContainer
+                        evoNum="III"
+                        evolutionLine={props["evolution_line"]}
+                        evolTier={props["evolution_line"]["evolution_III"]}
+                        evolSpriteTier={
+                            props["evolution_sprites"]["evolution_III"]
+                        }
+                        handleTransition={handleTransition}
+                        entryPos={spriteIIIEntryPosition}
+                        isFetching={props.isFetching}
+                    />
+                    {/* )} */}
                 </SpriteScreen>
                 <NameScreen>
                     <EvolutionNameScreen
