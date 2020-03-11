@@ -162,6 +162,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: ""
             };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
+            console.log("in fetching evo line success");
             let evoIISprites = [...state["evolution_sprites"]["evol_II"]];
             let evoIIISprites = [...state["evolution_sprites"]["evol_III"]];
 
@@ -307,18 +308,31 @@ export const pokemonReducer = (state = initialState, action) => {
             console.log("evolineObj: ", evolineObj);
             console.log("evolution_urls: ", evolution_urls);
 
-            let isLoading = true;
+            console.log(
+                "evolution_urls[evolution_I]: ",
+                evolution_urls.evolution_I
+            );
+            console.log(
+                "evolution_urls[evolution_II]: ",
+                evolution_urls.evolution_II
+            );
+            console.log(
+                "evolution_urls[evolution_III]: ",
+                evolution_urls.evolution_III
+            );
 
-            if (
-                evoIUrl &&
-                evoIIUrls &&
-                evoIIIUrls &&
-                evoIUrl.length > 0 &&
-                evoIIUrls[0].length > 0 &&
-                evoIIIUrls[0].length > 0
-            ) {
-                isLoading = false;
-            }
+            // let isLoading = true;
+
+            // if (
+            //     evolution_urls.evolution_I &&
+            //     evolution_urls.evolution_II &&
+            //     evolution_urls.evolution_III &&
+            //     evolution_urls.evolution_I.length > 0 &&
+            //     evolution_urls.evolution_II[0].length > 0 &&
+            //     evolution_urls.evolution_III[0].length > 0
+            // ) {
+            //     isLoading = false;
+            // }
 
             return {
                 ...state,
@@ -332,7 +346,7 @@ export const pokemonReducer = (state = initialState, action) => {
                 //     evol_III: evoIIISprites
                 // },
                 error: "",
-                isFetching: isLoading
+                isFetching: false
             };
         case FETCHING_EVOLUTION_LINE_FAILURE:
             return {

@@ -201,88 +201,88 @@ export const getPokemon = apiUrl => dispatch => {
 
                             // console.log("evolution_urls: ", evolution_urls);
 
-                            axios
-                                .get(evolution_urls["evol_I"])
-                                .then(res => {
-                                    console.log("fourth API call");
-                                    dispatch({
-                                        type: FETCHING_EVOL_SPRITE_SUCCESS,
-                                        payload: {
-                                            evolution_tier: "evol_I",
-                                            sprite:
-                                                res.data.sprites[
-                                                    "front_default"
-                                                ]
-                                        }
-                                    });
-                                })
-                                .catch(err => {
-                                    console.log(
-                                        "error getting evol_I sprite: ",
-                                        err
-                                    );
-                                    dispatch({
-                                        type: FETCHING_EVOL_SPRITE_FAILURE,
-                                        payload: err
-                                    });
-                                });
+                            // axios
+                            //     .get(evolution_urls["evol_I"])
+                            //     .then(res => {
+                            //         console.log("fourth API call");
+                            //         dispatch({
+                            //             type: FETCHING_EVOL_SPRITE_SUCCESS,
+                            //             payload: {
+                            //                 evolution_tier: "evol_I",
+                            //                 sprite:
+                            //                     res.data.sprites[
+                            //                         "front_default"
+                            //                     ]
+                            //             }
+                            //         });
+                            //     })
+                            //     .catch(err => {
+                            //         console.log(
+                            //             "error getting evol_I sprite: ",
+                            //             err
+                            //         );
+                            //         dispatch({
+                            //             type: FETCHING_EVOL_SPRITE_FAILURE,
+                            //             payload: err
+                            //         });
+                            //     });
 
-                            evolution_urls["evol_II"].forEach(url => {
-                                axios
-                                    .get(url)
-                                    .then(res => {
-                                        console.log("fifth API call");
-                                        dispatch({
-                                            type: FETCHING_EVOL_SPRITE_SUCCESS,
-                                            payload: {
-                                                evolution_tier: "evol_II",
-                                                sprite:
-                                                    res.data.sprites[
-                                                        "front_default"
-                                                    ]
-                                            }
-                                        });
-                                    })
-                                    .catch(err => {
-                                        console.log(
-                                            "error getting evolution II: ",
-                                            err
-                                        );
-                                        dispatch({
-                                            type: FETCHING_EVOL_SPRITE_FAILURE,
-                                            payload: err
-                                        });
-                                    });
-                            });
+                            // evolution_urls["evol_II"].forEach(url => {
+                            //     axios
+                            //         .get(url)
+                            //         .then(res => {
+                            //             console.log("fifth API call");
+                            //             dispatch({
+                            //                 type: FETCHING_EVOL_SPRITE_SUCCESS,
+                            //                 payload: {
+                            //                     evolution_tier: "evol_II",
+                            //                     sprite:
+                            //                         res.data.sprites[
+                            //                             "front_default"
+                            //                         ]
+                            //                 }
+                            //             });
+                            //         })
+                            //         .catch(err => {
+                            //             console.log(
+                            //                 "error getting evolution II: ",
+                            //                 err
+                            //             );
+                            //             dispatch({
+                            //                 type: FETCHING_EVOL_SPRITE_FAILURE,
+                            //                 payload: err
+                            //             });
+                            //         });
+                            // });
 
-                            evolution_urls["evol_III"].length &&
-                                evolution_urls["evol_III"].forEach(url => {
-                                    axios
-                                        .get(url)
-                                        .then(res => {
-                                            console.log("sixth API call");
-                                            dispatch({
-                                                type: FETCHING_EVOL_SPRITE_SUCCESS,
-                                                payload: {
-                                                    evolution_tier: "evol_III",
-                                                    sprite:
-                                                        res.data.sprites[
-                                                            "front_default"
-                                                        ]
-                                                }
-                                            });
-                                        })
-                                        .catch(err => {
-                                            console.log(
-                                                "error getting evolution III: ",
-                                                err
-                                            );
-                                            dispatch({
-                                                type: FETCHING_EVOL_SPRITE_FAILURE,
-                                                payload: err
-                                            });
-                                        });
-                                });
+                            // evolution_urls["evol_III"].length &&
+                            //     evolution_urls["evol_III"].forEach(url => {
+                            //         axios
+                            //             .get(url)
+                            //             .then(res => {
+                            //                 console.log("sixth API call");
+                            //                 dispatch({
+                            //                     type: FETCHING_EVOL_SPRITE_SUCCESS,
+                            //                     payload: {
+                            //                         evolution_tier: "evol_III",
+                            //                         sprite:
+                            //                             res.data.sprites[
+                            //                                 "front_default"
+                            //                             ]
+                            //                     }
+                            //                 });
+                            //             })
+                            //             .catch(err => {
+                            //                 console.log(
+                            //                     "error getting evolution III: ",
+                            //                     err
+                            //                 );
+                            //                 dispatch({
+                            //                     type: FETCHING_EVOL_SPRITE_FAILURE,
+                            //                     payload: err
+                            //                 });
+                            //             });
+                            //     });
                         })
                         .catch(err => {
                             console.log("error fetching evolution line: ", err);
@@ -303,19 +303,19 @@ export const getPokemon = apiUrl => dispatch => {
 };
 
 // used in MoveList component in RightPanel
-// export const getMoveInfo = apiUrl => dispatch => {
-//     dispatch({ type: FETCHING_MOVE_INFO });
-//     axios
-//         .get(apiUrl)
-//         .then(res => {
-//             console.log("fetching moves API call");
-//             dispatch({ type: FETCHING_MOVE_INFO_SUCCESS, payload: res.data });
-//         })
-//         .catch(err => {
-//             console.log("error getting moves: ", err);
-//             dispatch({ type: FETCHING_MOVE_INFO_FAILURE, payload: err });
-//         });
-// };
+export const getMoveInfo = apiUrl => dispatch => {
+    dispatch({ type: FETCHING_MOVE_INFO });
+    axios
+        .get(apiUrl)
+        .then(res => {
+            console.log("fetching moves API call");
+            dispatch({ type: FETCHING_MOVE_INFO_SUCCESS, payload: res.data });
+        })
+        .catch(err => {
+            console.log("error getting moves: ", err);
+            dispatch({ type: FETCHING_MOVE_INFO_FAILURE, payload: err });
+        });
+};
 
 export const updateInputNum = (updateType, newInput) => dispatch => {
     if (updateType === "increment") {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-// import { getMoveInfo } from "../../actions";
+import { getMoveInfo } from "../../actions";
 
 import { Screen } from "../StyledComponents";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
@@ -151,23 +151,23 @@ const MoveList = props => {
         setMovePosition(newPosition);
     };
 
-    // useEffect(() => {
-    //     let tempArray = [];
-    //     if (pokemon.moves) {
-    //         tempArray = [...pokemon.moves];
-    //     }
+    useEffect(() => {
+        let tempArray = [];
+        if (pokemon.moves) {
+            tempArray = [...pokemon.moves];
+        }
 
-    //     if (tempArray !== []) {
-    //         tempArray.forEach(move => {
-    //             getMoveInfo(move.move.url);
-    //         });
-    //     }
-    // }, [pokemon.moves, getMoveInfo]);
+        if (tempArray !== []) {
+            tempArray.forEach(move => {
+                getMoveInfo(move.move.url);
+            });
+        }
+    }, [pokemon.moves, getMoveInfo]);
 
     return (
         <MoveContainer>
             <MoveScreen>
-                {/* {!props.isFetching && moves && (
+                {!props.isFetching && moves && (
                     <Slides
                         translateValue={movePosition}
                         numOfSlides={moves.length}
@@ -183,7 +183,7 @@ const MoveList = props => {
                             </MoveInfoContainer>
                         ))}
                     </Slides>
-                )} */}
+                )}
             </MoveScreen>
 
             <MoveControls>
@@ -210,4 +210,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, {})(MoveList);
+export default connect(mapStateToProps, { getMoveInfo })(MoveList);
