@@ -30,7 +30,6 @@ export const getPokemon = apiUrl => dispatch => {
         .then(res => {
             axios
                 .get(res.species.url)
-
                 .then(res => {
                     console.log("second API call");
                     // console.log("res from res.species.url: ", res.data);

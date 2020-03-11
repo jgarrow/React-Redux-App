@@ -307,6 +307,19 @@ export const pokemonReducer = (state = initialState, action) => {
             console.log("evolineObj: ", evolineObj);
             console.log("evolution_urls: ", evolution_urls);
 
+            let isLoading = true;
+
+            if (
+                evoIUrl &&
+                evoIIUrls &&
+                evoIIIUrls &&
+                evoIUrl.length > 0 &&
+                evoIIUrls[0].length > 0 &&
+                evoIIIUrls[0].length > 0
+            ) {
+                isLoading = false;
+            }
+
             return {
                 ...state,
                 evolution_line: evolutions,
@@ -318,8 +331,8 @@ export const pokemonReducer = (state = initialState, action) => {
                 //     evol_II: evoIISprites,
                 //     evol_III: evoIIISprites
                 // },
-                error: ""
-                // isFetching: false
+                error: "",
+                isFetching: isLoading
             };
         case FETCHING_EVOLUTION_LINE_FAILURE:
             return {
