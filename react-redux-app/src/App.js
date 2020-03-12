@@ -25,8 +25,6 @@ const App = ({ updateInputNum, getPokemon }) => {
         const max = 807; // excluding 807
         const randomNum = Math.floor(Math.random() * Math.floor(max));
 
-        console.log("randomNum: ", randomNum);
-
         return randomNum;
     };
 

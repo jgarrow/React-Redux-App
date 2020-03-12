@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -57,28 +57,12 @@ const AltImage = styled.img`
 
 const SpriteContainer = ({
     evoNum,
-    evolutionLine,
     evolTier,
     evolSpriteTier,
     handleTransition,
     entryPos,
-    // ...props
     isFetching
 }) => {
-    const [isLoading, setIsLoading] = useState(isFetching);
-
-    // console.log(`evolSpriteTier for ${evoNum}: `, evolSpriteTier);
-    // console.log("isFetching in SpriteContainer: ", isFetching);
-    // console.log(`evolTier for ${evoNum}: `, evolTier);
-    // console.log(`evolutionLine for ${evoNum}: `, evolutionLine);
-
-    useEffect(() => {
-        console.log("isFetching in SpriteContainer: ", isFetching);
-        setIsLoading(isFetching);
-    }, [isFetching]);
-
-    console.log("evolSpriteTier: ", evolSpriteTier);
-
     return (
         <>
             {!isFetching && (

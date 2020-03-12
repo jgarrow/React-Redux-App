@@ -164,8 +164,6 @@ const MoveList = props => {
         }
     }, [pokemon.moves, getMoveInfo]);
 
-    // console.log("isFetching in movesList: ", props.isFetching);
-
     return (
         <MoveContainer>
             <MoveScreen>

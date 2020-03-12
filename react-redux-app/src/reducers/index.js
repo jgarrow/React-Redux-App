@@ -16,6 +16,7 @@ import {
 } from "../actions";
 
 const initialState = {
+    // genApiUrls is the starting query number for the API for the first pokemon in each generation
     genApiUrls: {
         gen1: 1,
         gen2: 152,
@@ -31,9 +32,9 @@ const initialState = {
     evolution_line: {},
     previous_evolution_line: {},
     evolution_sprites: {
-        evol_I: [],
-        evol_II: [],
-        evol_III: []
+        evolution_I: [],
+        evolution_II: [],
+        evolution_III: []
     },
     dexEntries: [],
     dexNum: 0,
@@ -45,7 +46,6 @@ const initialState = {
 export const pokemonReducer = (state = initialState, action) => {
     switch (action.type) {
         case API_CALL_FETCHING:
-            console.log("API_CALL_FETCHING");
             // reset state when new api call is made
             return {
                 ...state,
@@ -62,7 +62,6 @@ export const pokemonReducer = (state = initialState, action) => {
                 isFetching: true
             };
         case API_CALL_SUCCESS:
-            console.log("API_CALL_SUCCESS");
             let movesArr = [...action.payload.moves];
 
             //compare function for sorting array
@@ -116,7 +115,6 @@ export const pokemonReducer = (state = initialState, action) => {
                 pokemon: action.payload,
                 moves: movesArr,
                 error: ""
-                // isFetching: false
             };
         case API_CALL_FAILURE:
             return {
@@ -128,7 +126,6 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: ""
-                // isFetching: true
             };
         case FETCHING_MOVE_INFO_SUCCESS:
             let movesArray = [...state.moves];
@@ -145,14 +142,12 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: "",
-                // isFetching: false,
                 moves: movesArray
             };
         case FETCHING_MOVE_INFO_FAILURE:
             return {
                 ...state,
                 error: action.payload
-                // isFetching: false
             };
         case FETCHING_DEX_INFO:
             return {
@@ -162,10 +157,6 @@ export const pokemonReducer = (state = initialState, action) => {
                 error: ""
             };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
-            console.log("in fetching evo line success");
-            let evoIISprites = [...state["evolution_sprites"]["evol_II"]];
-            let evoIIISprites = [...state["evolution_sprites"]["evol_III"]];
-
             // want to set the `previous_evolution_line` to what the current `evolution_line` is before it gets updated
             const prev_evo_line = { ...state["evolution_line"] };
 
@@ -194,48 +185,6 @@ export const pokemonReducer = (state = initialState, action) => {
                 evolution_II: evol_II,
                 evolution_III: evol_III
             };
-
-            // if they're the same, evoIIArraysAreSame will be the length of the array - 1
-            let evoIIArraysAreSame = false;
-            if (prev_evo_line["evolution_II"]) {
-                for (let i = 0; i < prev_evo_line["evolution_II"].length; i++) {
-                    if (
-                        prev_evo_line["evolution_II"][i] ===
-                        evolutions["evolution_II"][i]
-                    ) {
-                        evoIIArraysAreSame = true;
-                    }
-                }
-
-                // reset the tier III evolution sprites in state to an empty array if the evolution line has changed
-                if (!evoIIArraysAreSame) {
-                    evoIISprites = [];
-                }
-            }
-
-            // if they're the same, evoIIArraysAreSame will be the length of the array - 1
-            let evoIIIArraysAreSame = false;
-            if (prev_evo_line["evolution_III"]) {
-                for (
-                    let i = 0;
-                    i < prev_evo_line["evolution_III"].length;
-                    i++
-                ) {
-                    if (
-                        prev_evo_line["evolution_III"][i] ===
-                        evolutions["evolution_III"][i]
-                    ) {
-                        evoIIArraysAreSame = true;
-                    }
-                }
-
-                // reset the tier III evolution sprites in state to an empty array if the evolution line has changed
-                if (!evoIIIArraysAreSame) {
-                    evoIIISprites = [];
-                }
-            }
-
-            // console.log("evolutions in reducer: ", evolutions);
 
             const spriteBase =
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
@@ -304,47 +253,11 @@ export const pokemonReducer = (state = initialState, action) => {
                 evolution_II: evoIIUrls,
                 evolution_III: evoIIIUrls
             };
-
-            console.log("evolineObj: ", evolineObj);
-            console.log("evolution_urls: ", evolution_urls);
-
-            console.log(
-                "evolution_urls[evolution_I]: ",
-                evolution_urls.evolution_I
-            );
-            console.log(
-                "evolution_urls[evolution_II]: ",
-                evolution_urls.evolution_II
-            );
-            console.log(
-                "evolution_urls[evolution_III]: ",
-                evolution_urls.evolution_III
-            );
-
-            // let isLoading = true;
-
-            // if (
-            //     evolution_urls.evolution_I &&
-            //     evolution_urls.evolution_II &&
-            //     evolution_urls.evolution_III &&
-            //     evolution_urls.evolution_I.length > 0 &&
-            //     evolution_urls.evolution_II[0].length > 0 &&
-            //     evolution_urls.evolution_III[0].length > 0
-            // ) {
-            //     isLoading = false;
-            // }
-
             return {
                 ...state,
                 evolution_line: evolutions,
                 previous_evolution_line: prev_evo_line,
                 evolution_sprites: evolution_urls,
-                // {
-                //     ...state["evolution_sprites"],
-                //     evol_I: evoIUrl,
-                //     evol_II: evoIISprites,
-                //     evol_III: evoIIISprites
-                // },
                 error: "",
                 isFetching: false
             };
@@ -352,129 +265,16 @@ export const pokemonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: action.payload
-                // isFetching: false
             };
         case FETCHING_EVOL_SPRITE_SUCCESS:
-            // let payload_evolution = action.payload["evolution_tier"];
-            // const evolutionSprites = { ...state["evolution_sprites"] };
-            // let updatedSprites = null;
-
-            // // need to reset evol_II and evol_III arrays when querying for a pokemon that has a different evolution_line
-            // if (payload_evolution === "evol_I") {
-            //     evolutionSprites["evol_I"] = [action.payload.sprite];
-            // } else if (payload_evolution === "evol_II") {
-            //     updatedSprites = [...state["evolution_sprites"]["evol_II"]];
-
-            //     // to prevent re "setting" state if the action.payload is the same as the current state
-            //     if (
-            //         updatedSprites[updatedSprites.length - 1] !==
-            //         action.payload.sprite
-            //     ) {
-            //         evolutionSprites["evol_II"] = [
-            //             ...evolutionSprites["evol_II"],
-            //             action.payload.sprite
-            //         ];
-            //     }
-            // } else if (payload_evolution === "evol_III") {
-            //     updatedSprites = [...state["evolution_sprites"]["evol_III"]];
-
-            //     // to prevent re "setting" state if the action.payload is the same as the current state
-            //     if (
-            //         updatedSprites[updatedSprites.length - 1] !==
-            //         action.payload.sprite
-            //     ) {
-            //         evolutionSprites["evol_III"] = [
-            //             ...evolutionSprites["evol_III"],
-            //             action.payload.sprite
-            //         ];
-            //     }
-            // }
-
-            // // logic to reorder the evolutionSprites for tier II so that they match the same order of the names for the sprites
-            // let evoIIUrlDexNumArray = evolutionSprites["evol_II"].map(
-            //     (url, index) => {
-            //         // get the last 7 characters (should be "###.png" or "/##.png")
-            //         let urlDexNum = url.slice(-7);
-
-            //         // if the first char is "/", get rid of it
-            //         if (urlDexNum.charAt(0) === "/") {
-            //             urlDexNum = urlDexNum.slice(1);
-            //         }
-
-            //         // get rid of the ".png" at the end and convert it to a num
-            //         urlDexNum = parseInt(urlDexNum.slice(0, 3));
-
-            //         return { dex: urlDexNum, imgSrc: url, currIndex: index };
-            //     }
-            // );
-
-            // // sort the array by lowest to highest urlDexNum value at key "dex"
-            // evoIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
-
-            // // update the value of "currIndex" to be the newly sorted index
-            // evoIIUrlDexNumArray.forEach((num, index) => {
-            //     num.currIndex = index;
-            // });
-
-            // // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
-            // evolutionSprites["evol_II"] = evoIIUrlDexNumArray.map(
-            //     obj => obj.imgSrc
-            // );
-
-            // // logic to reorder the evolutionSprites for tier III so that they match the same order of the names for the sprites
-            // let evoIIIUrlDexNumArray = evolutionSprites["evol_III"].map(
-            //     (url, index) => {
-            //         // get the last 7 characters (should be "###.png" or "/##.png")
-            //         let urlDexNum = url.slice(-7);
-
-            //         // if the first char is "/", get rid of it
-            //         if (urlDexNum.charAt(0) === "/") {
-            //             urlDexNum = urlDexNum.slice(1);
-            //         }
-
-            //         // get rid of the ".png" at the end and convert it to a num
-            //         urlDexNum = parseInt(urlDexNum.slice(0, 3));
-
-            //         return { dex: urlDexNum, imgSrc: url, currIndex: index };
-            //     }
-            // );
-
-            // // sort the array by lowest to highest urlDexNum value at key "dex"
-            // evoIIIUrlDexNumArray.sort((a, b) => (a.dex < b.dex ? -1 : 1));
-
-            // // update the value of "currIndex" to be the newly sorted index
-            // evoIIIUrlDexNumArray.forEach((num, index) => {
-            //     num.currIndex = index;
-            // });
-
-            // // update evolutionSprites to reflect the new order that the images should be in to match the evolution_line
-            // evolutionSprites["evol_III"] = evoIIIUrlDexNumArray.map(
-            //     obj => obj.imgSrc
-            // );
-
-            // let isLoading = true;
-            // if (
-            //     action.payload["evolution_tier"] === "evol_III" || // if we've gotten the last evolution
-            //     !(evolutionSprites["evol_II"].length > 0) || // if there is no second evolution
-            //     !(evolutionSprites["evol_III"].length > 0) // if there is no third evolution
-            // ) {
-            //     // console.log(
-            //     //     "in last evolution OR there's no 2nd evo OR there's no 3rd evo"
-            //     // );
-            //     isLoading = false;
-            // }
-
             return {
                 ...state,
                 error: ""
-                // isFetching: isLoading,
-                // evolution_sprites: evolutionSprites
             };
         case FETCHING_EVOL_SPRITE_FAILURE:
             return {
                 ...state,
                 error: action.payload
-                // isFetching: false
             };
         case INCREMENT_INPUT:
             let newInput = state.inputNum + 1;
