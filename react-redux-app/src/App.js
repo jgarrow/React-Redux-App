@@ -20,12 +20,10 @@ const AppContainer = styled.div`
 
 // styling from Eric Varela -- https://codepen.io/siliconunicorn/pen/VqoxXP
 
-const App = props => {
+const App = ({ updateInputNum, getPokemon }) => {
     const getRandomNum = () => {
         const max = 807; // excluding 807
         const randomNum = Math.floor(Math.random() * Math.floor(max));
-
-        console.log("randomNum: ", randomNum);
 
         return randomNum;
     };
@@ -33,9 +31,9 @@ const App = props => {
     useEffect(() => {
         const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
         const randomNum = getRandomNum();
-        props.updateInputNum("new input", randomNum);
-        props.getPokemon(baseUrl + randomNum);
-    }, []);
+        updateInputNum("new input", randomNum);
+        getPokemon(baseUrl + randomNum);
+    }, [updateInputNum, getPokemon]);
 
     return (
         <AppContainer>

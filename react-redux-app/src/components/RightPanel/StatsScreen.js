@@ -68,7 +68,6 @@ const mapStateToProps = state => {
     return {
         pokemon: state.pokemon,
         isFetching: state.isFetching
-        // stats: state.stats
     };
 };
 

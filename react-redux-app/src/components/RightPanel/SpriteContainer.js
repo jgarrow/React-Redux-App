@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 import pokeball from "../../img/PokeballSVG.svg";
 import { IoMdArrowDropupCircle, IoMdArrowDropdownCircle } from "react-icons/io";
@@ -56,18 +57,12 @@ const AltImage = styled.img`
 
 const SpriteContainer = ({
     evoNum,
-    evolutionLine,
     evolTier,
     evolSpriteTier,
     handleTransition,
     entryPos,
     isFetching
 }) => {
-    // console.log(`evolSpriteTier for ${evoNum}: `, evolSpriteTier);
-    // console.log("isFetching in SpriteContainer: ", isFetching);
-    // console.log(`evolTier for ${evoNum}: `, evolTier);
-    // console.log(`evolutionLine for ${evoNum}: `, evolutionLine);
-
     return (
         <>
             {!isFetching && (
@@ -129,4 +124,10 @@ const SpriteContainer = ({
     );
 };
 
-export default SpriteContainer;
+const mapStateToProps = state => {
+    return {
+        isFetching: state.isFetching
+    };
+};
+
+export default connect(mapStateToProps, {})(SpriteContainer);
