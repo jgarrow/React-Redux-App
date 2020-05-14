@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import styled, { css, keyframes } from "styled-components";
+import React, { useState, useEffect } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 
-import pokeball from "../../img/PokeballSVG.svg";
-import { IoMdFemale } from "react-icons/io";
-import { FaUndo } from "react-icons/fa";
-import { SpriteControl } from "../StyledComponents";
+import pokeball from '../../img/PokeballSVG.svg';
+import { IoMdFemale } from 'react-icons/io';
+import { FaUndo } from 'react-icons/fa';
+import { SpriteControl } from '../StyledComponents';
 
 const ImgWrapper = styled.div`
     width: 359px;
@@ -51,12 +51,12 @@ const LoadingImage = styled.img`
     height: 200px;
     position: relative;
     z-index: 2;
-    animation: ${props =>
+    animation: ${(props) =>
         props.isFetching
             ? css`
                   ${rotate} 2s infinite linear
               `
-            : "none"};
+            : 'none'};
 `;
 
 const LoadingText = styled.p`
@@ -69,7 +69,7 @@ const LoadingText = styled.p`
 const SpriteControls = styled.div`
     display: flex;
     justify-content: space-around;
-    font-family: "Staatliches", cursive;
+    font-family: 'Staatliches', cursive;
     margin-bottom: 10px;
 `;
 
@@ -93,68 +93,71 @@ const ShinySpriteControl = styled(SpriteControl)`
     }
 `;
 
-const MainSprite = ({ sprites, name, isFetching }) => {
+const MainSprite = ({ id, sprites, name, isFetching }) => {
     const [isFemale, setIsFemale] = useState(false);
     const [isShiny, setIsShiny] = useState(false);
     const [isBackwards, setIsBackwards] = useState(false);
-    const [spriteSrc, setSpriteSrc] = useState("");
+    const [spriteSrc, setSpriteSrc] = useState('');
 
-    const handleShinyIconClick = e => {
+    const handleShinyIconClick = (e) => {
         setIsShiny(!isShiny);
     };
 
-    const handleUndoIconClick = e => {
+    const handleUndoIconClick = (e) => {
         setIsBackwards(!isBackwards);
     };
 
-    const handleFemaleIconClick = e => {
+    const handleFemaleIconClick = (e) => {
         setIsFemale(!isFemale);
     };
 
     // initialize spriteSrc when sprites changes (which will change when the whole pokemon changes)
     useEffect(() => {
         if (sprites) {
-            setSpriteSrc(sprites["front_default"]);
+            const defaultSprite = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+            setSpriteSrc(defaultSprite);
         }
     }, [sprites]);
 
     // for changing image sprite
     useEffect(() => {
-        let newSpriteSrc = "";
+        let newSpriteSrc = '';
 
         if (sprites) {
             if (isFemale && !isShiny && !isBackwards) {
-                newSpriteSrc = sprites["front_female"];
+                newSpriteSrc = sprites['front_female'];
 
                 if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc = sprites["front_default"];
+                    newSpriteSrc = newSpriteSrc = sprites['front_default'];
                 }
             } else if (isFemale && !isShiny && isBackwards) {
-                newSpriteSrc = sprites["back_female"];
+                newSpriteSrc = sprites['back_female'];
 
                 if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc = sprites["back_default"];
+                    newSpriteSrc = newSpriteSrc = sprites['back_default'];
                 }
             } else if (isFemale && isShiny && !isBackwards) {
-                newSpriteSrc = sprites["front_shiny_female"];
+                newSpriteSrc = sprites['front_shiny_female'];
 
                 if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc = sprites["front_shiny"];
+                    newSpriteSrc = newSpriteSrc = sprites['front_shiny'];
                 }
             } else if (isFemale && isShiny && isBackwards) {
-                newSpriteSrc = sprites["back_shiny_female"];
+                newSpriteSrc = sprites['back_shiny_female'];
 
                 if (newSpriteSrc === null) {
-                    newSpriteSrc = newSpriteSrc = sprites["back_shiny_default"];
+                    newSpriteSrc = newSpriteSrc = sprites['back_shiny_default'];
                 }
             } else if (!isFemale && !isShiny && !isBackwards) {
-                newSpriteSrc = sprites["front_default"];
+                newSpriteSrc = sprites['front_default']
+                    ? sprites['front_default']
+                    : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png `;
             } else if (!isFemale && !isShiny && isBackwards) {
-                newSpriteSrc = sprites["back_default"];
+                newSpriteSrc = sprites['back_default'];
             } else if (!isFemale && isShiny && !isBackwards) {
-                newSpriteSrc = sprites["front_shiny"];
+                newSpriteSrc = sprites['front_shiny'];
             } else if (!isFemale && isShiny && isBackwards) {
-                newSpriteSrc = sprites["back_shiny"];
+                newSpriteSrc = sprites['back_shiny'];
             }
         }
 

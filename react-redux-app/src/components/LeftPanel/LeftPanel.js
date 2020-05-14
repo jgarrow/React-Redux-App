@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
+import React from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 
-import { Panel, Screen } from "../StyledComponents";
-import DexEntries from "./DexEntries";
-import NameScreenText from "./NameScreen";
-import MainSprite from "./MainSprite";
+import { Panel, Screen } from '../StyledComponents';
+import DexEntries from './DexEntries';
+import NameScreenText from './NameScreen';
+import MainSprite from './MainSprite';
 
 const NameScreen = styled(Screen)`
     font-size: 28px;
@@ -15,7 +15,7 @@ const NameScreen = styled(Screen)`
     box-sizing: border-box;
 `;
 
-const LeftPanel = props => {
+const LeftPanel = (props) => {
     return (
         <Panel>
             <NameScreen>
@@ -27,6 +27,7 @@ const LeftPanel = props => {
                 )}
             </NameScreen>
             <MainSprite
+                id={props.pokemon.id}
                 sprites={props.pokemon.sprites}
                 name={props.pokemon.name}
                 isFetching={props.isFetching}
@@ -39,12 +40,12 @@ const LeftPanel = props => {
     );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         pokemon: state.pokemon,
         dexEntries: state.dexEntries,
         dexNum: state.dexNum,
-        isFetching: state.isFetching
+        isFetching: state.isFetching,
     };
 };
 
