@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
+import React from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 
-import { getPokemon, updateInputNum } from "../../actions";
+import { getPokemon, updateInputNum } from '../../actions';
 
-import { PanelRow } from "../StyledComponents";
+import { PanelRow } from '../StyledComponents';
 
 const BlueBtns = styled(PanelRow)`
     flex-wrap: wrap;
@@ -39,19 +39,19 @@ const BlueButton = styled.div`
     }
 `;
 
-const BlueButtons = props => {
+const BlueButtons = (props) => {
     const getRandomNum = () => {
-        const max = 807; // excluding 807
+        const max = 808; // excluding 808
         const randomNum = Math.floor(Math.random() * Math.floor(max));
 
-        props.updateInputNum("new input", randomNum);
+        props.updateInputNum('new input', randomNum);
         return randomNum;
     };
 
-    const handleGetPokemon = num => {
+    const handleGetPokemon = (num) => {
         const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
 
-        props.updateInputNum("new input", num);
+        props.updateInputNum('new input', num);
         props.getPokemon(baseUrl + num);
     };
 
@@ -119,10 +119,10 @@ const BlueButtons = props => {
     );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         genApiUrls: state.genApiUrls,
-        inputNum: state.inputNum
+        inputNum: state.inputNum,
     };
 };
 

@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 
-import { getPokemon, updateInputNum } from "./actions";
+import { getPokemon, updateInputNum } from './actions';
 
-import LeftPanel from "./components/LeftPanel/LeftPanel";
-import Divider from "./components/Divider";
-import RightPanel from "./components/RightPanel/RightPanel";
+import LeftPanel from './components/LeftPanel/LeftPanel';
+import Divider from './components/Divider';
+import RightPanel from './components/RightPanel/RightPanel';
 
 const AppContainer = styled.div`
     background-color: #e61515;
@@ -22,7 +22,7 @@ const AppContainer = styled.div`
 
 const App = ({ updateInputNum, getPokemon }) => {
     const getRandomNum = () => {
-        const max = 807; // excluding 807
+        const max = 808; // excluding 808
         const randomNum = Math.floor(Math.random() * Math.floor(max));
 
         return randomNum;
@@ -31,7 +31,7 @@ const App = ({ updateInputNum, getPokemon }) => {
     useEffect(() => {
         const baseUrl = `https://pokeapi.co/api/v2/pokemon/`;
         const randomNum = getRandomNum();
-        updateInputNum("new input", randomNum);
+        updateInputNum('new input', randomNum);
         getPokemon(baseUrl + randomNum);
     }, [updateInputNum, getPokemon]);
 
@@ -44,10 +44,10 @@ const App = ({ updateInputNum, getPokemon }) => {
     );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         pokemon: state.pokemon,
-        inputNum: state.inputNum
+        inputNum: state.inputNum,
     };
 };
 

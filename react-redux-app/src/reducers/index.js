@@ -12,8 +12,8 @@ import {
     FETCHING_EVOL_SPRITE_FAILURE,
     INCREMENT_INPUT,
     DECREMENT_INPUT,
-    PROVIDED_NEW_INPUT
-} from "../actions";
+    PROVIDED_NEW_INPUT,
+} from '../actions';
 
 const initialState = {
     // genApiUrls is the starting query number for the API for the first pokemon in each generation
@@ -25,7 +25,7 @@ const initialState = {
         gen5: 495,
         gen6: 650,
         gen7: 722,
-        gen8: null
+        gen8: null,
     },
     pokemon: {},
     moves: [],
@@ -34,13 +34,13 @@ const initialState = {
     evolution_sprites: {
         evolution_I: [],
         evolution_II: [],
-        evolution_III: []
+        evolution_III: [],
     },
     dexEntries: [],
     dexNum: 0,
     inputNum: 1,
-    error: "",
-    isFetching: false
+    error: '',
+    isFetching: false,
 };
 
 export const pokemonReducer = (state = initialState, action) => {
@@ -56,16 +56,16 @@ export const pokemonReducer = (state = initialState, action) => {
                 evolution_sprites: {
                     evol_I: [],
                     evol_II: [],
-                    evol_III: []
+                    evol_III: [],
                 },
-                error: "",
-                isFetching: true
+                error: '',
+                isFetching: true,
             };
         case API_CALL_SUCCESS:
             let movesArr = [...action.payload.moves];
 
             //compare function for sorting array
-            function compareValues(key, order = "asc") {
+            function compareValues(key, order = 'asc') {
                 return function innerSort(a, b) {
                     if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
                         return 0;
@@ -73,13 +73,13 @@ export const pokemonReducer = (state = initialState, action) => {
 
                     // if learned by level, value will be an int
                     // want all of the moves learned by level first (highest level = 100)
-                    let varA = typeof a[key] === "string" ? 101 : a[key];
-                    let varB = typeof b[key] === "string" ? 101 : b[key];
+                    let varA = typeof a[key] === 'string' ? 101 : a[key];
+                    let varB = typeof b[key] === 'string' ? 101 : b[key];
 
                     // if they're both strings (neither are learned by level), now we want to alphabetize them
                     if (
-                        typeof a[key] === "string" &&
-                        typeof b[key] === "string"
+                        typeof a[key] === 'string' &&
+                        typeof b[key] === 'string'
                     ) {
                         varA = a[key].toUpperCase();
                         varB = b[key].toUpperCase();
@@ -91,74 +91,74 @@ export const pokemonReducer = (state = initialState, action) => {
                     } else if (varA < varB) {
                         comparison = -1;
                     }
-                    return order === "desc" ? comparison * -1 : comparison;
+                    return order === 'desc' ? comparison * -1 : comparison;
                 };
             }
 
             // add "learnMethod" key for each move
-            movesArr.forEach(move => {
+            movesArr.forEach((move) => {
                 move.learnMethod =
-                    move["version_group_details"][0]["level_learned_at"] !== 0
+                    move['version_group_details'][0]['level_learned_at'] !== 0
                         ? parseInt(
-                              move["version_group_details"][0][
-                                  "level_learned_at"
+                              move['version_group_details'][0][
+                                  'level_learned_at'
                               ]
                           )
-                        : move["version_group_details"][0]["move_learn_method"]
+                        : move['version_group_details'][0]['move_learn_method']
                               .name;
             });
 
-            movesArr.sort(compareValues("learnMethod"));
+            movesArr.sort(compareValues('learnMethod'));
 
             return {
                 ...state,
                 pokemon: action.payload,
                 moves: movesArr,
-                error: ""
+                error: '',
             };
         case API_CALL_FAILURE:
             return {
                 ...state,
                 error: action.payload,
-                isFetching: false
+                isFetching: false,
             };
         case FETCHING_MOVE_INFO:
             return {
                 ...state,
-                error: ""
+                error: '',
             };
         case FETCHING_MOVE_INFO_SUCCESS:
             let movesArray = [...state.moves];
 
             const moveIndex = movesArray.findIndex(
-                move => move.move.name === action.payload.name
+                (move) => move.move.name === action.payload.name
             );
 
             movesArray[moveIndex] = {
                 ...movesArray[moveIndex],
-                moveInfo: action.payload
+                moveInfo: action.payload,
             };
 
             return {
                 ...state,
-                error: "",
-                moves: movesArray
+                error: '',
+                moves: movesArray,
             };
         case FETCHING_MOVE_INFO_FAILURE:
             return {
                 ...state,
-                error: action.payload
+                error: action.payload,
             };
         case FETCHING_DEX_INFO:
             return {
                 ...state,
                 dexEntries: action.payload.dexEntries,
                 dexNum: action.payload.dexNum,
-                error: ""
+                error: '',
             };
         case FETCHING_EVOLUTION_LINE_SUCCESS:
             // want to set the `previous_evolution_line` to what the current `evolution_line` is before it gets updated
-            const prev_evo_line = { ...state["evolution_line"] };
+            const prev_evo_line = { ...state['evolution_line'] };
 
             // structure of action.payload = res.data.chain
             const evolineObj = { ...action.payload };
@@ -166,34 +166,34 @@ export const pokemonReducer = (state = initialState, action) => {
             const evol_I = evolineObj.species.name;
 
             // array of strings
-            const evol_II = evolineObj["evolves_to"].map(
-                mon => mon.species.name
+            const evol_II = evolineObj['evolves_to'].map(
+                (mon) => mon.species.name
             );
 
             // array of strings
-            let evol_III = evolineObj["evolves_to"]
-                .map(mon =>
-                    mon["evolves_to"]
-                        .map(pokemon => pokemon.species.name)
+            let evol_III = evolineObj['evolves_to']
+                .map((mon) =>
+                    mon['evolves_to']
+                        .map((pokemon) => pokemon.species.name)
                         .toString()
                 )
                 .toString();
-            evol_III = evol_III.split(",");
+            evol_III = evol_III.split(',');
 
             const evolutions = {
                 evolution_I: evol_I,
                 evolution_II: evol_II,
-                evolution_III: evol_III
+                evolution_III: evol_III,
             };
 
             const spriteBase =
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
+                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
             const regExp = /[a-zA-Z]*\/?/g;
 
             let evoIUrl = evolineObj.species.url.slice(-5);
 
             // get rid of the trailing "/"
-            if (evoIUrl[evoIUrl.length - 1] === "/") {
+            if (evoIUrl[evoIUrl.length - 1] === '/') {
                 evoIUrl = evoIUrl.slice(0, -1);
             }
 
@@ -203,13 +203,13 @@ export const pokemonReducer = (state = initialState, action) => {
             // get rid of everything before "/#"
             evoIUrl = evoIUrl.slice(indexToRemove > 1 ? indexToRemove - 1 : 0);
 
-            evoIUrl = spriteBase + evoIUrl + ".png";
+            evoIUrl = spriteBase + evoIUrl + '.png';
 
-            let evoIIUrls = evolineObj["evolves_to"].map(mon => {
+            let evoIIUrls = evolineObj['evolves_to'].map((mon) => {
                 let url = mon.species.url.slice(-5);
 
                 // get rid of the trailing "/"
-                if (url[url.length - 1] === "/") {
+                if (url[url.length - 1] === '/') {
                     url = url.slice(0, -1);
                 }
 
@@ -219,17 +219,17 @@ export const pokemonReducer = (state = initialState, action) => {
                 // get rid of everything before "/#"
                 url = url.slice(amntToRemove > 1 ? amntToRemove - 1 : 0);
 
-                url = spriteBase + url + ".png";
+                url = spriteBase + url + '.png';
 
                 return url;
             });
 
-            let evoIIIUrls = evolineObj["evolves_to"].map(mon =>
-                mon["evolves_to"].map(pokemon => {
+            let evoIIIUrls = evolineObj['evolves_to'].map((mon) =>
+                mon['evolves_to'].map((pokemon) => {
                     let url = pokemon.species.url.slice(-5);
 
                     // get rid of the trailing "/"
-                    if (url[url.length - 1] === "/") {
+                    if (url[url.length - 1] === '/') {
                         url = url.slice(0, -1);
                     }
 
@@ -239,7 +239,7 @@ export const pokemonReducer = (state = initialState, action) => {
                     // get rid of everything before "/#"
                     url = url.slice(remove > 1 ? remove - 1 : 0);
 
-                    url = spriteBase + url + ".png";
+                    url = spriteBase + url + '.png';
 
                     return url;
                 })
@@ -251,57 +251,57 @@ export const pokemonReducer = (state = initialState, action) => {
             const evolution_urls = {
                 evolution_I: evoIUrl,
                 evolution_II: evoIIUrls,
-                evolution_III: evoIIIUrls
+                evolution_III: evoIIIUrls,
             };
             return {
                 ...state,
                 evolution_line: evolutions,
                 previous_evolution_line: prev_evo_line,
                 evolution_sprites: evolution_urls,
-                error: "",
-                isFetching: false
+                error: '',
+                isFetching: false,
             };
         case FETCHING_EVOLUTION_LINE_FAILURE:
             return {
                 ...state,
-                error: action.payload
+                error: action.payload,
             };
         case FETCHING_EVOL_SPRITE_SUCCESS:
             return {
                 ...state,
-                error: ""
+                error: '',
             };
         case FETCHING_EVOL_SPRITE_FAILURE:
             return {
                 ...state,
-                error: action.payload
+                error: action.payload,
             };
         case INCREMENT_INPUT:
             let newInput = state.inputNum + 1;
 
-            if (newInput > 806) {
+            if (newInput > 807) {
                 newInput = 1;
             }
 
             return {
                 ...state,
-                inputNum: newInput
+                inputNum: newInput,
             };
         case DECREMENT_INPUT:
             let updatedInput = state.inputNum - 1;
 
             if (updatedInput < 1) {
-                updatedInput = 806;
+                updatedInput = 807;
             }
 
             return {
                 ...state,
-                inputNum: updatedInput
+                inputNum: updatedInput,
             };
         case PROVIDED_NEW_INPUT:
             return {
                 ...state,
-                inputNum: action.payload
+                inputNum: action.payload,
             };
         default:
             return state;

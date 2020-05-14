@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 
-import { getPokemon, updateInputNum } from "../../actions";
+import { getPokemon, updateInputNum } from '../../actions';
 
-import { PanelRow } from "../StyledComponents";
+import { PanelRow } from '../StyledComponents';
 
 const Controls = styled(PanelRow)`
     display: flex;
@@ -32,7 +32,7 @@ const ControlsButton = styled.div`
 
     &:after {
         border: groove #460f0f 5px;
-        content: "";
+        content: '';
         width: 60px;
         height: 60px;
         position: absolute;
@@ -57,7 +57,7 @@ const NumInput = styled.input`
     );
     padding: 5px;
     border-radius: 3px;
-    font-family: "VT323";
+    font-family: 'VT323';
     border: inset #879a65 3px;
 `;
 
@@ -72,27 +72,27 @@ const Submit = styled.div`
     cursor: pointer;
 `;
 
-const BottomControls = props => {
+const BottomControls = (props) => {
     const [inputNum, setInputNum] = useState(1);
 
-    const handleChange = e => {
+    const handleChange = (e) => {
         let newInput = e.target.value;
 
-        if (newInput > 806) {
+        if (newInput > 807) {
             newInput = 1;
         } else if (newInput < 1) {
-            newInput = 806;
+            newInput = 807;
         }
 
-        setInputNum(newInput);
+        props.updateInputNum('new input', parseInt(newInput));
     };
 
     const handleGetPokemon = () => {
         props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${inputNum}`);
     };
 
-    const handleEnterKeyGetPokemon = e => {
-        if (e.key === "Enter") {
+    const handleEnterKeyGetPokemon = (e) => {
+        if (e.key === 'Enter') {
             props.getPokemon(`https://pokeapi.co/api/v2/pokemon/${inputNum}`);
         }
     };
@@ -103,7 +103,7 @@ const BottomControls = props => {
 
     return (
         <Controls>
-            <ControlsButton onClick={() => props.updateInputNum("decrement")} />
+            <ControlsButton onClick={() => props.updateInputNum('decrement')} />
             <div>
                 <label htmlFor="inputNum" />
                 <NumInput
@@ -116,15 +116,15 @@ const BottomControls = props => {
                 />
                 <Submit onClick={() => handleGetPokemon()} />
             </div>
-            <ControlsButton onClick={() => props.updateInputNum("increment")} />
+            <ControlsButton onClick={() => props.updateInputNum('increment')} />
         </Controls>
     );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         pokemon: state.pokemon,
-        inputNum: state.inputNum
+        inputNum: state.inputNum,
     };
 };
 
