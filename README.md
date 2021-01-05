@@ -1,4 +1,6 @@
-For this project, I used the [pokeapi](https://pokeapi.co/). This API was particularly challenging because of the sheer amount of information and the way all of the endpoints are set up. Not all of the information pertaining to each pokemon is available at one endpoint, so I had to make queries to multiple different endpoints in order to get all of the information I wanted. For the styling, I used the styling done by [Eric Varela](https://codepen.io/siliconunicorn/pen/VqoxXP) in order to save myself some time so that I could focus my efforts on practicing Redux.
+For this project, I used React and [pokeapi](https://pokeapi.co/). This API was particularly challenging because of the sheer amount of information and the way all of the endpoints are set up. Not all of the information pertaining to each Pokémon is available at one endpoint, so I had to make queries to multiple different endpoints in order to get all of the information I wanted. For the styling, I used the styling done by [Eric Varela](https://codepen.io/siliconunicorn/pen/VqoxXP) in order to save myself some time so that I could focus my efforts on practicing Redux. The only changes I made were refactoring the vanilla CSS to Styled Components, as well as adding some animated transitions for the Pokédex entries, evolutions, and moves.
+
+This project was built from a project prompt for Lambda School. No code was provided in advance. The instructions for the project are found below:
 
 # Module Project: Async Redux - React Redux App
 
